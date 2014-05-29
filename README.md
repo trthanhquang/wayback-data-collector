@@ -11,7 +11,6 @@ Please do not copy our project without permission. Thank you for your understand
 Contact
 ---------------------------
 
-Dr. Yuanyuan Chen (discy@nus.edu.sg) National University of Singapore
-
-Dr. Taekyung Kim (disktk@nus.edu.sg) National University of Singapore
+* Dr. Yuanyuan Chen (discy@nus.edu.sg) National University of Singapore
+* Dr. Taekyung Kim (disktk@nus.edu.sg) National University of Singapore
 
