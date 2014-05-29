@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+ # -*- coding:utf-8 -*-
 # ================================================================================
 # Wayback Machine Endpoint Library
 # Developed by Tag Kim (Ph D.)
@@ -61,6 +61,25 @@ class WaybackMachine:
             eles = soup.find_all(id="error")
             url_parser.close()
             return len(eles) <= 0 #False = Not here
+    
+    def testExtract(self,query):
+        url_parser = urllib.urlopen(WaybackMachine.search_query + query)
+
+        if url_parser.info().type != "text/html":
+            url_parser.close()
+            return False
+        else:
+            page = url_parser.read()
+            soup = BS(page,"html.parser")
+            page_id= -1
+
+            dict_analyzer = DictAnalyzePageSource(soup)
+            dict_analyzer.analyze() #analyze the code
+            output =(page_id,dict_analyzer['title'],dict_analyzer['h1'],dict_analyzer['h2'],dict_analyzer['h3'],dict_analyzer['p'],dict_analyzer['ul'],dict_analyzer['ol'],dict_analyzer['a'],dict_analyzer['address'],dict_analyzer['pre'])
+            stdout.write("a") #analyzing
+            return output
+
+
 # --------------------------------------------------------------------------------
 # --<CLASS>-----------------------------------------------------------------------
 class PageNode:
