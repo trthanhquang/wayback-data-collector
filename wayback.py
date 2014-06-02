@@ -9,7 +9,7 @@
 # All right reseved.
 # ================================================================================
 #Import parsers
-from drtag.waybackmachine import *
+from waybackmachine import *
 import sys,os,glob
 from colorconsole import terminal
 
