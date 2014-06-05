@@ -10,18 +10,20 @@
 # All right reseved.
 # ================================================================================
 # ====== Import Modules ======#
-from web import HtmlParser
-from web import HtmlParserThread
+
+#from web import HtmlParser
+#from web import HtmlParserThread
+
+from web3 import WebReader2
 from bs4 import BeautifulSoup as BS
-from sys import stdout
-from sys import exit
+from sys import stdout, exit
 from Queue import Queue
 from threading import Lock, Thread
 from multiprocessing import Pool,cpu_count
 from time import strptime
 from datetime import date
 from util_queue import *
-import re, pickle, logging, urllib, csv, sqlite3, zlib, hashlib
+import re, pickle, logging, urllib, csv, sqlite3, zlib, hashlib, copy
 
 # ====== Global Object ======#
 lock = Lock()
@@ -167,33 +169,55 @@ class WaybackKit(Thread):
             self.inputQueue.task_done() #do next file
 # --------------------------------------------------------------------------------
 # --<CLASS>-----------------------------------------------------------------------
-class WaybackCrawler(HtmlParser): #this is a html parser
-    def __init__(self,politeness = 10,logFileName = "",proxyDic = None):
-        HtmlParser.__init__(self,politeness = 10,logFileName = "",proxyDic = None)
-        self.timeTable = dict() #Main time table (it looks like a calendar)
-# --------------------------------------------------------------------------------
+class WaybackCrawler:
+    def __init__(self):
+        self.timeTable = dict()
     def readWaybackMain(self,urlAddr,year,timeout=60):
-        stdout.write("S") #start
         if not urlAddr.startswith("http"):
             urlAddr2 = "http://" + urlAddr #if the url does not start with 'http'...
         else:
             urlAddr2 = urlAddr
-        #Wayback Machine query code IMPORTANT!!!
         urlAddr2 = WaybackMachine.machinePart1 + str(year) + WaybackMachine.machinePart2 + urlAddr2
-        page = self.readHtmlNormal2(urlAddr2,timeout) #The web collector without flexibility
-        #IF page is "" cancel.
-        if len(page) == 0: #if the page is empty
-            return False #go back
-        #-----------YEAR CHECK-----------#
-        self.soup = BS(page,"html.parser") #HTML PARSER OPTION
-        year_checked = self.check_year(self.soup,year) #do year check
-        if not year_checked: #if faield
+        wr = WebReader2(timeout = timeout)
+        page = wr.read(url = urlAddr2, soup = True)
+        if page != "no url" and page != "-1" and page != "0":
+            self.soup = copy.deepcopy(wr.soup)
+            year_checked = self.check_year(self.soup,year) #do year check
+            if not year_checked: #if faield
+                return False
+            links = self.soup.find_all(self.filterAnchorMain,href = re.compile(urlAddr)) #get page links recorded in Wayback Machine
+            if links != None and len(links) > 0 : #if there are valid links of captured webpages
+                self.extractHrefFromBsResultSet(links) #pass the Beautifulsoup object
+            return True
+        else:
             return False
-        #otherwise
-        links = self.soup.find_all(self.filterAnchorMain,href = re.compile(urlAddr)) #get page links recorded in Wayback Machine
-        if links != None and len(links) > 0 : #if there are valid links of captured webpages
-            self.extractHrefFromBsResultSet(links) #pass the Beautifulsoup object
-        return True
+#class WaybackCrawler(HtmlParser): #this is a html parser
+    #def __init__(self,politeness = 10,logFileName = "",proxyDic = None):
+        #HtmlParser.__init__(self,politeness = 10,logFileName = "",proxyDic = None)
+        #self.timeTable = dict() #Main time table (it looks like a calendar)
+## --------------------------------------------------------------------------------
+    #def readWaybackMain(self,urlAddr,year,timeout=60):
+        #stdout.write("S") #start
+        #if not urlAddr.startswith("http"):
+            #urlAddr2 = "http://" + urlAddr #if the url does not start with 'http'...
+        #else:
+            #urlAddr2 = urlAddr
+        ##Wayback Machine query code IMPORTANT!!!
+        #urlAddr2 = WaybackMachine.machinePart1 + str(year) + WaybackMachine.machinePart2 + urlAddr2
+        #page = self.readHtmlNormal2(urlAddr2,timeout) #The web collector without flexibility
+        ##IF page is "" cancel.
+        #if len(page) == 0: #if the page is empty
+            #return False #go back
+        ##-----------YEAR CHECK-----------#
+        #self.soup = BS(page,"html.parser") #HTML PARSER OPTION
+        #year_checked = self.check_year(self.soup,year) #do year check
+        #if not year_checked: #if faield
+            #return False
+        ##otherwise
+        #links = self.soup.find_all(self.filterAnchorMain,href = re.compile(urlAddr)) #get page links recorded in Wayback Machine
+        #if links != None and len(links) > 0 : #if there are valid links of captured webpages
+            #self.extractHrefFromBsResultSet(links) #pass the Beautifulsoup object
+        #return True
 # --------------------------------------------------------------------------------
     def filterAnchorMain(self,tag):
         return tag.has_attr('class')
@@ -308,20 +332,50 @@ class WaybackRedirectionChecker:
 
 # --------------------------------------------------------------------------------
 # --<CLASS>-----------------------------------------------------------------------
-class WaybackPageCrawler(HtmlParserThread):
-    def __init__(self,queue_addr,queue_page,politeness = 0):
-        HtmlParserThread.__init__(self,queue_addr,queue_page)
-# --------------------------------------------------------------------------------
+
+class WaybackPageCrawler(Thread):
+    def __init__(self,queue_addr,queue_page,politeness = 0,timeout = 60,loud=False):
+        Thread.__init__(self)
+        self.queue_address = queue_addr
+        self.queue_page_source = queue_page
+        self.timeout = timeout
+        self.politeness = politeness
+        self.loud = loud
+    def terminate(self):
+        self.queue_address.put((None,None))    
     def run(self):
-        while True:
-            try:
-                (key, addr,) = self.queue_addr.get_nowait() #Tuple
-            except:
+        while 1:
+            (key, url,) = self.queue_addr.get_nowait() #Tuple
+            if url == None:
+                self.queue_address.task_done()
                 break
-            parser = HtmlParser(self.politeness)
-            html = parser.readHtmlNormal2(addr)
-            self.queue_page.put((key,html,))
-            self.queue_addr.task_done()
+            wr = WebReader2(url,timeout = self.timeout,)
+            page = wr.read()
+            if page != "no url" and page != "-1" and page != "0":
+                self.queue_page_source.put_nowait((key,page,))
+                if self.loud:
+                    sys.stdout.write(":) ")                 
+            else:
+                self.queue_page_source.put_nowait((key,"error",))
+                if self.loud:
+                    sys.stdout.write(":( ")                 
+            time.sleep(self.politeness)
+            self.queue_address.task_done()        
+
+#class WaybackPageCrawler(HtmlParserThread):
+    #def __init__(self,queue_addr,queue_page,politeness = 0):
+        #HtmlParserThread.__init__(self,queue_addr,queue_page)
+## --------------------------------------------------------------------------------
+    #def run(self):
+        #while True:
+            #try:
+                #(key, addr,) = self.queue_addr.get_nowait() #Tuple
+            #except:
+                #break
+            #parser = HtmlParser(self.politeness)
+            #html = parser.readHtmlNormal2(addr)
+            #self.queue_page.put((key,html,))
+            #self.queue_addr.task_done()
 
 
 # ===== Collection Page ===== #
