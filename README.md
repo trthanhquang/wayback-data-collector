@@ -8,6 +8,10 @@ About the project
 
 Please do not copy our project without permission. Thank you for your understanding. 
 
+Document
+---------------------------
+https://www.comp.nus.edu.sg/~kimtk/python/wayback
+
 Contact
 ---------------------------
 
