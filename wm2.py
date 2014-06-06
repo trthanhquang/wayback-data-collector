@@ -30,7 +30,7 @@ class WaybackMachine:
         """
 |  Check whether the URL(=query) exists
         """
-        assert assert_valid_url(query), "Not valid URL"
+        assert self.assert_valid_url(query), "Not valid URL"
         url_parser = urllib.urlopen(WaybackMachine.search_query + query)
         if url_parser.info().type != "text/html": # rule out other types
             url_parser.close()
@@ -72,7 +72,7 @@ class WaybackMachine:
                 return False, {}
             links = self.soup.find_all(self.filterAnchorMain,href = re.compile(urlAddr)) #get page links recorded in Wayback Machine
             if links != None and len(links) > 0 : #if there are valid links of captured webpages
-                time_table = self.extractHrefFromBsResultSet(links) #pass the Beautifulsoup object
+                time_table = self.extract_href_from_bs_result_set(links) #pass the Beautifulsoup object
                 return True, time_table
             else:
                 return False, {}
@@ -98,7 +98,7 @@ class WaybackMachine:
                     rv = False #set false
                 break #once the test is good, stop
         return rv #return
-    def extractHrefFromBsResultSet(self,elements):
+    def extract_href_from_bs_result_set(self,elements):
         """
 |  Extract results as a dictionary object
         """
