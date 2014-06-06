@@ -10,7 +10,7 @@ Please do not copy our project without permission. Thank you for your understand
 
 Document
 ---------------------------
-https://www.comp.nus.edu.sg/~kimtk/python/wayback
+http://trthanhquang.github.io/wayback-data-collector/
 
 Contact
 ---------------------------
