@@ -7,10 +7,11 @@ query = "http://www.bitdefender.com"
 def main():
     driver = webdriver.PhantomJS(executable_path=phantomJSpath)
     driver.get(query)
+
     soup = BS(driver.page_source)
     driver.quit()
 
-    f = open('log.txt','w')
+    f = open('pageSource.txt','w')
     f.write(soup.prettify().encode('utf8'))
     f.close()
     
