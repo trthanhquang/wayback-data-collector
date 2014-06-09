@@ -45,6 +45,10 @@ def decompress_page_source(compressed_one):
 # --<CLASS>-----------------------------------------------------------------------
 #
 class WaybackMachine:
+    """This class checks if archive.org has ever captured a snapshot of a user given
+    URL. If such a record exists, it returns true, else it returns false. To use this
+    class, first create a WaybackMachine instance, and then call the instance method
+    hasData and giving it a URL parameter."""
     home = "http://web.archive.org" #wayback machine home
     machine = "http://web.archive.org/web/*/" #query part1
     machinePart1 = "http://web.archive.org/web/" #query part2
