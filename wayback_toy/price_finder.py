@@ -21,18 +21,43 @@ def main():
     html = convert_to_HTML(url)
     #if there does not exist even a single archive of the webpage
     if not has_snapshot(html):
-        print('There are no records of this webpage at archive.org')
+        print('There are no records of this webpage at archive.org.')
         exit
+    #get a list which stores URLs pointing to snapshots that are separated by the year
+    #that they were created
+    snapshots_by_year = collate_archive_links(html,url)
     
     #try using method 1 to find the list of products and prices
-
+    #if has_price_product_table(html):
+        
+def collate_archive_links(html, url):
+    """This method takes in the HTML code of the archive records of a particular
+    web page. It will return a list of links to the archived web pages. The list
+    will be arranged from oldest archived web page to most recent archived web page."""
+    #we find the earliest archive of the web page, and the latest archive of the web page
+    time_limits = html.find(id='wbMeta').findAll('p')[1].findAll('a')
+    least_recent = str(time_limits[0])
+    most_recent = str(time_limits[1])
+    #we format the string so that we can manipulate the URL
+    least_recent = least_recent[least_recent.find('/web/')+len('/web/'):least_recent.find('/http')]
+    most_recent = most_recent[most_recent.find('/web/')+len('/web/'):most_recent.find('/http')]
+    
+    #we want to visit every year's archive of the web page, and we can store each
+    #year's archive as a URL in a list
+    start_year = int(least_recent[0:4])
+    end_year = int(most_recent[0:4])
+    snapshots_by_year = ['https://web.archive.org/web/' + least_recent + '*/' + url]
+    for x in xrange(1, end_year - start_year + 1):
+        temp = str(start_year + x) + most_recent[4:]
+        snapshots_by_year.append('https://web.archive.org/web/' + temp + '*/' + url)
+    
+    return snapshots_by_year
+    
 def convert_to_HTML(url):
     """This function takes in the URL of a web page, and then returns a string 
     containing the HTML of the web page"""
-    #add a User-Agent so that the website doesn't reject a bot visitor
-    header = {'User-Agent': 'Mozilla/5.0'}
     #create the HTML request to the website
-    request = urllib2.Request(url, headers=header)
+    request = urllib2.Request(url)
     try:
         #create the response object for the HTML request
         response = urllib2.urlopen(request)
@@ -47,7 +72,6 @@ def convert_to_HTML(url):
     except:
         print('Unexpected error: Not 403 or 404. Exiting.')
         exit
-
     #convert it into better formatting using BeautifulSoup
     soup = BeautifulSoup.BeautifulSoup(html)
     return soup
@@ -84,5 +108,4 @@ def has_price_product_table(html):
         else:
             return False;
         
-    
     
