@@ -40,6 +40,8 @@ def convert_to_HTML(url):
         html = response.read()
     #if we come across a 403 or 404 error, the HTML code will be stored in the
     #HTTPError instance, and we just need to extract the HTML code from it
+    #this method assumes that it will only come across 403 or 404 errors, but it
+    #catches all HTTPErrors.
     except urllib2.HTTPError, e:
         html = e.fp
     except:
