@@ -1,0 +1,1015 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="http://www.w3.org/TR/REC-html40"><head>
+<link rel="apple-touch-icon" href="images/nst-apple-iphone-57.png">
+<link rel="apple-touch-icon" sizes="72x72" href="images/nst-apple-ipad-72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="images/nst-apple-iphone-retina-114.png">
+<link rel="apple-touch-icon" sizes="144x144" href="images/nst-apple-ipad-retina-144.png">
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="keywords" content="NetScanTools, network utilities, network security, firewall test tools, SNMP network management, network tools, internet forensics, net scan tools, netscan tools, internet research tools, whitehat toolkit, ethical hacking, packet generator, managed switch, stealth scan, switch port mapper, switch mapping, managed switch, switch port discovery, network engineers toolkit, internet tools, NetScanTools Basic, NetScanTools Pro, network troubleshooting, netscan, IPv6">
+<meta name="description" content="Northwest Performance Software, Inc., a leader network information tool technology, provides a broad range of network toolkits and managed switch port mapping solutions to individuals, companies and government. Products are the NetScanTools family and the Managed Switch Port Mapping Tool.">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta name="google-site-verification" content="eRkzSILkyN7HdsGcmclu0L4_xHGLz5P4OaXJnbiV4M0">
+<title>NetScanTools® Network Engineering Tools and the Managed Switch Port 
+Mapping Tool</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css">
+<script async="" src="//www.google-analytics.com/analytics.js"></script><script type="text/javascript" src="highslide/highslide-with-gallery.js"></script>
+<link rel="stylesheet" type="text/css" href="highslide/highslide.css">
+<!--[if lt IE 7]>
+<link rel="stylesheet" type="text/css" href="highslide/highslide-ie6.css" />
+<![endif]-->
+<script type="text/javascript">
+	hs.graphicsDir = 'highslide/graphics/';
+	hs.showCredits = false;
+	hs.align = 'center';
+	hs.transitions = ['expand', 'crossfade'];
+	hs.fadeInOut = true;
+	hs.outlineType = 'glossy-dark';
+	hs.wrapperClassName = 'dark';
+	hs.captionEval = 'this.a.title';
+	hs.numberPosition = 'caption';
+	hs.useBox = true;
+	hs.width = 800;
+	hs.height = 600;
+	//hs.dimmingOpacity = 0.8;
+
+	// Add the slideshow providing the controlbar and the thumbstrip
+	hs.addSlideshow({
+		//slideshowGroup: 'group1',
+		interval: 5000,
+		repeat: false,
+		useControls: true,
+		fixedControls: 'fit',
+		overlayOptions: {
+			position: 'bottom center',
+			opacity: .75,
+			hideOnMouseOut: true
+		},
+		thumbstrip: {
+			position: 'above',
+			mode: 'horizontal',
+			relativeTo: 'expander'
+		}
+	});
+
+	// gallery - thumbnailId must correspond with the id of the opening thumb
+	var miniGalleryOptions1 = {
+		thumbnailId: 'nstprolaunch',
+		slideshowGroup: 'gallery1'
+	};
+	var miniGalleryOptions2 = {
+		thumbnailId: 'spmlaunch',
+		slideshowGroup: 'gallery2'
+	};
+	var miniGalleryOptions3 = {
+		thumbnailId: 'nstlelaunch',
+		slideshowGroup: 'gallery3'
+	};
+	
+</script>
+<link type="text/css" href="css/redmond/jquery-ui-1.8.12.custom.css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		// Tabs
+		$('#tabs').tabs({
+//			event: "mouseover"
+		});
+	});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-584897-1', 'netscantools.com');
+  ga('send', 'pageview');
+
+</script>
+<!--mstheme--><link rel="stylesheet" type="text/css" href="_themes/solid_business/soli1011.css"><meta name="Microsoft Theme" content="solid_business 1011, default">
+<style type="text/css">.highslide img {cursor: url(highslide/graphics/zoomin.cur), pointer !important;}.highslide-viewport-size {position: fixed; width: 100%; height: 100%; left: 0; top: 0}</style></head>
+
+<body>
+
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber1">
+	<tbody><tr>
+		<td width="100%">
+		<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber2">
+			<tbody><tr>
+				<td valign="top">
+				<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber3">
+					<tbody><tr>
+						<td width="100%">
+						<img border="0" src="images/logo_topbar.gif" width="188" height="20"></td>
+					</tr>
+					<tr>
+						<td width="100%" background="images/logo_back.gif" align="center" height="75">
+						<!--webbot bot="Include" u-include="includes/logo.htm" tag="BODY" startspan -->
+
+<p>
+<img border="0" src="images/logofinal2005_188w.png" width="188" height="89" alt="NWPS Logo"></p>
+
+<!--webbot bot="Include" i-checksum="17934" endspan --></td>
+					</tr>
+				</tbody></table>
+				</td>
+				<td width="100%" valign="top">
+				<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber4">
+					<tbody><tr>
+						<td width="100%" background="images/top_back.gif" height="50" align="right">
+						<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" id="AutoNumber15" height="50">
+							<tbody><tr>
+								<td>
+								<!--webbot bot="Include" u-include="includes/icons.htm" tag="BODY" startspan -->
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" id="AutoNumber1" height="50" width="500"> <!--was 429-->
+	<tbody><tr>
+		<td align="center">
+		<i><font face="Arial" size="2" color="#808080">
+		Search &nbsp;</font></i><a href="http://www.netscantools.com/search.html"><img border="0" src="images/icon05.gif" width="27" height="23" alt="Search Site"></a>
+		</td>
+		<td align="center">
+		<a target="_blank" href="http://www.facebook.com/NetScanTools">
+		<img border="0" src="images/icon-facebook.png" width="30" height="30" alt="Become a Facebook Fan"></a>
+		<a target="_blank" href="http://twitter.com/netscantools">
+		<img border="0" src="images/icon-twitter.png" width="30" height="32" alt="Follow us on Twitter"></a>
+		<a href="http://www.netscantools.com/blog.html">
+		<img border="0" src="images/icon-rss.png" width="29" height="32" alt="NetScanTools Blog"></a>
+		<a href="http://www.youtube.com/user/netscantools">
+		<img border="0" src="images/icon-youtube_32x32.png" width="30" height="30" alt="NetScanTools YouTube Channel"></a>
+		<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2FNetScanTools&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowtransparency="true"></iframe>
+		</td>
+		<td align="left">
+		<a href="javascript:window.print();">
+		<img border="0" src="images/icon06.gif" width="27" height="23"></a>
+		</td>
+<!--		<td width="4" align="center">&nbsp;</td>-->
+	</tr>
+</tbody></table>
+<!--webbot bot="Include" i-checksum="7141" endspan --></td>
+								<td>
+								<!--webbot bot="Include" u-include="includes/quickmenu.htm" tag="BODY" startspan -->
+
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="150" id="AutoNumber0" height="50">
+	<tbody><tr>
+		<td width="100%" align="center">
+		<form>
+			<select size="1" name="D1" class="quickmenu" onchange="if(this.selectedIndex!=0)self.location=this.options[this.selectedIndex].value">
+			<option selected="">-- Quick Menu --</option>
+			<option value="http://www.netscantools.com/index.html">Home</option>
+			<option value="http://www.netscantools.com/search.html">Search NetScanTools.com</option>
+			<option value="http://netscantools.blogspot.com/">Blog (external link)</option>
+			<option value="http://www.facebook.com/NetScanTools">Facebook</option>
+			<option value="http://twitter.com/netscantools">Twitter</option>
+			<option value="http://www.netscantools.com/videos.html">Videos</option>
+			<option value="http://www.netscantools.com/howtobuy.html">How to Buy</option>
+			<option value="http://www.netscantools.com/pricing.html">Pricing</option>
+			<option value="http://www.netscantools.com/support.html">Support</option>
+			<option value="http://www.netscantools.com/email_general.html">Email us</option>
+			<option value="http://www.netscantools.com/contact.html">Contact us</option>
+			<option value="http://www.netscantools.com/about.html">About us</option>
+			<option value="http://www.netscantools.com/nstpronews.html">NetScanTools Pro News</option>
+			<option value="http://www.netscantools.com/press.html">Press Resources</option>
+			<option value="http://www.netscantools.com/sitemap.html">SiteMap</option>
+			<option value="http://www.netscantools.com/products.html">Products</option>
+			<option value="http://www.netscantools.com/nstpromain.html">--NetScanTools Pro</option>
+			<option value="http://www.SwitchPortMapper.com">--Managed Switch Port Mapping Tool</option>
+			<option value="http://www.ippulse.com/">--ipPulse</option>
+			</select>
+		</form>
+		</td>
+	</tr>
+</tbody></table>
+
+<!--webbot bot="Include" i-checksum="31959" endspan --></td>
+							</tr>
+						</tbody></table>
+						</td>
+					</tr>
+					<tr>
+						<td width="100%" background="images/topbar_back.gif" height="45" align="right">
+						<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="400" height="30" id="flash_text1">
+							<param name="movie" value="flash_text1.swf">
+							<param name="quality" value="high">
+							<param name="bgcolor" value="#2677AB">
+							<embed src="flash_text1.swf" quality="high" bgcolor="#2677AB" width="400" height="30" name="flash_text1" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+							
+              				
+						</object>
+						</td>
+					</tr>
+				</tbody></table>
+				</td>
+			</tr>
+		</tbody></table>
+		</td>
+	</tr>
+	<tr>
+		<td width="100%">
+		<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber5">
+			<tbody><tr>
+				<td valign="top">
+				<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber6">
+					<tbody><tr>
+						<td width="100%">
+						<img border="0" src="images/monitor_topbar.gif" width="185" height="25"></td>
+					</tr>
+					<tr>
+						<td width="100%" background="images/monitor_back.gif" align="center" height="75">
+						<!--webbot bot="Navigation" s-type="banner" s-orientation="horizontal" s-rendering="graphics" startspan --><img src="_derived/index.html_cmp_solid_business010_bnr.gif" width="165" height="30" border="0" alt="NetScanTools.com"><!--webbot bot="Navigation" i-checksum="8982" endspan --></td>
+					</tr>
+				</tbody></table>
+				</td>
+				<td width="100%" background="images/image_back.gif" class="blank">
+				<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="585" height="100" id="flash_image1">
+					<param name="movie" value="flash_image1.swf">
+					<param name="quality" value="high">
+					<param name="bgcolor" value="#124C72">
+					<embed src="flash_image1.swf" quality="high" bgcolor="#124C72" width="585" height="100" name="flash_image1" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+					
+          			
+				</object>
+				</td>
+			</tr>
+		</tbody></table>
+		</td>
+	</tr>
+	<tr>
+		<td width="100%" background="images/hbar_back.gif" height="30" align="center">
+		<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" id="AutoNumber17" height="30">
+			<tbody><tr>
+				<td>
+				<!--webbot bot="Navigation" s-orientation="horizontal" s-rendering="graphics" s-type="global" b-include-home="TRUE" b-include-up="FALSE" startspan --><a href="index.html"><img src="_derived/home_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="Home" align="middle"></a> <a href="products.html"><img src="_derived/products.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="Products" align="middle"></a> <a href="download.html"><img src="_derived/download.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="Download" align="middle"></a> <a href="blog.html"><img src="_derived/blog.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="Social Media" align="middle"></a> <a href="support.html"><img src="_derived/support.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="Support" align="middle"></a> <a href="contact.html"><img src="_derived/contact.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="Contact us" align="middle"></a> <a href="about.html"><img src="_derived/about.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="About us" align="middle"></a> <a href="search.html"><img src="_derived/search.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="Search" align="middle"></a> <a href="sitemap.html"><img src="_derived/sitemap.html_cmp_solid_business010_gbtn.gif" width="100" height="22" border="0" alt="SiteMap" align="middle"></a><!--webbot bot="Navigation" i-checksum="46673" endspan --></td>
+				<td class="blank" width="2">
+				<img border="0" src="images/global_vline.gif" width="2" height="22"></td>
+			</tr>
+		</tbody></table>
+		</td>
+	</tr>
+	<tr>
+		<td width="100%">
+		<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber7">
+			<tbody><tr>
+				<td valign="top">
+				<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber8">
+					<tbody><tr>
+						<td width="100%">
+						<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber9">
+							<tbody><tr>
+								<td width="100%">
+								<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber10">
+									<tbody><tr>
+										<td width="21" background="images/menu_left_back.gif">&nbsp;</td>
+										<td width="142" background="images/menu_back.gif">
+										<!--webbot bot="Navigation" s-orientation="vertical" s-rendering="graphics" s-type="top" b-include-home="FALSE" b-include-up="FALSE" startspan --><script language="JavaScript"><!--
+MSFPhover = 
+  (((navigator.appName == "Netscape") && 
+  (parseInt(navigator.appVersion) >= 3 )) || 
+  ((navigator.appName == "Microsoft Internet Explorer") && 
+  (parseInt(navigator.appVersion) >= 4 ))); 
+function MSFPpreload(img) 
+{
+  var a=new Image(); a.src=img; return a; 
+}
+// --></script><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav1n=MSFPpreload("_derived/nstpromain.html_cmp_solid_business010_vbtn.gif"); MSFPnav1h=MSFPpreload("_derived/nstpromain.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="nstpromain.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav1'].src=MSFPnav1h.src" onmouseout="if(MSFPhover) document['MSFPnav1'].src=MSFPnav1n.src"><img src="_derived/nstpromain.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="NetScanTools® Pro" name="MSFPnav1"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav2n=MSFPpreload("_derived/nst_le_main.html_cmp_solid_business010_vbtn.gif"); MSFPnav2h=MSFPpreload("_derived/nst_le_main.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="nst_le_main.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav2'].src=MSFPnav2h.src" onmouseout="if(MSFPhover) document['MSFPnav2'].src=MSFPnav2n.src"><img src="_derived/nst_le_main.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="NetScanTools® LE" name="MSFPnav2"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav3n=MSFPpreload("_derived/nstbasicmain.html_cmp_solid_business010_vbtn.gif"); MSFPnav3h=MSFPpreload("_derived/nstbasicmain.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="nstbasicmain.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav3'].src=MSFPnav3h.src" onmouseout="if(MSFPhover) document['MSFPnav3'].src=MSFPnav3n.src"><img src="_derived/nstbasicmain.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="NetScanTools® Basic" name="MSFPnav3"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav4n=MSFPpreload("_derived/nstmain.html_cmp_solid_business010_vbtn.gif"); MSFPnav4h=MSFPpreload("_derived/nstmain.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="nstmain.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav4'].src=MSFPnav4h.src" onmouseout="if(MSFPhover) document['MSFPnav4'].src=MSFPnav4n.src"><img src="_derived/nstmain.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="NetScanTools® Std" name="MSFPnav4"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav5n=MSFPpreload("_derived/spmapmain.html_cmp_solid_business010_vbtn.gif"); MSFPnav5h=MSFPpreload("_derived/spmapmain.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="spmapmain.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav5'].src=MSFPnav5h.src" onmouseout="if(MSFPhover) document['MSFPnav5'].src=MSFPnav5n.src"><img src="_derived/spmapmain.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Switch Port Mapping Tool" name="MSFPnav5"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav6n=MSFPpreload("_derived/ipv6scopefinder.html_cmp_solid_business010_vbtn.gif"); MSFPnav6h=MSFPpreload("_derived/ipv6scopefinder.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="ipv6scopefinder.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav6'].src=MSFPnav6h.src" onmouseout="if(MSFPhover) document['MSFPnav6'].src=MSFPnav6n.src"><img src="_derived/ipv6scopefinder.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="IPv6ScopeFinder" name="MSFPnav6"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav7n=MSFPpreload("_derived/ippulseinfo.html_cmp_solid_business010_vbtn.gif"); MSFPnav7h=MSFPpreload("_derived/ippulseinfo.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="ippulseinfo.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav7'].src=MSFPnav7h.src" onmouseout="if(MSFPhover) document['MSFPnav7'].src=MSFPnav7n.src"><img src="_derived/ippulseinfo.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="ipPulse" name="MSFPnav7"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav8n=MSFPpreload("_derived/videos.html_cmp_solid_business010_vbtn.gif"); MSFPnav8h=MSFPpreload("_derived/videos.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="videos.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav8'].src=MSFPnav8h.src" onmouseout="if(MSFPhover) document['MSFPnav8'].src=MSFPnav8n.src"><img src="_derived/videos.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Videos" name="MSFPnav8"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav9n=MSFPpreload("_derived/pricing.html_cmp_solid_business010_vbtn.gif"); MSFPnav9h=MSFPpreload("_derived/pricing.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="pricing.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav9'].src=MSFPnav9h.src" onmouseout="if(MSFPhover) document['MSFPnav9'].src=MSFPnav9n.src"><img src="_derived/pricing.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Product Pricing" name="MSFPnav9"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav10n=MSFPpreload("_derived/howtobuy.html_cmp_solid_business010_vbtn.gif"); MSFPnav10h=MSFPpreload("_derived/howtobuy.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="howtobuy.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav10'].src=MSFPnav10h.src" onmouseout="if(MSFPhover) document['MSFPnav10'].src=MSFPnav10n.src"><img src="_derived/howtobuy.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="How to Buy" name="MSFPnav10"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav11n=MSFPpreload("_derived/resellers.html_cmp_solid_business010_vbtn.gif"); MSFPnav11h=MSFPpreload("_derived/resellers.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="resellers.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav11'].src=MSFPnav11h.src" onmouseout="if(MSFPhover) document['MSFPnav11'].src=MSFPnav11n.src"><img src="_derived/resellers.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Resellers" name="MSFPnav11"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav12n=MSFPpreload("_derived/distributors.html_cmp_solid_business010_vbtn.gif"); MSFPnav12h=MSFPpreload("_derived/distributors.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="distributors.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav12'].src=MSFPnav12h.src" onmouseout="if(MSFPhover) document['MSFPnav12'].src=MSFPnav12n.src"><img src="_derived/distributors.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Distributors" name="MSFPnav12"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav13n=MSFPpreload("_derived/freeware.html_cmp_solid_business010_vbtn.gif"); MSFPnav13h=MSFPpreload("_derived/freeware.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="freeware.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav13'].src=MSFPnav13h.src" onmouseout="if(MSFPhover) document['MSFPnav13'].src=MSFPnav13n.src"><img src="_derived/freeware.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Freeware" name="MSFPnav13"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav14n=MSFPpreload("_derived/press.html_cmp_solid_business010_vbtn.gif"); MSFPnav14h=MSFPpreload("_derived/press.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="press.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav14'].src=MSFPnav14h.src" onmouseout="if(MSFPhover) document['MSFPnav14'].src=MSFPnav14n.src"><img src="_derived/press.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Press Resources" name="MSFPnav14"></a><br><script language="JavaScript"><!--
+if(MSFPhover) { MSFPnav15n=MSFPpreload("_derived/newsletters.html_cmp_solid_business010_vbtn.gif"); MSFPnav15h=MSFPpreload("_derived/newsletters.html_cmp_solid_business010_vbtn_a.gif"); }
+// --></script><a href="newsletters.html" language="JavaScript" onmouseover="if(MSFPhover) document['MSFPnav15'].src=MSFPnav15h.src" onmouseout="if(MSFPhover) document['MSFPnav15'].src=MSFPnav15n.src"><img src="_derived/newsletters.html_cmp_solid_business010_vbtn.gif" width="142" height="24" border="0" alt="Newsletters" name="MSFPnav15"></a><!--webbot bot="Navigation" i-checksum="3465" endspan --></td>
+										<td width="22" background="images/menu_right_back.gif">&nbsp;</td>
+									</tr>
+								</tbody></table>
+								</td>
+							</tr>
+							<tr>
+								<td width="100%" class="blank" height="18">
+								<img border="0" src="images/menu_bottom.gif" width="185" height="18"></td>
+							</tr>
+						</tbody></table>
+						</td>
+					</tr>
+					<tr>
+						<td width="100%">&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="100%">
+						<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber11">
+							<tbody><tr>
+								<td width="100%" class="blank" height="15">
+								<img border="0" src="images/info_top.gif" width="185" height="15"></td>
+							</tr>
+							<tr>
+								<td width="100%">
+								<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber12">
+									<tbody><tr>
+										<td background="images/info_left_back.gif" width="21">&nbsp;</td>
+										<td background="images/info_back.gif" width="142">
+										<font size="2" color="#025197"><b>NetScanTools 
+										History</b></font><br>
+										<font size="2">NetScanTools<sup>®</sup> 
+										was designed and released in 1995 because 
+										we saw the need to bring many separate internet 
+										tools into one package on a Windows platform.</font><p>
+										<font size="2">
+										<a href="http://www.netscantools.com/nstpromain.html">NetScanTools Pro</a> 
+										was first released in July 1999.</font></p>
+										<p><font size="2">
+										<a href="http://www.netscantools.com/nstbasicmain.html">NetScanTools 
+										Basic</a> was first released in 2009.</font></p>
+										<p><font size="2">
+										<a href="http://www.netscantools.com/nst_le_main.html">NetScanTools 
+										LE</a> was first released in 2010.</font></p>
+										</td>
+										<td background="images/info_right_back.gif" width="22">&nbsp;</td>
+									</tr>
+								</tbody></table>
+								</td>
+							</tr>
+							<tr>
+								<td width="100%" class="blank" height="18">
+								<img border="0" src="images/info_bottom.gif" width="185" height="18"></td>
+							</tr>
+						</tbody></table>
+						</td>
+					</tr>
+				</tbody></table>
+				</td>
+				<td valign="top">
+				<img border="0" src="images/blank.gif" width="10" height="10"></td>
+				<td valign="top" width="100%">
+				<table border="0" width="100%" cellspacing="8">
+					<tbody><tr>
+						<td align="center">
+						<font size="2"><i><font color="#808080">Stay Connected:</font>
+						<a target="_blank" href="http://www.facebook.com/NetScanTools">
+						<img border="0" src="images/connectfacebook.jpg" width="18" height="17" alt="Become a Facebook Fan"></a></i></font><font size="1">
+						</font>
+						<a target="_blank" href="http://twitter.com/netscantools">
+						<img border="0" src="images/connecttwitter.jpg" width="18" height="17" alt="Follow us on Twitter"></a>
+						<a href="http://www.netscantools.com/blog.html">
+						<img border="0" src="images/connectblog.jpg" width="18" height="17" alt="NetScanTools Blog"></a>
+						<a href="http://www.youtube.com/user/netscantools">
+						<img border="0" src="images/connect_youtube.jpg" width="16" height="16" alt="NetScanTools YouTube Channel"></a>
+						</td>
+						<td align="center">
+						<p>NetScanTools Pro has 
+						<a href="http://www.netscantools.com/nstpro_ipv6_tools.html">IPv6 enabled 
+						tools</a></p><p>Try our FREE <a href="http://www.netscantools.com/ipv6scopefinder.html">
+						IPv6ScopeFinder</a>
+						</p></td>
+					</tr>
+				</tbody></table>
+				<hr>
+				<p align="left">
+				</p><h1>NetScanTools<sup>®</sup> 
+				internet and network information toolkits for Windows<sup>®</sup>.</h1>
+				<font size="2"> We have 
+				a NetScanTools edition to suit your needs. Our network toolkits are designed 
+				for those who work in network engineering, network security, network 
+				administration, network training, or law enforcement internet crimes 
+				investigation. We have a free edition for home users.</font><p></p>
+				<p align="left"><b><font size="1">**NetScanTools are 32 bit programs 
+				that run equally well on 32 or 64 bit Windows 8, 7, Vista, XP, 
+				2008, or 2003.</font></b></p>
+				<b>There is a NetScanTools<sup>®</sup> Edition just right for you!</b><p>
+				</p>
+				<!-- Tabs -->
+				<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+					<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+						<li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><font size="1"><a href="#tabs-1">NetScanTools<br>
+						Pro Installed</a></font></li>
+						<li class="ui-state-default ui-corner-top"><font size="1"><a href="#tabs-2">NetScanTools<br>
+						Pro USB</a></font></li>
+						<li class="ui-state-default ui-corner-top"><font size="1"><a href="#tabs-3">NetScanTools<br>
+						LE</a></font></li>
+						<li class="ui-state-default ui-corner-top"><font size="1"><a href="#tabs-4">NetScanTools<br>
+						Basic</a></font></li>
+						<li class="ui-state-default ui-corner-top"><font size="1"><a href="#tabs-5">Managed Switch<br>
+						Port Mapper</a></font></li>
+						<li class="ui-state-default ui-corner-top"><font size="1"><a href="#tabs-6">How-To<br>
+						Videos</a></font></li>
+						<li class="ui-state-default ui-corner-top"><font size="1"><a href="#tabs-7">Newsletter<br>
+						Signup</a></font></li>
+					</ul>
+					<div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+						<h2>NetScanTools Pro Installed Version</h2>
+						<table border="0" width="90%" bgcolor="#DDDDDD" cellpadding="8">
+							<tbody><tr>
+								<td valign="top"><font size="2">Network 
+								professionals like yourself rely on the installed 
+								version of NetScanTools® Pro to solve their daily 
+								network problems.</font><p><font size="2">We designed 
+								NetScanTools Pro with Network Administrators, Network 
+								Engineers or Technicians or Training Instructors 
+								in mind.</font></p>
+								<p><font size="2">It has a powerful set of over 
+								50 network tools in an easy to use interface.</font></p>
+								<p align="right"><font face="Verdana" size="2">
+								<a href="http://www.netscantools.com/nstpromain.html">More Info &gt;&gt;</a></font><font size="2"><br>
+								</font><font face="Verdana" size="2">
+								<a href="http://www.netscantools.com/nstprodetails.html">Explore NetScanTools &gt;&gt;</a><font size="2"><br>
+								</font><a href="http://www.netscantools.com/videos.html">See tool videos &gt;&gt;</a><font size="2"><br>
+								</font><a href="http://www.netscantools.com/nstprodemorequestform.html">Download 
+								a free demo &gt;&gt;</a></font></p>
+								</td>
+								<td align="center"><font face="Verdana">
+								<a id="nstprolaunch" class="highslide" href="javascript:;" onclick="return document.getElementById('gallery1').onclick()">
+								<img src="images/nstprov11portscan2-thumb.gif" alt="click for image gallery"></a></font><br>
+								<b><font size="1"><br>
+								NetScanTools Pro Version 11 slideshow<br>
+								</font></b><font size="1"><b>(longer slideshow 
+								on tool web page)</b></font></td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Pricing:</b> $249 for a single 
+								license. Includes a one year maintenance plan.</font></td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://www.netscantools.com/nstprodemorequestform.html">
+								<img border="0" src="images/hbutton_download.gif" width="110" height="28"></a><br>
+								<font size="1">(this is a v11 demo with a fixed 
+								end date)<br>
+								<br>
+								</font><a href="http://www.netscantools.com/nstproonline.html">
+								<img border="0" src="images/hbutton_buynow.gif" width="110" height="28"></a>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Bundled Pricing:</b> $348 for 
+								a single license bundled with a license of the Managed 
+								Switch Port Mapping Tool. NetScanTools Pro includes 
+								a one year maintenance plan.</font></td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://www.netscantools.com/nstprodemorequestform.html">
+								<img border="0" src="images/hbutton_download.gif" width="110" height="28"></a><br>
+								<font size="1">(this is a v11 demo with a fixed 
+								end date - also has link to Switch Port Mapper)<br>
+								<br>
+								</font>
+								<a href="https://www.plimus.com/jsp/buynow.jsp?contractId=1669078">
+								<img border="0" src="images/hbutton_buynow.gif" width="110" height="28"></a></td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Maintenance Plan Renewal:</b> 
+								Pricing varies with term.</font></td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://www.netscantools.com/nstpromaintenance.html">
+								<img border="0" src="images/hbutton_details.gif" width="110" height="28" alt="NetScanTools Pro Maintenance Plan Renewal Information"></a>
+								</td>
+							</tr>
+						</tbody></table>
+					</div>
+					<div id="tabs-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+						<h2>NetScanTools Pro USB Version</h2>
+						<table border="0" width="90%" bgcolor="#DDDDDD" cellpadding="8">
+							<tbody><tr>
+								<td valign="top"><font size="2">Network professionals 
+								like yourself rely on the USB version of NetScanTools® 
+								Pro to solve their daily network problems. The USB 
+								version is a fully portable application that resides 
+								entirely on the flash drive.</font><p>
+								<font size="2">The USB version of NetScanTools Pro 
+								is designed for Network Engineers, Technicians or 
+								Security Personnel who frequently move from machine to machine.</font></p>
+								<p><font size="2">It has the same set of over 50 
+								network tools in an easy to use interface. The only 
+								difference is that you do not have to install the 
+								software.</font></p>
+								<p align="right"><font face="Verdana" size="2">
+								<a href="http://www.netscantools.com/nstprousb.html">More Info &gt;&gt;</a></font><font size="2"><br>
+								</font><font face="Verdana" size="2">
+								<a href="http://www.netscantools.com/nstprodetails.html">Explore NetScanTools &gt;&gt;</a><font size="2"><br>
+								</font><a href="http://www.netscantools.com/videos.html">See tool videos &gt;&gt;</a><font size="2"><br>
+								</font><a href="http://www.netscantools.com/nstprodemorequestform.html">Download 
+								a free demo of the installed version &gt;&gt;</a></font></p>
+								</td>
+								<td align="center"><font face="Verdana">
+								<a id="nstprolaunch" class="highslide" href="javascript:;" onclick="return document.getElementById('gallery1').onclick()">
+								<img src="images/nstprov11portscan2-thumb.gif" alt="click for image gallery"></a></font><br>
+								<b><font size="1"><br>
+								NetScanTools Pro Version 11 slideshow<br>
+								</font></b><font size="1"><b>(longer slideshow 
+								on tool web page)</b></font></td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Pricing (we supply the software 
+								preloaded on a fast USB flash drive):</b> $299 for 
+								a single license that includes a one year maintenance 
+								plan. It is supplied on a 16GB  
+								high speed USB flash drive. There is room to put 
+								your own favorite portable applications like Wireshark or NMAP on the drive.</font></td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://www.netscantools.com/nstprodemorequestform.html">
+								<img border="0" src="images/hbutton_download.gif" width="110" height="28"></a><br>
+								<font size="1">(this is an installed v11 demo with 
+								a fixed end date)<br>
+								<br>
+								</font>
+								<a target="_blank" href="https://www.plimus.com/jsp/buynow.jsp?contractId=2682508">
+								<img border="0" src="images/hbutton_buynow.gif" width="110" height="28"></a>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Pricing (you supply the USB flash 
+								drive):</b> $259 for a single license that includes 
+								a one year maintenance plan. You will be installing 
+								this on your own high speed USB flash drive. This 
+								option requires interaction by email with our tech 
+								support to fully activate it on your drive.<br>
+								<br>
+								<i>Since the drive you choose is up to you, the 
+								performance of the software due to the speed of 
+								the drive is not our responsibility.</i></font></td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://www.netscantools.com/nstprodemorequestform.html">
+								<img border="0" src="images/hbutton_download.gif" width="110" height="28"></a><br>
+								<font size="1">(this is an installed v11 demo with 
+								a fixed end date)<br>
+								<br>
+								</font>
+								<a target="_blank" href="https://www.plimus.com/jsp/buynow.jsp?contractId=2290261">
+								<img border="0" src="images/hbutton_buynow.gif" width="110" height="28"></a>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Maintenance Plan Renewal (USB):</b> 
+								Pricing varies with term.</font></td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://www.netscantools.com/nstpromaintenance.html">
+								<img border="0" src="images/hbutton_details.gif" width="110" height="28" alt="NetScanTools Pro Maintenance Plan Renewal Information"></a>
+								</td>
+							</tr>
+						</tbody></table>
+					</div>
+					<div id="tabs-3" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+						<h2>NetScanTools LE</h2>
+						<table border="0" width="90%" bgcolor="#DDDDDD" cellpadding="8">
+							<tbody><tr>
+								<td valign="top"><font size="2">NetScanTools LE 
+								is an Internet Information collection tool for Windows 
+								that gives you reports about an IP Address, Hostname, 
+								Domain Name, Email Address or URL (web address).</font><p>
+								<font size="2">This is NetScanTools designed especially 
+								for Law Enforcement.</font></p>
+								<p><font size="2">We took our Law Enforcement 
+								user's favorite tools, 
+								streamlined them into an easy-to-use interface and 
+								made the program 'case' oriented. And 'case' oriented 
+								means that all your queries are documented, time 
+								stamped and saved automatically. Reports are direct 
+								and to the point. There are no distractions in the 
+								reports - you get the results you need, not fancy 
+								logos.</font></p>
+								<p><font size="2">Tool count: 13</font></p>
+								<p align="right"><font face="Verdana" size="2">
+								<a href="http://www.netscantools.com/nst_le_main.html">More Info &gt;&gt;</a></font><font size="2"><br>
+								</font><font face="Verdana" size="2">
+								<a href="http://nwpsinc.fileburstcdn.com/downloads/nstle151.zip">Download a 
+								free 30 day trial &gt;&gt;</a></font></p>
+								</td>
+								<td align="center"><font face="Verdana">
+								<a id="nstlelaunch" class="highslide" href="javascript:;" onclick="return document.getElementById('gallery3').onclick()">
+								<img src="images/NSTLE-welcome-medium.gif" alt="click for image gallery" width="255" height="185"></a></font><br>
+								<b><font size="1"><br>
+								NetScanTools LE slideshow<br>
+								</font></b><font size="1"><b>(longer slideshow 
+								on tool web page)</b></font></td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Pricing:</b></font>
+								<font size="2">$69</font><p align="center"><font size="2"><b>
+								<img border="0" src="images/LET_Innovation_Finalist_2010-130w.jpg" width="130" height="100"><br>
+								</b></font><font size="1" color="#808080">NetScanTools 
+								LE was a finalist in the Law Enforcement Technology 
+								2010 Innovation Awards.</font></p>
+								</td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://nwpsinc.fileburstcdn.com/downloads/nstle151.zip">
+								<img border="0" src="images/hbutton_download.gif" width="110" height="28" alt="Download NetScanTools LE"></a><br>
+								<font size="1">30 day trial<br>
+								<br>
+								</font><a href="nst_le_online.html">
+								<img border="0" src="images/hbutton_buynow.gif" width="110" height="28" alt="Buy NetScanTools LE Now"></a>
+								</td>
+							</tr>
+						</tbody></table>
+&nbsp;</div>
+					<div id="tabs-4" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+						<h2>NetScanTools Basic</h2>
+						<table border="0" width="90%" bgcolor="#DDDDDD" cellpadding="8">
+							<tbody><tr>
+								<td valign="top">
+								<p><b><font size="2">NetScanTools<sup>®</sup> Basic 
+								Edition</font></b><font size="2"> was introduced as a freeware product designed to fill the 
+								gap left by the retirement of NetScanTools Standard.</font></p>
+								<p><font size="2">We have included simplified versions 
+								of these 6 basic networking tools design for the 
+								home or casual user:</font></p>
+								<ul>
+									<li><font size="2">DNS Tools - Simple: simple 
+									IP/hostname resolution, Who Am I? (shows your 
+									computer name, IP and DNSs)</font></li>
+									<li><font size="2">Ping</font></li>
+									<li><font size="2">Graphical Ping</font></li>
+									<li><font size="2">Traceroute</font></li>
+									<li><font size="2">Ping Scanner</font></li>
+									<li><font size="2">Whois</font></li>
+								</ul>
+								<p align="right"><font size="2">
+								<a href="http://www.netscantools.com/nstbasicmain.html">More Info &gt;&gt;</a></font></p>
+								</td>
+								<td align="center"><font face="Verdana">
+								<a href="images/nstbasic.jpg">
+								<img border="2" src="images/nstbasic_small2.jpg" xthumbnail-orig-image="images/nstbasic.jpg" alt="NetScanTools Basic Screenshot"></a></font><br>
+								<b><font size="1"><br>
+								Click for larger image</font></b></td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Pricing:</b> FREE</font></td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://nwpsinc.fileburstcdn.com/downloads/nstb230.zip">
+								<img border="0" src="images/hbutton_download.gif" width="110" height="28" alt="Download NetScanTools Basic"></a>
+								</td>
+							</tr>
+						</tbody></table>
+&nbsp;</div>
+					<div id="tabs-5" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+						<h2>Managed Switch Port Mapping Tool</h2>
+						<table border="0" width="90%" bgcolor="#DDDDDD" cellpadding="8">
+							<tbody><tr>
+								<td valign="top"><font size="2">Do you have an SNMP 
+								managed switch that you need to maintain, map or 
+								trace wiring connections through?</font><p>
+								<font size="2">Our Managed Switch Port Mapping tool 
+								is designed to help you map out and identify the 
+								devices connected to the ports. </font></p>
+								<p><font size="2">Currently available as 'installed' only, 
+								there is no USB version.</font></p>
+								<p><font size="2">Requires access to SNMP v1/v2c/v3 
+								managed switch.</font></p>
+								<p><font size="2">Version 2 just released. 
+								Switch Lists, SNMPv3, Command Line operation and 
+								more!</font></p>
+								<p align="right"><font size="2">
+								<a href="http://www.switchportmapper.com/">More Info &gt;&gt;</a><br>
+								<a href="http://www.netscantools.com/videos.html">See switch port mapper videos 
+								&gt;&gt;</a><br>
+								<a href="http://www.switchportmapper.com/download.htm">
+								Download a free 30 day trial &gt;&gt;</a></font></p>
+								</td>
+								<td align="center"><font face="Verdana">
+								<a id="spmlaunch" class="highslide" href="javascript:;" onclick="return document.getElementById('gallery2').onclick()">
+								<img src="images/spm-main-window-medium.gif" alt="click for image gallery" width="255" height="177"></a></font>
+								<b><font size="1"><br>
+								</font></b><font size="1"><b>Managed Switch Port 
+								Mapping Tool Slideshow<br>
+								(longer slideshow on tool web page)</b></font></td>
+							</tr>
+							<tr>
+								<td valign="top" bgcolor="#FFFFFF">
+								<font size="2"><b>Pricing:</b> $199 for an 
+								Installed Version License. $209 for an 'End-User 
+								Installed' USB Flash Drive License.</font><p>
+								<font size="2">$99 Installed Version discounted price for NetScanTools Pro owners (any 
+								NST Pro version; 
+								one license of this program at this price per licensed 
+								copy of NetScanTools Pro).</font></p>
+								<p>
+								<font size="2">No Maintenance Plan for this 
+								software.</font></p>
+								</td>
+								<td align="center" bgcolor="#FFFFFF">
+								<a href="http://nwpsinc.fileburstcdn.com/downloads/spm233.zip">
+								<img border="0" src="images/hbutton_download.gif" width="110" height="28" alt="Download the Managed Switch Port Mapping Tool"></a><p>
+								<a href="http://www.switchportmapper.com/buy-now.htm">
+								<img border="0" src="images/hbutton_buynow.gif" width="110" height="28" alt="Buy the Managed Switch Port Mapping Tool Now"></a>
+								</p>
+								</td>
+							</tr>
+						</tbody></table>
+&nbsp;</div>
+					<div id="tabs-6" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+						<h2>Demonstration and Training Videos</h2>
+						<p><font size="2">We have a number of demonstration videos 
+						showing NetScanTools Pro Version 11 in action.</font></p>
+						<p><font size="2">There are also videos of the Managed Switch 
+						Port Mapping tool mapping switches from a number of 
+						different vendors including Cisco, HP, Netgear, D-Link, 
+						Nortel and others.</font></p>
+						<p><font size="2"><a href="http://www.netscantools.com/videos.html">Please review our 
+						demonstration and training videos.</a></font></p>
+					</div>
+					<div id="tabs-7" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+						<h2>NetScanTools Newsletter Signup</h2>
+						<p align="left"><i><b><font size="2" color="#808080">Register 
+						for our monthly NetScanTools newsletter below.</font></b></i></p>
+						<script language="Javascript" type="text/javascript">
+				
+				function checkform() {
+				  for (i=0;i<fieldstocheck.length;i++) {
+				    if (eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].type") == "checkbox") {
+				      if (document.subscribeform.elements[fieldstocheck[i]].checked) {
+				      } else {
+				        alert("Please enter your "+fieldnames[i]);
+				        eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].focus()");
+				        return false;
+				      }
+				    }
+				    else {
+				      if (eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].value") == "") {
+				        alert("Please enter your "+fieldnames[i]);
+				        eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].focus()");
+				        return false;
+				      }
+				    }
+				  }
+				  for (i=0;i<groupstocheck.length;i++) {
+				    if (!checkGroup(groupstocheck[i],groupnames[i])) {
+				      return false;
+				    }
+				  }
+  
+				  if(! compareEmail())
+				  {
+				    alert("Email Addresses you entered do not match");
+				    return false;
+				  }
+				  return true;
+				}
+				 
+				var fieldstocheck = new Array();
+				var fieldnames = new Array();
+				function addFieldToCheck(value,name) {
+				  fieldstocheck[fieldstocheck.length] = value;
+				  fieldnames[fieldnames.length] = name;
+				}
+				var groupstocheck = new Array();
+				var groupnames = new Array();
+				function addGroupToCheck(value,name) {
+				  groupstocheck[groupstocheck.length] = value;
+				  groupnames[groupnames.length] = name;
+				}
+				 
+				function compareEmail()
+				{
+				  return (document.subscribeform.elements["email"].value == document.subscribeform.elements["emailconfirm"].value);
+				}
+				function checkGroup(name,value) {
+				  option = -1;
+				  for (i=0;i<document.subscribeform.elements[name].length;i++) {
+				    if (document.subscribeform.elements[name][i].checked) {
+				      option = i;
+				    }
+				  }
+				  if (option == -1) {
+				    alert ("Please enter your "+value);
+				    return false;
+				  }
+				  return true;
+				}
+				</script>
+						<form method="post" action="http://www.netscantools.com/thelist/?p=subscribe&amp;id=1" name="subscribeform">
+							<table border="0">
+								<tbody><tr>
+									<td>
+									<div class="required">
+										<font size="1">Email</font></div>
+									</td>
+									<td class="attributeinput">
+									<input type="text" name="email" value="" size="35">
+									<script language="Javascript" type="text/javascript">
+									
+							
+							addFieldToCheck("email","Email");</script>
+									</td>
+									<td>
+									<input type="submit" name="subscribe" value="Subscribe" onclick="return checkform();">
+									</td>
+								</tr>
+								<tr>
+									<td>
+									<div class="required">
+										<font size="1">Confirm your email address</font></div>
+									</td>
+									<td class="attributeinput">
+									<input type="text" name="emailconfirm" value="" size="35">
+									<script language="Javascript" type="text/javascript">
+									
+							
+							addFieldToCheck("emailconfirm","Confirm your email address");</script>
+									</td>
+									<td><font size="1">Please whitelist email from 
+									netscantools.com - a confirmation message will 
+									be sent and you must respond to be added to 
+									our list.</font></td>
+								</tr>
+								<input type="hidden" name="htmlemail" value="0">
+							</tbody></table>
+							<input type="hidden" name="list[2]" value="signup">
+							<input type="hidden" name="listname[2]" value="NetScanTools Newsletter">
+							<div style="display:none">
+								<input type="text" name="VerificationCodeX" value="" size="20"></div>
+							<p>
+							<input type="submit" name="subscribe" value="Subscribe to the NetScanTools Newsletter" onclick="return checkform();"></p>
+						</form>
+						<font size="2"><a href="newsletters.html"><b>Make an informed 
+						decision:</b> review our past newsletters here.</a></font>
+					</div>
+				</div>
+				<!-- end tabs -->
+				<img border="0" src="images/blank.gif" width="10" height="10"><p>&nbsp;</p>
+				</td>
+				<td valign="top">
+				<img border="0" src="images/blank.gif" width="15" height="10"></td>
+				<td valign="top" background="images/news_back.gif">
+				<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber13">
+					<tbody><tr>
+						<td width="100%" class="blank" height="10">
+						<img border="0" src="images/blank.gif" width="140" height="10"></td>
+					</tr>
+					<tr>
+						<td width="100%">
+						<table border="0" cellpadding="5" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber14">
+							<tbody><tr>
+								<td width="100%"><font size="2">
+								<a href="http://www.netscantools.com/nstpromaintenance.html">
+								<font color="#0066CC"><b>NetScanTools Pro</b></font><br>
+								<img border="0" src="images/news_hline.gif" width="130" height="2"><br>
+								Maintenance Plan Renewal:<br>
+								<img border="0" src="images/hbutton_details.gif" width="110" height="28" alt="NetScanTools Pro Maintenance Plan Renewal Information"></a><p>
+								<font color="#0066CC"><b>Important News<br>
+								</b></font>
+								<img border="0" src="images/news_hline.gif" width="130" height="2"><font color="#FF0000"><b><br>
+								May 29, 2014</b></font><br>
+								May newsletter is <a href="newsletters.html">available 
+								here</a>. Topics include&nbsp;May release of NetScanTools Pro 11.61 and April 
+								29 release of 
+								the Managed Switch Port Mapper 2.33.</p>
+								<p>
+								<font color="#FF0000"><b>May 8, 2014</b></font><b><br>
+								NetScanTools Pro USB Version 11.61 Patch 
+								Ready.</b> See Help/Check for New Version to 
+								download.</p>
+								<p>
+								<font color="#FF0000"><b>May 7, 2014</b></font><br>
+								<b>NetScanTools Pro Installed Version 11.61 
+								released
+								<a href="nstpronews.html">(release info)</a>.</b> 
+								Click on Help/Check for New Version.</p>
+								<p>
+								<font color="#FF0000"><b>April 29, 2014</b></font><br>
+								Managed Switch Port Mapping Tool v2.33 released.
+								<a href="http://www.switchportmapper.com/download.htm">
+								Get it today!</a></p>
+								<p>
+								<font color="#FF0000"><b>November 7, 2013</b></font><br>
+								<b><a href="nstprodemorequestform.html">New 
+								improved demo</a> of NetScanTools Pro Installed 
+								Version based on the latest version 11.53 with 
+								all the new tools in place.</b></p>
+								<p>
+								<font color="#FF0000"><b>Sept 4, 2013</b></font><b><font color="#FF0000"><br>
+								</font>NetScanTools Basic v2.3
+								<a href="http://www.netscantools.com/nstbasicmain.html">released.<br>
+								<img border="0" src="images/more_trans.gif" width="54" height="11"></a></b></p>
+								<p>
+								<font color="#FF0000"><b>Sept 3, 2013</b></font><br>
+								nwpsw.com makeover complete. The new site is now 
+								live. Please have a look at
+								<a target="_blank" href="http://www.nwpsw.com/">
+								www.nwpsw.com</a> </p>
+								<p>
+								<font color="#FF0000"><b>February 1, 2013</b></font><br>
+								<b>NetScanTools LE 1.51
+								<a href="http://www.netscantools.com/nst_le_main.html">released.</a></b><a href="http://www.netscantools.com/nst_le_main.html">
+								<img border="0" src="images/more_trans.gif" width="54" height="11"></a></p>
+								<p>
+								<font color="#FF0000"><b>January 11, 2013</b></font><br>
+								IPv6 Scope Finder Freeware Tool Updated to v3.0:
+								<a href="http://www.netscantools.com/ipv6scopefinder.html">IPv6ScopeFinder</a></p>
+								<p>
+								<font color="#FF0000"><b>September 6, 2012</b></font><br>
+								<a href="ippulseinfo.html">ipPulse 1.83 released.</a> 
+								Added results grid sorting and header 
+								reordering.</p>
+								</font><p><font size="2"><font color="#0066CC"><b>Company</b></font><font size="2" color="#0066CC"><b> 
+								Websites</b></font><br>
+								<img border="0" src="images/news_hline.gif" width="130" height="2"><br>
+								<a href="http://www.nwpsw.com/">nwpsw.com</a><br>
+								<a href="http://www.switchportmapper.com/">SwitchPortMapper.com</a><br>
+								</font></p>
+								</td>
+							</tr>
+						</tbody></table>
+						</td>
+					</tr>
+				</tbody></table>
+				</td>
+			</tr>
+		</tbody></table>
+		</td>
+	</tr>
+	<tr>
+		<td width="100%" background="images/hbar_back.gif" align="center" height="30">
+		<!--webbot bot="Include" u-include="includes/bottommenu.htm" tag="BODY" startspan -->
+
+<p><b><a href="http://www.netscantools.com/index.html"><font size="1">Home</font></a><font size="1"> |
+<a href="http://www.netscantools.com/about.html">About us</a> |
+<a href="http://www.netscantools.com/contact.html">Contact us</a> |
+<a href="http://www.netscantools.com/privacypolicy.html">Privacy Policy</a> |
+<a href="http://www.netscantools.com/search.html">Search</a> |
+<a href="http://www.netscantools.com/sitemap.html">Site Map</a></font></b></p>
+
+<!--webbot bot="Include" i-checksum="31903" endspan --></td>
+	</tr>
+	<tr>
+		<td width="100%" align="center" height="20">
+		<div align="center">
+			<!--webbot bot="Include" u-include="includes/copyright.htm" tag="BODY" startspan -->
+
+<p align="center">
+<img border="0" src="images/copyright-notice.png" width="720" height="72" alt="Copyright 1995-2014 Northwest Performance Software, Inc."></p>
+
+<!--webbot bot="Include" i-checksum="56179" endspan --></div>
+		</td>
+	</tr>
+</tbody></table>
+<div class="hidden-container">
+	<!-- 1. gallery - id for the first thumb must correspond with the id in getElementById for the opening thumb -->
+	<a id="gallery1" class="highslide" href="images/nstprov11welcome.gif" title="This is the Welcome Window" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11welcome-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11arpping.gif" title="Arp Ping of 192.168.0.1" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11arpping-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11arpscan.gif" title="Arp Scan of the local subnet" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11arpscan-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11dhcpdisc.gif" title="DHCP Discovery of two DHCP Servers on the local subnet" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11dhcpdisc-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11packetgen.gif" title="Packet Generator main window, sends TCP, UDP, ICMP, CDP, ARP/RARP and RAW" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11packetgen-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11pingipv6.gif" title="Ping using IPv6 - works best on Windows 7 or Vista" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11pingipv6-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11pingscan.gif" title="Ping Scan (AKA NetScanner) of the local IPv4 subnet" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11pingscan-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11portscan.gif" title="Port Scan of a list of common TCP and UDP ports" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11portscan-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11trace-w-icmp.gif" title="Traceroute to BBC's website showing IPs, hostnames, times and countries" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11trace-w-icmp-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/nstprov11whoisdomain.gif" title="Whois query of a domain showing IP addresses, DNS info, abuse and SPF records prior to the query" onclick="return hs.expand(this, miniGalleryOptions1)">
+	<img src="images/nstprov11whoisdomain-thumb.gif" alt=""></a>
+	
+	<a id="gallery2" class="highslide" href="images/spm-main-window.gif" title="This is the main Switch Port Mapper Window" onclick="return hs.expand(this, miniGalleryOptions2)">
+	<img src="images/spm-main-window-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/spm-web-report.gif" title="The report that appears in your web browser after mapping a switch" onclick="return hs.expand(this, miniGalleryOptions2)">
+	<img src="images/spm-web-report-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/spm-review-history.gif" title="All mappings are saved in a searchable database. Review results at a later time." onclick="return hs.expand(this, miniGalleryOptions2)">
+	<img src="images/spm-review-history-thumb.gif" alt=""></a>
+	
+	<a id="gallery3" class="highslide" href="images/NSTLE-welcome.gif" title="This is the main NetScanTools LE Welcome Window. The case database name is shown on the titlebar" onclick="return hs.expand(this, miniGalleryOptions3)">
+	<img src="images/NSTLE-welcome-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/NSTLE-automated-tools.gif" title="The Automated Tools are used to quickly gather a large amount of data about a target" onclick="return hs.expand(this, miniGalleryOptions3)">
+	<img src="images/NSTLE-automated-tools-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/NSTLE-automated-report-select.gif" title="The Automated Tools Reports are listed for your later review" onclick="return hs.expand(this, miniGalleryOptions3)">
+	<img src="images/NSTLE-automated-report-select-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/NSTLE-traceroute.gif" title="Shows the route packets take from your computer to the target" onclick="return hs.expand(this, miniGalleryOptions3)">
+	<img src="images/NSTLE-traceroute-thumb.gif" alt=""></a>
+	<a class="highslide" href="images/NSTLE-whois.gif" title="Shows Whois and basic DNS info for a domain name or IP address" onclick="return hs.expand(this, miniGalleryOptions3)">
+	<img src="images/NSTLE-whois-thumb.gif" alt=""></a>
+
+
+
+
+</div><div class="highslide-container" style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; position: absolute; left: 0px; top: 0px; width: 100%; z-index: 1001; direction: ltr; "><a class="highslide-loading" title="Click to cancel" href="javascript:;" style="position: absolute; top: -9999px; opacity: 0.75; z-index: 1; ">Loading...</a><div style="display: none; "></div><div class="highslide-viewport highslide-viewport-size" style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; visibility: hidden; "></div><table cellspacing="0" style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; visibility: hidden; position: absolute; border-collapse: collapse; width: 0px; "><tbody style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; "><tr style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; height: auto; "><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: 0px 0px; background-repeat: initial initial; "></td><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: 0px -40px; background-repeat: initial initial; "></td><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: -20px 0px; background-repeat: initial initial; "></td></tr><tr style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; height: auto; "><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: 0px -80px; background-repeat: initial initial; "></td><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; position: relative; " class="glossy-dark highslide-outline"></td><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: -20px -80px; background-repeat: initial initial; "></td></tr><tr style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; height: auto; "><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: 0px -20px; background-repeat: initial initial; "></td><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: 0px -60px; background-repeat: initial initial; "></td><td style="padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; line-height: 0; font-size: 0px; background-image: url(http://www.netscantools.com/highslide/graphics/outlines/glossy-dark.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; height: 20px; width: 20px; background-position: -20px -20px; background-repeat: initial initial; "></td></tr></tbody></table></div></body></html>
