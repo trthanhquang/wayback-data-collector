@@ -18,7 +18,7 @@ def main():
     #prompt user for the URL of the web page
     url = raw_input('Please indicate the URL of the webpage that lists the products and their prices: ')
     #converts it into HTML
-    html = convert_to_HTML(url)
+    html = convert_to_HTML('http://web.archive.org/web/query?type=urlquery&url=' + url)
     #if there does not exist even a single archive of the webpage
     if not has_snapshot(html):
         print('There are no records of this webpage at archive.org.')
@@ -29,12 +29,25 @@ def main():
     all_snapshots = []
     for year in snapshots_by_year:
         all_snapshots += collate_snapshots(year)
-        
     
-        
+    
+    
     #try using method 1 to find the list of products and prices
     #if has_price_product_table(html):
-        
+
+def export_snapshots(all_snapshots):
+    """This method takes in a list of tuples (containing date and time of a snapshot created,
+    and the URL of the snapshot), and exports them to a csv file called snapshots.csv"""
+    f = open('snapshots.csv', 'w')    
+    
+    for x in all_snapshots:
+        temp = str(x).strip('()\'')
+        temp = temp.replace('\'', '')
+        temp += '\n'
+        f.write(temp)
+    
+    f.close()
+       
 def collate_archive_links_by_year(html, url):
     """This method takes in the HTML code of the archive records of a particular
     web page. It will return a list of links to the archived web pages. The list
@@ -120,8 +133,8 @@ def has_price_product_table(html):
     and not other terms such as "catalogue" or "value". """
     #search for all the tables and see if any of them contain the words "price"
     #and "product" in their header
-    table_list = html.findAll('table')
-    for table in table_list:
+    list_of_tables = html.findAll('table')
+    for table in list_of_tables:
         #makes a list of headers in each table
         headers = table.findAll('th')
         #check that the words "product" and "price" are part of the table headers
@@ -131,4 +144,28 @@ def has_price_product_table(html):
         else:
             return False;
         
-    
+def extract_price_product_table(html):
+    """""This method assumes that the HTML string has a table containing information of
+    prices and products. It will return a list of tuples containing the products and their
+    respective prices. This function assumes that the headers will be labelled "product" 
+    and "price", and not other terms such as "catalogue" or "value". """
+    list_of_tables = html.findAll('table')
+    for table in list_of_tables:
+        #makes a list of headers in each table
+        headers = table.findAll('thead')
+        #run through each table's headers and look for the position of product and price
+        for table_headers in headers:
+            table_headers = str(table_headers).lower()
+            temp = table_headers.split('<th>')
+
+            for index in xrange(len(temp)):
+                if 'product' in temp[index]:
+                    product_position = index
+                if 'price' in temp[index]:
+                    price_position = index
+        
+        assert price_position != product_position, "price_position equals product_position"
+        
+        #having found the position of product and price in a particular table in a list
+        #of tables, we extract the information from that table first
+        table_data = table.findAll('td')
