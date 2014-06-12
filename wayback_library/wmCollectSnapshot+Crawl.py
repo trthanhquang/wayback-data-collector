@@ -29,7 +29,8 @@ for row in cur.fetchmany(2):
         
         for tag in links:
             print tag,links[tag]
-            date = tag.encode('utf32')
+            date = tag.encode('utf8')
+            print date
             '''from each link wm crawl html by using phantomjs'''
             driver = webdriver.PhantomJS(executable_path=phantomJSpath)
             linkwm = links[tag]
@@ -37,7 +38,7 @@ for row in cur.fetchmany(2):
                 print 'empty link!'
                 continue
             driver.get(linkwm)
-           # driver.get("http://www.netscantools.com")
+            #driver.get("http://www.netscantools.com")
             crawl_data = driver.page_source.encode('utf8')
             driver.quit()
     
@@ -55,11 +56,16 @@ for row in cur.fetchmany(2):
             meaningfulText = MySQLdb.escape_string(meaningfulText)
             #print meaningfulText
     
-            query = """insert into snapshot_2014(itemID, date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%b-%%e-%%Y\"), \"%s\", \"%s\");""" % (itemId, date,crawl_data, meaningfulText)
+            query = """insert into snapshot_2014(itemID, date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%b-%%e-%%Y\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
             #print query
             cur.execute(query)
             db.commit()
-
+            #f = open('query.txt', 'w')
+            #for line in query.split('\n') :
+            #    if line.strip() != '' :
+            #        f.write(line + str('\n'))
+            #f.close()
+            #return
 
     if __name__ == "__main__":
         main()
