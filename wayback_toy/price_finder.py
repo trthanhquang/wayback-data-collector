@@ -25,12 +25,17 @@ def main():
         exit
     #get a list which stores URLs pointing to snapshots that are separated by the year
     #that they were created
-    snapshots_by_year = collate_archive_links(html,url)
+    snapshots_by_year = collate_archive_links_by_year(html,url)
+    all_snapshots = []
+    for year in snapshots_by_year:
+        all_snapshots += collate_snapshots(year)
+        
     
+        
     #try using method 1 to find the list of products and prices
     #if has_price_product_table(html):
         
-def collate_archive_links(html, url):
+def collate_archive_links_by_year(html, url):
     """This method takes in the HTML code of the archive records of a particular
     web page. It will return a list of links to the archived web pages. The list
     will be arranged from oldest archived web page to most recent archived web page."""
@@ -52,6 +57,24 @@ def collate_archive_links(html, url):
         snapshots_by_year.append('https://web.archive.org/web/' + temp + '*/' + url)
     
     return snapshots_by_year
+
+def collate_snapshots(url):
+    """This method takes in the URL of a web page (intended to be a URL from archive.org
+    that shows the snapshots taken in a year), and returns a list of tuples, each tuple 
+    containing the date and time of a snapshot, and the URL that links to the respective 
+    snapshot gathered by archive.org"""
+    html = convert_to_HTML(url)
+    all_links = html.findAll('div', attrs={'class':'month'})
+    url_and_date = []
+    for x in xrange(12,24):
+        links_by_month = all_links[x].findAll('li')
+        for y in xrange(len(links_by_month)):
+            temp = str(links_by_month[y])
+            snapshot_url = 'http://web.archive.org' + temp[temp.find('/web/'):temp.rfind("\"")]
+            date_and_time = temp[temp.find('/web/')+len('/web/'):temp.find('/http')]
+            url_and_date.append((date_and_time, snapshot_url))
+    return url_and_date
+        
     
 def convert_to_HTML(url):
     """This function takes in the URL of a web page, and then returns a string 
