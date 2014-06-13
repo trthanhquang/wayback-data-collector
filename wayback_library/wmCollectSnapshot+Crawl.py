@@ -67,7 +67,7 @@ for row in cur:
         meaningfulText = MySQLdb.escape_string(meaningfulText)
         #print meaningfulText
 
-        query = """insert into snapshot_2014(itemID, date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%b-%%e-%%Y\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
+        query = """insert into snapshot_2014(itemID, date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%Y-%%m-%%d\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
         #print query
         #cur.execute(query)
         #db.commit()
