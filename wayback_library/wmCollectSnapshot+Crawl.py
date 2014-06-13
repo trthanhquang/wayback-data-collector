@@ -32,8 +32,14 @@ for row in cur:
     else:
         urlAddr2 = urlAddr
 
-    for year in (2014, 1979):
-        page = urllib2.urlopen(wmstart + str(year) + "0000000000*/" + urlAddr2)
+    for year in range (2014, 1979, -1):
+        #print wmstart + str(year) + "0000000000*/" + urlAddr2
+        req = urllib2.Request(wmstart + str(year) + "0000000000*/" + urlAddr2)
+        try:
+            page = urllib2.urlopen(req)
+        except urllib2.URLError, e:
+            print e
+        #page = urllib2.urlopen(wmstart + str(year) + "0000000000*/" + urlAddr2)
         soup = BeautifulSoup(page.read())
         links = soup.findAll("a")
 
@@ -69,6 +75,6 @@ for row in cur:
             #print query
             cur.execute(query)
             db.commit()
-        
-
     
+
+
