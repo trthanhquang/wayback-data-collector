@@ -14,13 +14,15 @@ phantomJSpath = 'C:\phantomjs-1.9.7-windows\phantomjs.exe'
 db = MySQLdb.connect(host = "localhost", user = "root", passwd = "", db = "wbm")
 cur = db.cursor()
 cur.execute("select `itemID`, `Publisher URL Search` from item order by itemID ASC");
-for row in cur.fetchmany(2):
 
+year = "2014"
+for row in cur:
     '''get date and link of waybackmachine and put in link[tag]'''
 
-    itemId = row[0];
-    query = row[1];
-    year = "2014"
+    itemId = row[0]
+    query = row[1]
+    print itemId, query
+    #print row
 
     w= WB()
     (status,links)=w.get_wayback_timetable_links(query,year)
@@ -36,11 +38,11 @@ for row in cur.fetchmany(2):
             print 'empty link!'
             continue
         driver = webdriver.PhantomJS(executable_path=phantomJSpath)
-        driver.get(linkwm) 
-        driver.quit()
+        driver.get(linkwm)
 
         crawl_data = driver.page_source.encode('utf8')
-
+ 
+        driver.quit()
 
         '''from craw_data convert to meaningful text'''
         soup = BeautifulSoup(crawl_data)
