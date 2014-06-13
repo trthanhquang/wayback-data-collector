@@ -21,7 +21,7 @@ wmstart = "http://web.archive.org/web/"
 #urlAddr = "www.netscantools.com"
 #urlAddr = "seriousbit.com"
 
-cur.execute("select `itemID`, `Publisher URL Search` from item order by itemID ASC");
+cur.execute("select `itemID`, `website` from item order by itemID ASC");
 #rows = cur.fetchmany(2)
 for row in cur:
     itemId = row[0]
@@ -55,12 +55,14 @@ for row in cur:
             date = final_link[27:35].encode('utf8')
             print ("\t%s\n") % final_link
             driver = webdriver.PhantomJS(executable_path=phantomJSpath)
-            driver.get(linkwm)
+            driver.get(final_link)
             crawl_data = driver.page_source.encode('utf8')
+            #crawl_data = os.linesep.join([s for s in crawl_data.split('\n') if s.strip() !=''])
             driver.quit()
 
             soup = BeautifulSoup(crawl_data)
             text = str(soup)
+            #print text
             meaningfulText = nltk.clean_html(text)
             meaningfulText = os.linesep.join([s for s in meaningfulText.split('\n') if s.strip() !=''])
 
