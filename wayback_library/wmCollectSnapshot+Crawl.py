@@ -21,8 +21,6 @@ wmstart = "http://web.archive.org/web/"
 #urlAddr = "www.netscantools.com"
 #urlAddr = "seriousbit.com"
 
-year = "2014"
-
 cur.execute("select `itemID`, `Publisher URL Search` from item order by itemID ASC");
 #rows = cur.fetchmany(2)
 for row in cur:
@@ -34,43 +32,43 @@ for row in cur:
     else:
         urlAddr2 = urlAddr
 
+    for year in (2014, 1979):
+        page = urllib2.urlopen(wmstart + str(year) + "0000000000*/" + urlAddr2)
+        soup = BeautifulSoup(page.read())
+        links = soup.findAll("a")
 
-    page = urllib2.urlopen(wmstart + year + "0000000000*/" + urlAddr2)
-    soup = BeautifulSoup(page.read())
-    links = soup.findAll("a")
+        link_list = []
+        for link in links:
+            if re.match("(.*)%s(.*)" % year, str(link), re.I):
+                if not "*" in str(link):
+                    linkwm = wm + link["href"]
+                    link_list.append(linkwm)
 
-    link_list = []
-    for link in links:
-        if re.match("(.*)%s(.*)" % year, str(link), re.I):
-            if not "*" in str(link):
-                linkwm = wm + link["href"]
-                link_list.append(linkwm)
+        for final_link in list(set(link_list)):
+            
+            date = final_link[27:35].encode('utf8')
+            print ("\t%s\n") % final_link
+            driver = webdriver.PhantomJS(executable_path=phantomJSpath)
+            driver.get(linkwm)
+            crawl_data = driver.page_source.encode('utf8')
+            driver.quit()
 
-    for final_link in list(set(link_list)):
+            soup = BeautifulSoup(crawl_data)
+            text = str(soup)
+            meaningfulText = nltk.clean_html(text)
+            meaningfulText = os.linesep.join([s for s in meaningfulText.split('\n') if s.strip() !=''])
+
+            '''write on MySQL craw_data and meaningful text'''
+            
+            crawl_data = MySQLdb.escape_string(crawl_data)
+            #print crawl_data
+            meaningfulText = MySQLdb.escape_string(meaningfulText)
+            #print meaningfulText
+
+            query = """insert into snapshot_allyear(itemID, snapshot_date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
+            #print query
+            cur.execute(query)
+            db.commit()
         
-        date = final_link[27:35].encode('utf8')
-        print ("\t%s\n") % final_link
-        driver = webdriver.PhantomJS(executable_path=phantomJSpath)
-        driver.get(linkwm)
-        crawl_data = driver.page_source.encode('utf8')
-        driver.quit()
-
-        soup = BeautifulSoup(crawl_data)
-        text = str(soup)
-        meaningfulText = nltk.clean_html(text)
-        meaningfulText = os.linesep.join([s for s in meaningfulText.split('\n') if s.strip() !=''])
-
-        '''write on MySQL craw_data and meaningful text'''
-        
-        crawl_data = MySQLdb.escape_string(crawl_data)
-        #print crawl_data
-        meaningfulText = MySQLdb.escape_string(meaningfulText)
-        #print meaningfulText
-
-        query = """insert into snapshot_2014(itemID, date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%Y-%%m-%%d\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
-        #print query
-        #cur.execute(query)
-        #db.commit()
-    
 
     
