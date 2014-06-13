@@ -36,10 +36,9 @@ for row in cur.fetchmany(2):
             print 'empty link!'
             continue
         driver = webdriver.PhantomJS(executable_path=phantomJSpath)
-        driver.get(linkwm) 
-        driver.quit()
-
+        driver.get(linkwm)
         crawl_data = driver.page_source.encode('utf8')
+        driver.quit()
 
 
         '''from craw_data convert to meaningful text'''
