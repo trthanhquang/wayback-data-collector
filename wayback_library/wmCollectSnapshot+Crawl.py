@@ -23,8 +23,8 @@ def worker(num):
     #urlAddr = "www.netscantools.com"
     #urlAddr = "seriousbit.com"
 
-    lowBound = num * 60
-    upBound = (num+1) * 60 - 1
+    lowBound = num * 30
+    upBound = (num+1) * 30 - 1
     cur.execute("select `itemID`, `website` from item order by itemID ASC limit %s, %s;"  % (lowBound, upBound));
     #rows = cur.fetchmany(2)
     for row in cur:
@@ -85,7 +85,7 @@ def worker(num):
     
 if __name__ == '__main__':
     threads = []
-    for i in range(22):
+    for i in range(45):
         t = threading.Thread(target=worker, args=(i,))
         threads.append(t)
         t.start()
