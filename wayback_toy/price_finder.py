@@ -1,39 +1,22 @@
 # -*- coding: utf-8 -*-
-#This program takes in a URL as its input, takes the HTML from the webpage, 
-#searches for a list of products and compiles the name and prices of the products
-#It does this in two ways:
-#Method 1 - It will search for a table header tag <th> and look for the strings
-#"product" and "price", and store the data
-#Method 2 - If such a table does not exist, then the program will look for
-#tags/attributes
-"""
+# file: price_finder.py
+'''
+|  This program takes in a URL as its input, takes the HTML from the webpage, 
+|    searches for a list of products and compiles the name and prices of the products.
+|  It does this in two ways:
+|    Method 1 - It will search for a table header tag <th> and look for the strings
+|      "product" and "price", and store the data
+|    Method 2 - If such a table does not exist, then the program will look for
+|      tags/attributes
+
 Created on Wed Jun 04 18:09:07 2014
 
 @author: chubbychubs
-"""
+@contribtor: drtagkim
+'''
 import urllib2
 import BeautifulSoup
-
-def main():
-    #prompt user for the URL of the web page
-    url = raw_input('Please indicate the URL of the webpage that lists the products and their prices: ')
-    #converts it into HTML
-    html = convert_to_HTML('http://web.archive.org/web/query?type=urlquery&url=' + url)
-    #if there does not exist even a single archive of the webpage
-    if not has_snapshot(html):
-        print('There are no records of this webpage at archive.org.')
-        exit
-    #get a list which stores URLs pointing to snapshots that are separated by the year
-    #that they were created
-    snapshots_by_year = collate_archive_links_by_year(html,url)
-    all_snapshots = []
-    for year in snapshots_by_year:
-        all_snapshots += collate_snapshots(year)
-    
-    
-    
-    #try using method 1 to find the list of products and prices
-    #if has_price_product_table(html):
+import sys
 
 def export_snapshots(all_snapshots):
     """This method takes in a list of tuples (containing date and time of a snapshot created,
@@ -93,11 +76,15 @@ def convert_to_HTML(url):
     """This function takes in the URL of a web page, and then returns a string 
     containing the HTML of the web page"""
     #create the HTML request to the website
-    request = urllib2.Request(url)
+    headers = { 'User-Agent' : 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11' ,
+                'charset' : 'utf-8',
+                'connection' : 'close'}
+    request = urllib2.Request(url,None,headers) #you should provide a header definition
     try:
         #create the response object for the HTML request
-        response = urllib2.urlopen(request)
+        response = urllib2.urlopen(request,None,timeout = 60) #timeout for 60 seconds
         #take the HTML from the response object
+        assert response.info().type == "text/html", "The data stream is not valid."
         html = response.read()
     #if we come across a 403 or 404 error, the HTML code will be stored in the
     #HTTPError instance, and we just need to extract the HTML code from it
@@ -106,10 +93,10 @@ def convert_to_HTML(url):
     except urllib2.HTTPError, e:
         html = e.fp
     except:
-        print('Unexpected error: Not 403 or 404. Exiting.')
-        exit
+        assert False, "Unexpected error: Not 403 or 404. Exiting."
     #convert it into better formatting using BeautifulSoup
-    soup = BeautifulSoup.BeautifulSoup(html)
+    soup = BeautifulSoup.BeautifulSoup(html,'html.parser')
+    assert soup != None and len(soup) > 0, "No content"
     return soup
 
 def has_snapshot(html):
@@ -169,3 +156,29 @@ def extract_price_product_table(html):
         #having found the position of product and price in a particular table in a list
         #of tables, we extract the information from that table first
         table_data = table.findAll('td')
+def main():
+    #prompt user for the URL of the web page
+    while 1:
+        url = raw_input('Please indicate the URL of the webpage that lists the products and their prices:\n> ')
+        #converts it into HTML
+        if len(url) <= 0:
+            continue
+        if not url.startswith("http"):
+            continue
+        break
+    html = convert_to_HTML('http://web.archive.org/web/query?type=urlquery&url=' + url)
+    #if there does not exist even a single archive of the webpage
+    assert has_snapshot(html), "There are no records of this Webpage at Archive.org"
+    #get a list which stores URLs pointing to snapshots that are separated by the year
+    #that they were created
+    snapshots_by_year = collate_archive_links_by_year(html, url)
+    all_snapshots = []
+    for year in snapshots_by_year:
+        all_snapshots += collate_snapshots(year)
+    
+    
+    
+    #try using method 1 to find the list of products and prices
+    #if has_price_product_table(html):
+    
+# ===== END OF PROGRAM =====
