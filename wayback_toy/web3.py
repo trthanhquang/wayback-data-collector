@@ -16,6 +16,7 @@ from Queue import Queue
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 
+
 #---------------------------------------------------------------
 class WebReaderPool(Thread):
     """
@@ -184,12 +185,17 @@ select.deselect_all()
 
 
     """
-    def __init__(self):
+    def __init__(self,noimage=False):
         """
 >>> pb = PhantomBrowser()
         """
         from selenium import webdriver
-        self.driver = webdriver.PhantomJS()
+        if noimage:
+            self.driver = webdriver.PhantomJS(service_args=['--load-images=no',
+                                                            '--webdriver-loglevel=NONE'])
+            # http://phantomjs.org/api/command-line.html (service_args reference)
+        else:
+            self.driver = webdriver.PhantomJS(service_args=['--webdriver-loglevel=NONE'])
         self.driver.set_window_size(1024,768)
 
     def goto(self,url):
@@ -228,7 +234,7 @@ select.deselect_all()
         return self.driver.page_source
 
     def execute_javascript(self,script):
-        self.driver.execute_script(script)
+        return self.driver.execute_script(script)
     def wait_ajax(self,driver):
         try:
             return 0 == driver.execute_script("return jQuery.active")
@@ -242,13 +248,18 @@ select.deselect_all()
     def scroll_down(self,patient=30):
         script = "window.scrollTo(0, document.body.scrollHeight);"
         self.execute_javascript(script)
-        WebDriverWait(self.driver,patient).until(self.wait_ajax,"Timeout waiting for page to load")
-        #time.sleep(patient)
+        try:
+            WebDriverWait(self.driver,patient).until(self.wait_ajax,"Timeout waiting for page to load")
+            return True
+        except:
+            return False # no ajax
+    def close(self):
+        self.driver.quit()
     def __del__(self):
         """
 >>> del pb
         """
-        self.driver.quit()
+        self.close()
 
 class BSHelper:
     def __init__(self):
@@ -257,3 +268,29 @@ class BSHelper:
         tags = soup.find_all(text = re.compile(text_string)) #bs4.element.NavigableString (inherits string)
         tags_list = map(lambda x : x.strip(), tags)
         return tags_list
+
+class Mp4WebTag:
+    """
+>>> sudo pip install hsaudiotag
+>>> sudo pip install requests
+    """
+    def __init__(self):
+        pass
+    def get_duration(self,url,buff=500,explain=False):
+        if explain:
+            print "in seconds"
+        from StringIO import StringIO
+        from hsaudiotag import mp4        
+        r = requests.get(url,stream=True)
+        if r.status_code == 200:
+            a = r.raw.read(buff)
+            b = StringIO()
+            b.write(a)
+            c = mp4.File(b)
+            duration = c.duration
+            b.close()
+            r.close()
+            return duration
+        else:
+            return -1
+        
