@@ -18,19 +18,25 @@ def worker(num):
     db = MySQLdb.connect(host = "localhost", user = "root", passwd = "", db = "wbm")
     db.autocommit(True)
     cur = db.cursor()
-
+    
     wm = "http://web.archive.org"
     wmstart = "http://web.archive.org/web/"
     #urlAddr = "www.netscantools.com"
     #urlAddr = "seriousbit.com"
 
-    lowBound = num * 5
-    upBound = (num+1) * 5 - 1
+    lowBound = num * 30
+    upBound = (num+1) * 30 - 1
     cur.execute("select `itemID`, `website` from item order by itemID ASC limit %s, %s;"  % (lowBound, upBound));
-    #rows = cur.fetchmany(2)
-    for row in cur:
+    rows = cur.fetchall()
+    for row in rows:
         itemId = row[0]
         urlAddr = row[1]
+        status_query = "select status from status where itemID = %s" % itemId
+        cur.execute(status_query)
+        status = cur.fetchone()
+        if status is not None and status[0] == "DONE":
+            print "This product has been processed\n"
+            continue
         print "Thread %s\t%s: %s\n" % (num, itemId, urlAddr)
         if not urlAddr.startswith("http"):
             urlAddr2 = "http://" + urlAddr #if the url does not start with 'http'...
@@ -58,7 +64,7 @@ def worker(num):
 
             for final_link in list(set(link_list)):
                 date = final_link[27:35].encode('utf8')
-                print ("\t%s\n") % final_link
+                print ("\t%s\t%s\n") % (num, final_link)
                 driver = webdriver.PhantomJS(executable_path=phantomJSpath)
                 driver.get(final_link)
                 crawl_data = driver.page_source.encode('utf8')
@@ -78,19 +84,18 @@ def worker(num):
                 meaningfulText = MySQLdb.escape_string(meaningfulText)
                 #print meaningfulText
 
-                query = """insert into snapshot_allyear(itemID, snapshot_date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
+                query = """insert into snapshot_allyear(itemID, snapshot_date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\ on duplicate key update");""" % (itemId, date, crawl_data, meaningfulText)
                 #print query
                 cur.execute(query)
-                
-        confirm_query = "insert into table status(`itemID`, `status`) values (%s, `%s`) " % (itemID, "DONE")
-        cur.execute(query)
+        confirm_query = "insert into status(itemID, status) values (%s, \"%s\") " % (itemId, "DONE")
+        cur.execute(confirm_query)
     cur.close()
     db.close()
     return
     
 if __name__ == '__main__':
     threads = []
-    for i in range(10):
+    for i in range(15):
         t = threading.Thread(target=worker, args=(i,))
         threads.append(t)
         t.start()
