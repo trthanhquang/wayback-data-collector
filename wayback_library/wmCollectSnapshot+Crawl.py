@@ -87,11 +87,11 @@ def worker(num):
                 meaningfulText = MySQLdb.escape_string(meaningfulText)
                 #print meaningfulText
 
-                query = """insert into snapshot_allyear(itemID, snapshot_date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
+                query = """insert ignore into snapshot_allyear(itemID, snapshot_date, crawl_data, meaningfulText) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");""" % (itemId, date, crawl_data, meaningfulText)
                 #print query
                 cur.execute(query)
 
-                confirm_query = "insert into status(itemID, snapshot_date, status) values (%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\")" % (itemId, date, "DONE")
+                confirm_query = "insert ignore into status(itemID, snapshot_date, status) values (%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\")" % (itemId, date, "DONE")
                 cur.execute(confirm_query)
 
     cur.close()
