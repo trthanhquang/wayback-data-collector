@@ -91,7 +91,7 @@ def worker(num):
                 #print query
                 cur.execute(query)
 
-                confirm_query = "insert into status(itemID, snapshot_date, status) values (%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\")" % (itemId, "DONE")
+                confirm_query = "insert into status(itemID, snapshot_date, status) values (%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\")" % (itemId, date, "DONE")
                 cur.execute(confirm_query)
 
     cur.close()
