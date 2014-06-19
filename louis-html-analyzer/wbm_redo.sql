@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.1.14
 -- http://www.phpmyadmin.net
 --
@@ -17,6 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 CREATE DATABASE IF NOT EXISTS `wbm`;
+
+USE `wbm`;
 --
 -- Database: `wbm`
 --
