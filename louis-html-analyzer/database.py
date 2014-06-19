@@ -17,7 +17,7 @@ class database(object):
     def getHTML(self,itemID):
         getHTML_query = "select snapshot_date, crawl_data from snapshot_allyear where itemID = %s order by snapshot_date desc" % itemID
         self.cur.execute(getHTML_query)
-        return self.cur.fetchall() #return: list of (snapshot_date as String, html as String)
+        return self.cur.fetchall() #return type: (date, html, text)
 
     def saveHTML(self,itemID,date,fName):
         openHTML_query = "select crawl_data from snapshot_allyear where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y-%%m-%%d\")" % (itemID, date)
@@ -36,16 +36,12 @@ class database(object):
     def getWebsiteHomepage(self, itemID):
         getHomepage_query = "select Website from item where itemID = %s" % itemID
         self.cur.execute(getHomepage_query)
-<<<<<<< HEAD
         return str(self.cur.fetchone()[0])
 
     def getItemID(self):
         query  = "select itemID from item"
         self.cur.execute(query)
         return self.cur.fetchall()
-=======
-        return str(self.cur.fetchone()[0]) #return: URL as String
->>>>>>> origin/master
     
     def isSnapshotInDB(self, itemID, date):
         status_query = "select itemID, snapshot_date from snapshot_allyear where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y%%m%%d\")" % (itemID, date)
@@ -63,7 +59,7 @@ class database(object):
     def retrieveHTML(self, itemID, date):
         query = "select crawl_data from snapshot_allyear where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y%%m%%d\");" % (itemID, date)
         self.cur.execute(query)
-        return str(self.cur.fetchone()[0]) #return: HTML as String
+        return str(self.cur.fetchone()[0])
     
 if __name__ == '__main__':
     db = database()

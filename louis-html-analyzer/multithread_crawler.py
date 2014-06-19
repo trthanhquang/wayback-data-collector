@@ -4,7 +4,8 @@ import threading
 
 db = database()
 itemIDs = db.getItemID()
-for itemID in itemIDs:
+
+for (itemID,) in itemIDs:
     threads = []
     for year in range(2014, 1990, -1):
         #print year
@@ -12,3 +13,4 @@ for itemID in itemIDs:
         threads.append(t)
         t.start()
     [x.join() for x in threads]
+
