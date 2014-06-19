@@ -43,11 +43,11 @@ class database:
             return False
     
     def storeSnapshot(self, itemID, date, data):
-        query = """insert ignore into snapshot_retest(itemID, snapshot_date, crawl_data) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\");""" % (itemID, date, data)
+        query = """insert ignore into snapshot_allyear(itemID, snapshot_date, crawl_data) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\");""" % (itemID, date, data)
         self.cur.execute(query)
 
     def retrieveHTML(self, itemID, date):
-        query = "select crawl_data from snapshot_retest where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y%%m%%d\");" % (itemID, date)
+        query = "select crawl_data from snapshot_allyear where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y%%m%%d\");" % (itemID, date)
         self.cur.execute(query)
         return str(self.cur.fetchone()[0])
     
