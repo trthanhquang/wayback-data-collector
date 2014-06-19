@@ -20,7 +20,7 @@ class Crawler:
         print self.url
         self.url_list = []
 
-    def getSnapshotLinks (self, year):
+    def __getSnapshotLinks (self, year):
         req = urllib2.Request(self.wmstart + str(year) + "0600000000*/" + self.url)
         try:
             page = urllib2.urlopen(req)
@@ -47,7 +47,7 @@ class Crawler:
         driver.quit()
         return data
     
-    def crawlSnapshot (self, year):
+    def __crawlSnapshot (self, year):
         for link in self.url_list:
             date = link[27:35]
             print date, link
@@ -57,14 +57,17 @@ class Crawler:
             data = self.__getDataFromPhantomBrowser(link)
             data = re.escape(data)
             self.db.storeSnapshot(self.itemID, date, data)
-            
+
+    def crawl(self, year):
+        self.__getSnapshotLinks(year)
+        self.__crawlSnapshot(year)
             
 if __name__ == '__main__':
-    '''crawler = Crawler(3395)
-    print crawler.getSnapshotLinks(2014)
-    crawler.crawlSnapshot(2014)
-'''
-    db = database()
+    crawler = Crawler(3681)
+    for year in range (2014, 1979, -1):
+        crawler.crawl(year)
+
+    '''db = database()
     f1= open("NewHTML.html", "w")
     tstr = db.retrieveHTML(3395, "20140422")
     
@@ -72,7 +75,7 @@ if __name__ == '__main__':
     f1.close()
 
     webbrowser.open("NewHTML.html")
-
+'''
    # threads = []
    # for i in range(20):
    #     t = threading.Thread(target=worker, args=(i,))
