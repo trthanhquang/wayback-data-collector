@@ -58,6 +58,7 @@ def worker(num):
                         link_list.append(linkwm)
 
             for final_link in list(set(link_list)):
+                final_link.encode('utf8')
                 date = final_link[27:35].encode('utf8')
                 print ("\t%s\t%s\n") % (num, final_link)
                 
