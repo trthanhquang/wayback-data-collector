@@ -9,25 +9,40 @@ class htmlCrawler:
         pass
     def start(self):
         self.driver = webdriver.PhantomJS(executable_path=self.phantomJSpath)
+
     def stop(self):
         self.driver.quit()
-    def extractHTML(self, url, fileName):
+
+    def crawlHTML(self,url):
         self.driver.get(url)
         soup = BS(self.driver.page_source)
-        
+        self.html = soup.prettify().encode('utf8')
+        return self.html
+    
+    def extractHTML(self, fileName):
         f = open(fileName,'w')
-        f.write(soup.prettify().encode('utf8'))
+        f.write(self.html)
         f.close()
 
 class htmlAnalyzer:
-    def __init__(self,sourceHTML):
+    def __init__(self):
+        pass
+
+    def importFromObject(self,html):
+        soup = BS(html)
+    
+        text = nltk.clean_html(str(soup))
+        self.rawText = os.linesep.join([s for s in text.split('\n') if s.strip() !=''])
+
+    def importFromFile(self,sourceHTML):
         pageSource = open(sourceHTML,'r')
         soup = BS(pageSource)
         pageSource.close()
     
         text = nltk.clean_html(str(soup))
         self.rawText = os.linesep.join([s for s in text.split('\n') if s.strip() !=''])
-    
+
+        
     def exportText(self, destinationFile):
         f = open(destinationFile,'w')
         f.write(self.rawText)
