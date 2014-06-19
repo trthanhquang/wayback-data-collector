@@ -17,6 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 CREATE DATABASE IF NOT EXISTS `wbm`;
+USE `wbm`;
 --
 -- Database: `wbm`
 --
@@ -7984,7 +7985,6 @@ CREATE TABLE IF NOT EXISTS `snapshot_allyear` (
   `itemID` int(11) NOT NULL,
   `snapshot_date` date NOT NULL,
   `crawl_data` longtext NOT NULL,
-  `meaningfulText` longtext NOT NULL,
   PRIMARY KEY (`itemID`,`snapshot_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
