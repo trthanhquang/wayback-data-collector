@@ -2,13 +2,17 @@ import MySQLdb
 import webbrowser
 from bs4 import BeautifulSoup as BS
 
-class database:
+class database(object):
     def __init__(self, hostName="localhost", userName="root", password="", database="wbm"):
         self.db = MySQLdb.connect(host = hostName, user = userName,
                                   passwd = password, db = database,
                                   charset='utf8', use_unicode=True)
         self.db.autocommit(True)
         self.cur = self.db.cursor()
+
+    def _del__(self):
+        self.cur.close()
+        self.db.close()
 
     def getHTML(self,itemID):
         getHTML_query = "select snapshot_date, crawl_data, meaningfulText from snapshot_allyear where itemID = %s order by snapshot_date desc" % itemID
@@ -33,12 +37,17 @@ class database:
         getHomepage_query = "select Website from item where itemID = %s" % itemID
         self.cur.execute(getHomepage_query)
         return str(self.cur.fetchone()[0])
+
+    def getItemID(self):
+        query  = "select itemID from item"
+        self.cur.execute(query)
+        return self.cur.fetchall()
     
     def isSnapshotInDB(self, itemID, date):
-        status_query = "select status from status where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y%%m%%d\")" % (itemID, date)
+        status_query = "select itemID, snapshot_date from snapshot_allyear where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y%%m%%d\")" % (itemID, date)
         self.cur.execute(status_query)
         status = self.cur.fetchone()
-        if status is not None and status[0] == "DONE":
+        if status is not None:
             return True
         else:
             return False

@@ -5,13 +5,13 @@ import re
 from selenium import webdriver
 import webbrowser
 
-class Crawler:
+class Crawler(object):
     phantomJSpath = 'C:\phantomjs-1.9.7-windows\phantomjs.exe'
     wm = "http://web.archive.org"
     wmstart = "http://web.archive.org/web/"
-    db = database()
     def __init__ (self, itemID):
         self.itemID = itemID
+        self.db = database()
         url = self.db.getWebsiteHomepage(itemID)
         if not url.startswith("http"):
             self.url = "http://" + url
