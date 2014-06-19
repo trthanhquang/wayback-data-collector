@@ -56,7 +56,7 @@ class Crawler(object):
                 continue
             data = self.__getDataFromPhantomBrowser(link)
             data = re.escape(data)
-            self.db.storeSnapshot(self.itemID, date, data)
+            self.db.storeSnapshot(self.itemID, date, link, data)
 
     def crawl(self, year):
         self.__getSnapshotLinks(year)

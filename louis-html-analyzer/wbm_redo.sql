@@ -3,10 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2014 at 11:10 AM
+-- Generation Time: Jun 19, 2014 at 08:10 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -16,11 +17,12 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
-CREATE DATABASE IF NOT EXISTS `wbm`;
-USE `wbm`;
 --
 -- Database: `wbm`
 --
+DROP DATABASE `wbm`;
+CREATE DATABASE IF NOT EXISTS `wbm` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `wbm`;
 
 -- --------------------------------------------------------
 
@@ -28,6 +30,7 @@ USE `wbm`;
 -- Table structure for table `item`
 --
 
+DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
   `itemID` int(4) NOT NULL DEFAULT '0',
   `softwareID` int(6) DEFAULT NULL,
@@ -39,6 +42,11 @@ CREATE TABLE IF NOT EXISTS `item` (
   PRIMARY KEY (`itemID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Truncate table before insert `item`
+--
+
+TRUNCATE TABLE `item`;
 --
 -- Dumping data for table `item`
 --
@@ -7981,26 +7989,20 @@ INSERT INTO `item` (`itemID`, `softwareID`, `app_name`, `total_down`, `publisher
 -- Table structure for table `snapshot_allyear`
 --
 
+DROP TABLE IF EXISTS `snapshot_allyear`;
 CREATE TABLE IF NOT EXISTS `snapshot_allyear` (
   `itemID` int(11) NOT NULL,
   `snapshot_date` date NOT NULL,
+  `snapshot_url` varchar(1024) NOT NULL,
   `crawl_data` longtext NOT NULL,
   PRIMARY KEY (`itemID`,`snapshot_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `status`
+-- Truncate table before insert `snapshot_allyear`
 --
 
-CREATE TABLE IF NOT EXISTS `status` (
-  `itemID` int(11) NOT NULL,
-  `snapshot_date` date NOT NULL,
-  `status` varchar(12) NOT NULL,
-  PRIMARY KEY (`itemID`,`snapshot_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+TRUNCATE TABLE `snapshot_allyear`;
 --
 -- Constraints for dumped tables
 --
@@ -8010,12 +8012,7 @@ CREATE TABLE IF NOT EXISTS `status` (
 --
 ALTER TABLE `snapshot_allyear`
   ADD CONSTRAINT `fk_snapshot_itemID` FOREIGN KEY (`itemID`) REFERENCES `item` (`itemID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `status`
---
-ALTER TABLE `status`
-  ADD CONSTRAINT `status_ibfk_1` FOREIGN KEY (`itemID`, `snapshot_date`) REFERENCES `snapshot_allyear` (`itemID`, `snapshot_date`);
+SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

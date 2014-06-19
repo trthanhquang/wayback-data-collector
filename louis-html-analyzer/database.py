@@ -52,8 +52,8 @@ class database(object):
         else:
             return False
     
-    def storeSnapshot(self, itemID, date, data):
-        query = """insert ignore into snapshot_allyear(itemID, snapshot_date, crawl_data) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\");""" % (itemID, date, data)
+    def storeSnapshot(self, itemID, date, url, data):
+        query = """insert ignore into snapshot_allyear(itemID, snapshot_date, snapshot_url, crawl_data) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");""" % (itemID, date, url, data)
         self.cur.execute(query)
 
     def retrieveHTML(self, itemID, date):
