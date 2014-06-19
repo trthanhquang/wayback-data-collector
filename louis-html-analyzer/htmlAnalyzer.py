@@ -25,23 +25,10 @@ class htmlCrawler:
         f.close()
 
 class htmlAnalyzer:
-    def __init__(self):
-        pass
-
-    def importFromObject(self,html):
-        soup = BS(html)
-    
-        text = nltk.clean_html(str(soup))
+    def __init__(self,html):
+        self.soup = BS(html)
+        text = nltk.clean_html(str(self.soup))
         self.rawText = os.linesep.join([s for s in text.split('\n') if s.strip() !=''])
-
-    def importFromFile(self,sourceHTML):
-        pageSource = open(sourceHTML,'r')
-        soup = BS(pageSource)
-        pageSource.close()
-    
-        text = nltk.clean_html(str(soup))
-        self.rawText = os.linesep.join([s for s in text.split('\n') if s.strip() !=''])
-
         
     def exportText(self, destinationFile):
         f = open(destinationFile,'w')
@@ -58,14 +45,17 @@ class htmlAnalyzer:
         return self.rawText
     
 if __name__ == "__main__":
-    '''crawler = htmlCrawler()
+    crawler = htmlCrawler()
     crawler.start()
-    crawler.extractHTML("http://web.archive.org/web/20130420051748/http://www.bitdefender.com/","page2013.html")
-    crawler.extractHTML("http://www.bitdefender.com/","page2014.html")
-    crawler.stop()
-    '''
+    html2013 = crawler.crawlHTML("http://web.archive.org/web/20130420051748/http://www.bitdefender.com/")
+    crawler.extractHTML("page2013.html")
     
-    analyzer = htmlAnalyzer("page2014.html")       
+    html2014 = crawler.crawlHTML("http://www.bitdefender.com/")
+    crawler.extractHTML("page2014.html")
+    crawler.stop()
+    
+    
+    page2014 = htmlAnalyzer(html2014)       
     searchString = """
     Antivirus
     Parental Control
@@ -75,12 +65,12 @@ if __name__ == "__main__":
     Safe Banking
     Social Network Protection """
     
-    if(analyzer.searchText(searchString)!=-1):
+    if(page2014.searchText(searchString)!=-1):
         print "HTML contain search String"
     else:
         #html does not contain search String --> manually compare!
-        text1 = htmlAnalyzer("page2013.html").getText()
-        text2 = htmlAnalyzer("page2014.html").getText()
+        text1 = htmlAnalyzer(html2013).getText()
+        text2 = htmlAnalyzer(html2014).getText()
 
         import difflib
         d = difflib.HtmlDiff()
@@ -91,7 +81,6 @@ if __name__ == "__main__":
         
         import webbrowser
         webbrowser.open("compare.html")
-       
         webbrowser.open("page2013.html")
         webbrowser.open("page2014.html")
         

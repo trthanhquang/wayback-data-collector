@@ -49,15 +49,13 @@ if __name__ == '__main__':
     '''
     crawler = htmlCrawler()
     crawler.start()
-    analyzer = htmlAnalyzer()
 
     for url in url_list:
         date = url[27:35]
         print date,url
         
         html = crawler.crawlHTML(url)
-
-        analyzer.importFromObject(html)
+        analyzer = htmlAnalyzer(html)
         print "crawled, analyzing"
         if(analyzer.searchText(searchString)!=-1):
             print "OK"
