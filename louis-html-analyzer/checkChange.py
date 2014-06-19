@@ -33,19 +33,13 @@ def getSnapshotURL(urlAddr,year):
         print 'exception: ',e
     
 if __name__ == '__main__':
-    url_list = getSnapshotURL("http://www.bitdefender.com",2013)
+    url_list = getSnapshotURL("http://www.pbsoftware.org/",2014)
 
     searchString = '''
-        Antivirus
-        Safe shopping
-        Firewall
-        Antispam
-        Parental Control
-        Online Storage
-        Facebook guardian
-        Device Anti-Theft
-        Identity protection
-        Tune-Up
+
+
+Our products have been rated 5 stars by most of the shareware sites on the internet!
+We at PB Software, LLC are dedicated to providing professional services and software. We are dedicated to the pursuit of quality and best price software for all of our customers.  We hope you enjoy our products and thank you for purchasing them.
     '''
     crawler = htmlCrawler()
     crawler.start()
@@ -55,7 +49,11 @@ if __name__ == '__main__':
         print date,url
         
         html = crawler.crawlHTML(url)
+        crawler.extractHTML('a.html')
+        
         analyzer = htmlAnalyzer(html)
+        print analyzer.getText()
+        
         print "crawled, analyzing"
         if(analyzer.searchText(searchString)!=-1):
             print "OK"
