@@ -5,7 +5,8 @@ from bs4 import BeautifulSoup as BS
 class database:
     def __init__(self, hostName="localhost", userName="root", password="", database="wbm"):
         self.db = MySQLdb.connect(host = hostName, user = userName,
-                                  passwd = password, db = database)
+                                  passwd = password, db = database,
+                                  charset='utf8', use_unicode=True)
         self.db.autocommit(True)
         self.cur = self.db.cursor()
 

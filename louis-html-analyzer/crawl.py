@@ -60,14 +60,23 @@ class Crawler:
             
             
 if __name__ == '__main__':
-    #crawler = Crawler(3395)
-    #print crawler.getSnapshotLinks(2014)
-    #crawler.crawlSnapshot(2014)
+    '''crawler = Crawler(3395)
+    print crawler.getSnapshotLinks(2014)
+    crawler.crawlSnapshot(2014)
+'''
+    db = database()
+    f1= open("NewHTML.html", "w")
+    tstr = db.retrieveHTML(3395, "20140422")
+    
+    f1.write(tstr)
+    f1.close()
 
-    #db = database()
-    #f1= open("NewHTML.html", "w")
-    #f1.write(db.retrieveHTML(3395, "20140422"))
-    #f1.close()
+    webbrowser.open("NewHTML.html")
 
-    #webbrowser.open("NewHTML.html")
+   # threads = []
+   # for i in range(20):
+   #     t = threading.Thread(target=worker, args=(i,))
+   #     threads.append(t)
+   #     t.start()
+
     
