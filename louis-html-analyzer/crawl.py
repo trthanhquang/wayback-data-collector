@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup as BS
 import urllib2
 from database import *
-import re
 from selenium import webdriver
 import webbrowser
 
@@ -17,7 +16,7 @@ class Crawler(object):
             self.url = "http://" + url
         else:
             self.url = url
-        print self.url
+        #print self.url
         self.url_list = []
 
     def __getSnapshotLinks (self, year):
@@ -42,6 +41,8 @@ class Crawler(object):
         
     def __getDataFromPhantomBrowser(self, url):
         driver = webdriver.PhantomJS(executable_path=self.phantomJSpath)
+        driver.set_page_load_timeout(30)
+        print url
         driver.get(url)
         data = driver.page_source
         driver.quit()
@@ -50,12 +51,11 @@ class Crawler(object):
     def __crawlSnapshot (self, year):
         for link in self.url_list:
             date = link[27:35]
-            print date, link
+            #print date, self.itemID, link
             if self.db.isSnapshotInDB(self.itemID, date):
-                print "in DB\n"
+                #print "in DB\n"
                 continue
             data = self.__getDataFromPhantomBrowser(link)
-            data = re.escape(data)
             self.db.storeSnapshot(self.itemID, date, link, data)
 
     def crawl(self, year):

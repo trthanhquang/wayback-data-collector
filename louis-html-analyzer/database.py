@@ -1,5 +1,6 @@
 import MySQLdb
 import webbrowser
+import re
 from bs4 import BeautifulSoup as BS
 
 class database(object):
@@ -53,6 +54,7 @@ class database(object):
             return False
     
     def storeSnapshot(self, itemID, date, url, data):
+        data = re.escape(data)
         query = """insert ignore into snapshot_allyear(itemID, snapshot_date, snapshot_url, crawl_data) values(%s, STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");""" % (itemID, date, url, data)
         self.cur.execute(query)
 
