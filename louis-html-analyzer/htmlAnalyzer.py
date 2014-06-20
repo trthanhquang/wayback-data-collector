@@ -40,8 +40,8 @@ class htmlAnalyzer:
         '''noSpaceText = " ".join(self.rawText.split())
         lookupText = " ".join(lookupText.split())'''
         #split words using not only \n,' ',\t but also punctuations:
-        noSpaceText = " ".join(e for e in self.rawText if e.isalnum())
-        lookupText = " ".join(e for e in lookupText if e.isalnum())
+        noSpaceText = " ".join(e for e in self.rawText.lower() if e.isalnum())
+        lookupText = " ".join(e for e in lookupText.lower() if e.isalnum())
         
         return noSpaceText.find(lookupText)
 
