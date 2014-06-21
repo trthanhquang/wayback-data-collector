@@ -42,7 +42,7 @@ class Crawler(object):
     def __getDataFromPhantomBrowser(self, url):
         driver = webdriver.PhantomJS(executable_path=self.phantomJSpath)
         driver.set_page_load_timeout(30)
-        print url
+        #print url
         driver.get(url)
         data = driver.page_source
         driver.quit()
@@ -61,25 +61,6 @@ class Crawler(object):
     def crawl(self, year):
         self.__getSnapshotLinks(year)
         self.__crawlSnapshot(year)
-            
-if __name__ == '__main__':
-    crawler = Crawler(3681)
-    for year in range (2014, 1979, -1):
-        crawler.crawl(year)
-
-    '''db = database()
-    f1= open("NewHTML.html", "w")
-    tstr = db.retrieveHTML(3395, "20140422")
-    
-    f1.write(tstr)
-    f1.close()
-
-    webbrowser.open("NewHTML.html")
-'''
-   # threads = []
-   # for i in range(20):
-   #     t = threading.Thread(target=worker, args=(i,))
-   #     threads.append(t)
-   #     t.start()
-
-    
+        print "done crawling %s-%s" % (self.itemID, year)
+        return
+        

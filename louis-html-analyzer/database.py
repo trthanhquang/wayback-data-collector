@@ -39,8 +39,10 @@ class database(object):
         self.cur.execute(getHomepage_query)
         return str(self.cur.fetchone()[0])
 
-    def getItemID(self):
-        query  = "select itemID from item"
+    def getItemID(self, lower, upper):
+        #query  = "select itemID from item where itemID >= 2262 and itemID <= 3392"
+        query  = "select itemID from item where itemID >= %s and itemID <= %s" % (lower, upper)
+        #query  = "select itemID from item where itemID = 2273"
         self.cur.execute(query)
         return self.cur.fetchall()
     

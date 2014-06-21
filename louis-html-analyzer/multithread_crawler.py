@@ -18,13 +18,14 @@ def multithread_onYear(itemID):
             year_threads.append(t)
         [x.start() for x in year_threads]
         [x.join() for x in year_threads]
+        print "done crawling %s-%s" % (itemID, years)
     print "%s finished\n" % itemID
     return
     
 db = database()
-itemID_list = db.getItemID()
-
-for (itemIDs) in grouped(itemID_list,16): #extract 16 IDs at once
+itemID_list = db.getItemID(2262, 3392)
+remainingIDs = []
+for (itemIDs) in grouped(itemID_list,20): #extract 20 IDs at once
     #print itemIDs
     ID_threads = []
     for (itemID,) in itemIDs:
@@ -34,3 +35,4 @@ for (itemIDs) in grouped(itemID_list,16): #extract 16 IDs at once
         ID_threads.append(t)
     [x.start() for x in ID_threads]
     [x.join() for x in ID_threads]
+    print "%s finished\n" % str(itemIDs)
