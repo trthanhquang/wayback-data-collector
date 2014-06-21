@@ -1,9 +1,10 @@
 from bs4 import BeautifulSoup as BS
 from selenium import webdriver
+import urllib2
 import nltk
 import os
 
-class htmlCrawler:
+class phantomCrawler:
     phantomJSpath = 'C:\phantomjs-1.9.7-windows\phantomjs.exe'
     def __init__(self):
         pass
@@ -24,6 +25,19 @@ class htmlCrawler:
         f.write(self.html)
         f.close()
 
+class urlCrawler:
+    def crawlHTML(self,url):
+        page = urllib2.urlopen(url)
+        '''    soup = BS(page.read())
+        self.html = soup.prettify().encode('utf8')
+        return self.html
+    '''
+        return page.read().encode('utf8')
+    def extractHTML(self, fileName):
+        f = open(fileName,'w')
+        f.write(self.html)
+        f.close()
+        
 class htmlAnalyzer:
     def __init__(self,html):
         self.soup = BS(html)
@@ -47,9 +61,47 @@ class htmlAnalyzer:
 
     def getText(self):
         return self.rawText
+
+def urlCrawlerExample():
+    crawler = urlCrawler()
+    html2013 = crawler.crawlHTML("http://web.archive.org/web/20130420051748/http://www.bitdefender.com/")
+    crawler.extractHTML("page2013.html")
+
+    html2014 = crawler.crawlHTML("http://www.bitdefender.com/")
+    crawler.extractHTML("page2014.html")
+
+    analyzer2014 = htmlAnalyzer(html2014)       
+    searchString = """
+    Antivirus
+    Parental Control
+    Antispam
+    Firewall
+    ID Theft Protection
+    Safe Banking
+    Social Network Protection """
     
-if __name__ == "__main__":
-    crawler = htmlCrawler()
+    if(analyzer2014.searchText(searchString)!=-1):
+        print "HTML contain search String"
+    else:
+        #html does not contain search String --> manually compare!
+        text1 = htmlAnalyzer(html2013).getText()
+        text2 = htmlAnalyzer(html2014).getText()
+
+        import difflib
+        d = difflib.HtmlDiff()
+        html_str = d.make_file(text1.split('\n'),text2.split('\n'))
+        f = open("compare.html","w")
+        f.write(html_str)
+        f.close()
+        
+        import webbrowser
+        webbrowser.open("compare.html")
+        webbrowser.open("page2013.html")
+        webbrowser.open("page2014.html")
+    
+    
+def phantomCrawlerExample():
+    crawler = phantomCrawler()
     crawler.start()
     html2013 = crawler.crawlHTML("http://web.archive.org/web/20130420051748/http://www.bitdefender.com/")
     crawler.extractHTML("page2013.html")
@@ -88,4 +140,6 @@ if __name__ == "__main__":
         webbrowser.open("page2013.html")
         webbrowser.open("page2014.html")
         
-    
+if __name__ == "__main__":
+    #urlCrawlerExample()
+    phantomCrawlerExample()

@@ -14,7 +14,7 @@ def getSnapshotURL(urlAddr,year):
     else:
         urlAddr2 = urlAddr
 
-    req = urllib2.Request(wmstart + str(year) + "0000000000*/" + urlAddr2)
+    req = urllib2.Request(wmstart + str(year) + "0600000000*/" + urlAddr2)
     try:
         page = urllib2.urlopen(req)
         soup = BS(page.read())
@@ -33,17 +33,40 @@ def getSnapshotURL(urlAddr,year):
         print 'exception: ',e
     
 if __name__ == '__main__':
-    url_list = getSnapshotURL("http://www.pbsoftware.org/",2014)
+    url_list = []
+    for year in range(2014,1992,-1):
+        url_list.extend(getSnapshotURL("http://www.bitdefender.com/",year))
+    print url_list
 
     searchString = '''
-
-
-Our products have been rated 5 stars by most of the shareware sites on the internet!
-We at PB Software, LLC are dedicated to providing professional services and software. We are dedicated to the pursuit of quality and best price software for all of our customers.  We hope you enjoy our products and thank you for purchasing them.
+AntivirusSafe shoppingFirewallAntispamParental ControlOnline StorageFacebook
+guardianDevice Anti-TheftIdentity protectionTune-Up
     '''
-    crawler = htmlCrawler()
+    print len(url_list)
+    for url in url_list:
+        print url
+        
+    crawler = phantomCrawler()
     crawler.start()
 
+    hi = len(url_list)
+    lo = 0
+
+    while(lo<hi):
+        mid = lo+(hi-lo)/2
+        url = url_list[mid]
+        html = crawler.crawlHTML(url)
+        analyzer = htmlAnalyzer(html)
+        
+        print 'crawled: %s'%(url[27:35])
+        if(analyzer.searchText(searchString)==-1):
+            hi = mid-1
+        else:
+            lo = mid+1
+        print lo,hi,mid
+        
+    print mid, url_list[mid][27:35], url_list[mid]
+    '''
     for url in url_list:
         date = url[27:35]
         print date,url
@@ -52,7 +75,7 @@ We at PB Software, LLC are dedicated to providing professional services and soft
         crawler.extractHTML('a.html')
         
         analyzer = htmlAnalyzer(html)
-        print analyzer.getText()
+        #print analyzer.getText()
         
         print "crawled, analyzing"
         if(analyzer.searchText(searchString)!=-1):
@@ -60,6 +83,7 @@ We at PB Software, LLC are dedicated to providing professional services and soft
         else:
             print "Have changes"
             break
-
+    '''
+    
     crawler.stop()
   
