@@ -1,6 +1,10 @@
 from compareSnapshot import *
 from htmlAnalyzer import *
-from database import * #!
+
+from stub_crawl import *
+from stub_database import *
+
+'''from database import * #!
 from crawl import * #!
 
 
@@ -44,6 +48,7 @@ class mock_database:
 		global mock_htmlList
 		return mock_htmlList[index]
 
+'''
 
 digLevel = 6
 db = None
@@ -116,23 +121,27 @@ def binarySearchDiff(lo, hi,searchString):
 
 if __name__ == '__main__':
 	#global db,crawler
-	db = mock_database()
+	# db = mock_database()
+	db = database()
 
 	# itemID = int(raw_input('Enter itemID: '))
 	# appName = db.getItemName(itemID)
 	#* Assume correct itemID
 	
-	itemID = 1
+	itemID = 3401
 
-	crawler = mock_crawler(itemID)
+	# crawler = mock_crawler(itemID)
+	crawler = Crawler(itemID)
 
 	#Initialize search ranges
 	lo = 0
 	endIndex = crawler.getNumberOfSnapshots()-1
-
+	print endIndex
+        
 	#Prepare snapshots for first search
 	downloadList = getBinarySearchIndex(lo,endIndex,digLevel)
 	crawler.crawl(downloadList)
+	print 'start binary search'
 
 	#Start Binary Search
 	while(lo!=-1):
