@@ -1,5 +1,5 @@
-from crawl import *
-from database import *
+from stub_crawl import *
+from stub_database import *
 import threading
 from itertools import izip
 
