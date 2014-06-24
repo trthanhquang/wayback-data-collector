@@ -49,9 +49,15 @@ digLevel = 6
 db = None
 crawler = None
 
+# errorList = ["""?????? ?????????????? ""","Bad Request",
+# 	"Got an HTTP 302 response at crawl time"]
 def isTextInSnapshot(index,searchString):
 	html = db.getHTML(index)
 	analyzer = htmlAnalyzer(html)
+
+	# for errorString in errorList:
+	# 	if(analyzer.searchText(errorString)!=-1):
+	# 		return False
 
 	if(analyzer.searchText(searchString)!=-1):
 		return True
@@ -133,18 +139,12 @@ if __name__ == '__main__':
 		html = db.getHTML(lo)
 		openHTML(html)
 		#enter searchString for each version
-		# searchString = str(raw_input('Enter search string: '))
-		searchString = '''
-		 ASPMaker is an automation tool that can generate a full set of ASP (Active Server Pages) quickly from a Microsoft Access Database or 
-		'''
-		
+		searchString = str(raw_input('Enter search string: '))
+
 		(lo,hi)=refineSearchRange(lo,endIndex,searchString)
 		print lo,hi
 
 		lo = binarySearchDiff(lo,hi,searchString)
 		print lo
-
-		html = db.getHTML(lo)
-		openHTML(html)
-		break #test for 1 only
+		# break #test for 1 only
 	
