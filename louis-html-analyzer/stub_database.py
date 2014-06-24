@@ -52,6 +52,11 @@ class database(object):
             return True
         else:
             return False
+
+    def getNumberOfSnapshots(self, itemID):
+        query = "select count(snapshot_date) from snapshot_revised where itemID = %s" %itemID
+        self.cur.execute(status_query)
+        return self.cur.fetchone()[0] #return type: #snapshots as Int
     
     def storeSnapshot(self, itemID, date, url, data):
         data = re.escape(data)
