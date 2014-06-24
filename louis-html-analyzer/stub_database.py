@@ -16,12 +16,12 @@ class database(object):
         self.db.close()
     
     def getHTML(self, index):
-        getHTML_query = """select snapshot_date, crawl_data
+        getHTML_query = """select crawl_data
                             from snapshot_revised
                             where url_list_index = %s
-                            order by snapshot_date desc""" % index
+                            """ % index
         self.cur.execute(getHTML_query)
-        return self.cur.fetchall() #return type: (date, html)
+        return str(self.cur.fetchone()[0]) #return type: html as string
 
     def saveHTML(self,index,fName):
         openHTML_query = """select crawl_data from snapshot_revised
