@@ -58,11 +58,12 @@ class CrawlEvaluator(object):
 def worker():
     while True:
         itemID = q.get()
-        print CrawlEvaluator(itemID).successfulRate()
+        res.put(CrawlEvaluator(itemID).successfulRate())
         q.task_done()
 
+res = Queue()
 q = Queue()
-for i in range(10):
+for i in range(100):
     t = Thread(target = worker)
     t.daemon = True
     t.start()
@@ -73,3 +74,6 @@ for (itemID,) in itemID_list:
     q.put(itemID)
 
 q.join()
+
+while res.empty() == False:
+    print(res.get())
