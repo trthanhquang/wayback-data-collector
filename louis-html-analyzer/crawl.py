@@ -63,4 +63,3 @@ class Crawler(object):
         self.__crawlSnapshot(year)
         print "done crawling %s-%s" % (self.itemID, year)
         return
-        
