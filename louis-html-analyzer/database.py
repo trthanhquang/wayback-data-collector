@@ -64,7 +64,12 @@ class database(object):
         query = "select crawl_data from snapshot_allyear where itemID = %s and snapshot_date = STR_TO_DATE(\"%s\", \"%%Y%%m%%d\");" % (itemID, date)
         self.cur.execute(query)
         return str(self.cur.fetchone()[0])
-    
+
+    def getItemName(self, itemID):
+        query = "select app_name from item where itemID = %s"%itemID
+        self.cur.execute(query)
+        return str(self.cur.fetchone()[0])
+
 if __name__ == '__main__':
     db = database()
     htmlist = db.getHTML(3394)

@@ -59,10 +59,19 @@ def compareHTML(html1,html2):
     webbrowser.open('compare.html')
     
 if __name__ == '__main__':  
-    itemID = int(raw_input('Enter itemID: '))
     db = database()
-    html_list = db.getHTML(itemID)
 
+    html_list = []
+    appName = None
+    itemID = None
+    
+    while (len(html_list)==0):
+        itemID = int(raw_input('Enter itemID: '))
+        appName = db.getItemName(itemID)
+        html_list = db.getHTML(itemID)
+        print 'App Name: \"%s\" contains %s snapshots'%(appName,len(html_list))
+        
+        
     initSearch = True
     searchString = ""
     (snapshot_date,html0) = html_list[0]
@@ -77,6 +86,11 @@ if __name__ == '__main__':
         analyzer = htmlAnalyzer(html)
 
         if(analyzer.searchText(searchString)==-1):
+            if(analyzer.searchText("Got an HTTP 302 response at crawl time")!=-1):
+                print 'Error 302! Continue'
+                continue
+               
+            
             print 'Unable to find: '+searchString
             print 'Suspect change in Content!'
 

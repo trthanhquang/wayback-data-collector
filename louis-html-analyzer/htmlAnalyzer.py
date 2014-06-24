@@ -49,14 +49,23 @@ class htmlAnalyzer:
         f.write(self.rawText)
         f.close()
 
+    def __readabilityCheck(self,e):
+        for char in e:
+            if not((ord('a')<= ord(e) <= ord('z')) or (ord('0')<= ord(e) <=ord('9'))):
+                return False
+        return True
+    
     def searchText(self, lookupText):
         #remove spaces:
         '''noSpaceText = " ".join(self.rawText.split())
         lookupText = " ".join(lookupText.split())'''
         #split words using not only \n,' ',\t but also punctuations:
-        noSpaceText = " ".join(e for e in self.rawText.lower() if e.isalnum())
+        '''noSpaceText = " ".join(e for e in self.rawText.lower() if e.isalnum())
         lookupText = " ".join(e for e in lookupText.lower() if e.isalnum())
-        
+        '''
+        noSpaceText = " ".join(e for e in self.rawText.lower() if self.__readabilityCheck(e))
+        lookupText = " ".join(e for e in lookupText.lower() if self.__readabilityCheck(e))
+
         return noSpaceText.find(lookupText)
 
     def getText(self):
