@@ -52,7 +52,7 @@ class CrawlEvaluator(object):
         actual = self.__getActualNumberOfLinks()
         expected = self.__getExpectedNumberOfLinks()
         if expected == 0 :
-            return self.itemID, "No Link to collect"
+            return self.itemID, 0, 0, 1
         return self.itemID, actual, expected, actual*1.0 / expected
 
 def worker():
@@ -63,7 +63,7 @@ def worker():
 
 res = Queue()
 q = Queue()
-for i in range(100):
+for i in range(200):
     t = Thread(target = worker)
     t.daemon = True
     t.start()
