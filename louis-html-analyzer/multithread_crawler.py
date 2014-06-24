@@ -2,37 +2,28 @@ from stub_crawl import *
 from stub_database import *
 import threading
 from itertools import izip
+from Queue import *
+from threading import *
 
 def grouped(iterable, n):
     "s -> (s0,s1,s2,...sn-1), (sn,sn+1,sn+2,...s2n-1), (s2n,s2n+1,s2n+2,...s3n-1), ..."
     return izip(*[iter(iterable)]*n)
 
-def multithread_onYear(itemID):
-    year_list = range(2014, 1992, -1)
-    for years in grouped(year_list, 4):
-        year_threads = []
-        for year in years:
-            #print year
-            t = threading.Thread(target = Crawler(itemID).crawl, args = (year,))
-            t.daemon = True
-            year_threads.append(t)
-        [x.start() for x in year_threads]
-        [x.join() for x in year_threads]
-        print "done crawling %s-%s" % (itemID, years)
-    print "%s finished\n" % itemID
-    return
-    
-db = database()
-itemID_list = db.getItemID(2262, 3392)
-remainingIDs = []
-for (itemIDs) in grouped(itemID_list,20): #extract 20 IDs at once
-    #print itemIDs
-    ID_threads = []
-    for (itemID,) in itemIDs:
-        #print itemID
-        t = threading.Thread(target = multithread_onYear, args = (itemID,))
-        t.daemon = True
-        ID_threads.append(t)
-    [x.start() for x in ID_threads]
-    [x.join() for x in ID_threads]
-    print "%s finished\n" % str(itemIDs)
+def worker():
+    while True:
+        itemID = q.get()
+        crawler = Crawler(itemID)
+        for year in range(2014, 1995, -1):
+            crawler.crawl(year)
+        q.task_done()
+
+q = Queue()
+for i in range(80):
+    t = threading.Thread(target = worker)
+    t.daemon = True
+    t.start()
+
+itemID_list = database().getItemID(2262, 3392)
+for (itemID,) in itemID_list:
+    q.put(itemID)
+q.join()
