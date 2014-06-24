@@ -18,7 +18,7 @@ def openHTML(html,fileName = "temp1.html"):
     
     f = open(fileName,'w')
     #f.write('<a href=\"file:///{}\">TEXT1</a><br><br><br>'.format(path+"\\"+'text1.html'))
-    f.write(html.encode('utf8'))
+    f.write(html)
     f.close()
 
     webbrowser.open(fileName)

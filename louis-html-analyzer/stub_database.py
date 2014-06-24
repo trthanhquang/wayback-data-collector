@@ -21,7 +21,7 @@ class database(object):
                             where url_list_index = %s
                             """ % index
         self.cur.execute(getHTML_query)
-        return str(self.cur.fetchone()[0]) #return type: html as string
+        return str(self.cur.fetchone()[0].encode('utf8')) #return type: html as string
 
     def saveHTML(self,index,fName):
         openHTML_query = """select crawl_data from snapshot_revised
@@ -62,7 +62,7 @@ class database(object):
     def getCrawledIndexes(self):
         query = "select url_list_index from snapshot_revised"
         self.cur.execute(query)
-        return self.cur.fetchall() #return (indexes)
+        return self.cur.fetchall()[0] #return (indexes)
 
     def getNumberOfSnapshots(self):
         query = "select count(url_list_index) from snapshot_revised"

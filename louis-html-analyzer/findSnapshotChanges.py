@@ -80,7 +80,7 @@ def refineSearchRange(lo,hi,searchString):
 			hi = index
 			break
 
-	# print 'update range from %s to %s'%(lo,hi)
+	print 'update range from %s to %s'%(lo,hi)
 	return (lo,hi) 
 
 def getBinarySearchIndex(lo,hi,level):
@@ -89,7 +89,9 @@ def getBinarySearchIndex(lo,hi,level):
 		return indexList
 	mid = lo + (hi-lo)/2
 	indexList.append(mid)
-
+	indexList.append(lo)
+	indexList.append(hi)
+	
 	indexList.extend(getBinarySearchIndex(lo,mid,level-1))
 	indexList.extend(getBinarySearchIndex(mid,hi,level-1))
 	return set(indexList)
@@ -116,7 +118,7 @@ def binarySearchDiff(lo, hi,searchString):
 		else:
 			lo = mid +1
 
-		digLevel = digLevel +1
+		level = level +1
 	return lo
 
 if __name__ == '__main__':
@@ -128,7 +130,7 @@ if __name__ == '__main__':
 	# appName = db.getItemName(itemID)
 	#* Assume correct itemID
 	
-	itemID = 3401
+	itemID = 2263
 
 	# crawler = mock_crawler(itemID)
 	crawler = Crawler(itemID)
@@ -151,8 +153,6 @@ if __name__ == '__main__':
 		searchString = str(raw_input('Enter search string: '))
 
 		(lo,hi)=refineSearchRange(lo,endIndex,searchString)
-		print lo,hi
-
 		lo = binarySearchDiff(lo,hi,searchString)
 		print lo
 		# break #test for 1 only
