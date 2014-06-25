@@ -98,9 +98,10 @@ def getBinarySearchIndex(lo,hi,level):
 
 def binarySearchDiff(lo, hi,searchString):
 	global crawler,digLevel
+	index_list = getBinarySearchIndex(lo,hi,digLevel)
+	crawler.crawl(index_list)
+	print index_list
 	
-	crawler.crawl(getBinarySearchIndex(lo,hi,digLevel))
-
 	if(isTextInSnapshot(hi,searchString)):
 		return -1
 
