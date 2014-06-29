@@ -53,41 +53,46 @@ class Crawler(object):
         except urllib2.URLError, e:
             q.task_done()
             print e
-        '''
-        except Exception as e:
-            q.task_done()
-            q.put(year)
-            print "Unhandled Error when collecting links: %s" % e1
-        '''
-        
-    def __getDataFromPhantomBrowser(self, url):
-        driver = webdriver.PhantomJS(executable_path=self.phantomJSpath)
+
+    def __getDataFromPhantomBrowser(self, driver, url):
         driver.get(url)
         data = driver.page_source
-        driver.quit()
         return data
 
+    def __getPhantomJSDriver(self):
+        try:
+            return webdriver.PhantomJS(executable_path=self.phantomJSpath)
+        except Exception as e:
+            print "RE-TRYING. Error when getting PhantomBrowser driver: %s" %e
+            return None
+
     def __crawlOne(self):
+        driver = None
+        while driver is None:
+            driver = self.__getPhantomJSDriver()
+        
         while True:
             (index, link) = q.get()
             ###terminate thread###
             if (index == -1 and link == ""):
+                driver.quit()
                 q.task_done()
                 return
             ######################
             date = link[27:35]
             #print date, self.itemID, link
             try:
-                data = self.__getDataFromPhantomBrowser(link)    
+                data = self.__getDataFromPhantomBrowser(driver, link)
                 database().storeSnapshot(self.itemID, index, date, link, data)
                 q.task_done()
             except Exception as e:
                 print "RE-CRAWLING. Error when crawling snapshots: %s" % e
                 q.task_done()
                 q.put((index, link)) #recrawl
-            
+                    
     def crawl(self, index_list): #list of indexes of url_list[]
-        for i in range(100):
+        noThreads = min(self.getNumberOfSnapshots(), 50) + 1
+        for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
             t.daemon = True
             t.start()
@@ -100,10 +105,10 @@ class Crawler(object):
                 q.put((index, self.url_list[index]))
         q.join()
 
-        for i in range(active_count() - 1):
+        for i in range(noThreads):
             q.put((-1, ""))
         q.join()
-            
+        
     def crawlAll(self):
         self.crawl(list(xrange(self.getNumberOfSnapshots())))
 
