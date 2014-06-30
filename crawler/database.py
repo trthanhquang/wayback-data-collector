@@ -12,7 +12,6 @@ class database(object):
             
         self.db.autocommit(True)
         self.cur = self.db.cursor()
-        
 
     def __del__(self):
         self.cur.close()
