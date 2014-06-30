@@ -6,15 +6,26 @@ from bs4 import BeautifulSoup as BS
 class database(object):
     def __init__(self, hostName="localhost", userName="root",
                  password="", database="crawling"):
-        self.db = MySQLdb.connect(host = hostName, user = userName,
-                                  passwd = password, db = database,
-                                  charset='utf8', use_unicode=True)
+        self.db = None
+        while self.db is None
+            self.db = self.__getConnection(hostName, userName, password, database)
+            
         self.db.autocommit(True)
         self.cur = self.db.cursor()
+        
 
     def __del__(self):
         self.cur.close()
         self.db.close()
+
+    def __getConnection(self, hostName, userName, password, database):
+        try:
+            return MySQLdb.connect(host = hostName, user = userName,
+                                      passwd = password, db = database,
+                                      charset='utf8', use_unicode=True)
+        except Exception as e:
+            print "Init DB connection. Error: %s" %e
+            return None
 
     def getWebsiteHomepage(self, itemID):
         getHomepage_query = '''select Website from item

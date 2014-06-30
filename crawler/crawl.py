@@ -84,15 +84,16 @@ class Crawler(object):
             date = link[27:35]
             #print date, self.itemID, link
             try:
-                print link
+                #print link
                 data = self.__getDataFromPhantomBrowser(driver, link)
                 database().storeSnapshot(self.itemID, index, date, link, data)
                 q.task_done()
             except Exception as e:
-                print "RE-CRAWLING. Error when crawling snapshots: %s" % e
+                driver.quit()
                 driver = None
                 while driver is None:
                     driver = self.__getPhantomJSDriver()
+                print "RE-CRAWLING with new PhantomJS driver. Error when crawling snapshots: %s" % e
                 q.task_done()
                 q.put((index, link)) #recrawl
                     
@@ -122,7 +123,7 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2292, 3392)
+    itemID_list = database().getItemID(2321, 3392)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
