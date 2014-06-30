@@ -6,11 +6,15 @@ from bs4 import BeautifulSoup as BS
 class database(object):
     def __init__(self, hostName="localhost", userName="root",
                  password="", database="crawling"):
-        self.db = MySQLdb.connect(host = hostName, user = userName,
-                                  passwd = password, db = database,
-                                  charset='utf8', use_unicode=True)
-        self.db.autocommit(True)
-        self.cur = self.db.cursor()
+        try:
+            self.db = MySQLdb.connect(host = hostName, user = userName,
+                                      passwd = password, db = database,
+                                      charset='utf8', use_unicode=True)
+            self.db.autocommit(True)
+            self.cur = self.db.cursor()
+        except Exception as e:
+            print "Init DB connection. Error: %s" % e
+            self.__init__()
 
     def __del__(self):
         self.cur.close()
