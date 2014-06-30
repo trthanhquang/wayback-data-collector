@@ -12,50 +12,70 @@ class database(object):
         self.db.autocommit(True)
         self.cur = self.db.cursor()
 
-    def _del__(self):
+    def __del__(self):
         self.cur.close()
         self.db.close()
 
     def getWebsiteHomepage(self, itemID):
         getHomepage_query = '''select Website from item
                                 where itemID = %s''' % itemID
-        self.cur.execute(getHomepage_query)
-        url = self.cur.fetchone()
-        if url is not None:
-            return str(url[0])
-        else:
-            return "ItemID not found in database"
-
+        try:
+            self.cur.execute(getHomepage_query)    
+            url = self.cur.fetchone()
+            if url is not None:
+                return str(url[0])
+            else:
+                return "ItemID not found in database"
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.getWebsiteHomepage(itemID)
+            
     def getWebsiteFeatureURL(self, itemID):
         query = '''select Feature_URL from item
                                 where itemID = %s''' % itemID
-        self.cur.execute(query)
-        url = self.cur.fetchone()
-        if url is not None:
-            return str(url[0])
-        else:
-            return "ItemID not found in database"
-
+        try:
+            self.cur.execute(query)
+            url = self.cur.fetchone()
+            if url is not None:
+                return str(url[0])
+            else:
+                return "ItemID not found in database"
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.getWebsiteFeatureURL(itemID)
+            
     # return URL as String
     def getWebsitePriceURL(self, itemID):
         query = '''select Price_URL from item
                                 where itemID = %s''' % itemID
-        self.cur.execute(query)
-        url = self.cur.fetchone()
-        if url is not None:
-            if (url[0] <> "Free"):
-                return str(url[0])
+        try:
+            self.cur.execute(query)
+            url = self.cur.fetchone()
+            if url is not None:
+                if (url[0] <> "Free"):
+                    return str(url[0])
+                else:
+                    return " " #generate a 404 on WBM
             else:
-                return " " #generate a 404 on WBM
-        else:
-            return "ItemID not found in database"
-
+                return "ItemID not found in database"
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.getWebsitePriceURL(itemID)
+            
     # return list of itemID
     def getItemID(self, lower, upper):
         query  = '''select itemID from item
                     where itemID >= %s and itemID <= %s''' % (lower, upper)
-        self.cur.execute(query)
-        return self.cur.fetchall()
+        try:
+            self.cur.execute(query)
+            return self.cur.fetchall()
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.getItemID(lower, upper)
 
     # return True if snapshot had been crawled
     def isSnapshotInDB(self, itemID, index):
@@ -63,12 +83,17 @@ class database(object):
                         where itemID = %s and
                         url_list_index = %s
                         ''' % (itemID, index)
-        self.cur.execute(status_query)
-        status = self.cur.fetchone()
-        if status is not None:
-            return True
-        else:
-            return False
+        try:
+            self.cur.execute(status_query)
+            status = self.cur.fetchone()
+            if status is not None:
+                return True
+            else:
+                return False
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.isSnapshotInDB(itemID, index)
     
     def storeSnapshot(self, itemID, index, date, url, data):
         data = re.escape(data)
@@ -81,47 +106,55 @@ class database(object):
         try:
             self.cur.execute(query)
         except Exception as e:
-            print e
-
+            self.__del__()
+            self.__init__()
+            print '''Storing snapshot itemID = %s: Error (Probably NO url was given?) %s''' % (itemID, e)
+            
     # return html data as String
     def retrieveHTML(self, itemID, index):
         query = '''select crawl_data from snapshot
                     where itemID = %s and
                     url_list_index = %s;
                     ''' % (itemID, index)
-        self.cur.execute(query)
-        data = self.cur.fetchone()
-        if data is not None:
-            return str(data[0]) #html as String
-        else:
-            return "Data has not been crawled"
-
+        try:
+            self.cur.execute(query)
+            data = self.cur.fetchone()
+            if data is not None:
+                return str(data[0]) #html as String
+            else:
+                return "Data has not been crawled"
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.retrieveHTML(itemID, index)
+        
     # return itemName as String
     def getItemName(self, itemID):
         query = "select app_name from item where itemID = %s" % itemID
-        self.cur.execute(query)
-        itemName = self.cur.fetchone()
-        if itemName is not None:
-            return str(itemName[0])
-        else:
-            return "ItemID not found in database"
+        try:
+            self.cur.execute(query)
+            itemName = self.cur.fetchone()
+            if itemName is not None:
+                return str(itemName[0])
+            else:
+                return "ItemID not found in database"
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.getItemName(itemID)
 
     # return type: numberOfSnapshots as Int
     def getNumberOfSnapshots(self, itemID):
         query = '''select count(url_list_index) from snapshot
                     where itemID = %s ''' % itemID
-        self.cur.execute(query)
-        numberOfSnapshots = self.cur.fetchone()
-        if numberOfSnapshots is not None:
-            return int(numberOfSnapshots[0])
-        else:
-            return 0
-
-if __name__ == '__main__':
-    db = database()
-    htmlist = db.getHTML(3394)
-
-    for (date,html,text) in htmlist:
-        print date
-        print '------------------------------------------------------------'
-    
+        try:
+            self.cur.execute(query)
+            numberOfSnapshots = self.cur.fetchone()
+            if numberOfSnapshots is not None:
+                return int(numberOfSnapshots[0])
+            else:
+                return 0
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.getNumberOfSnapshots(itemID)
