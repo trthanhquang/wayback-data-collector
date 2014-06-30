@@ -44,7 +44,7 @@ class Crawler(object):
             links = soup.findAll("a")
             for link in links:
                 #if re.match("(.*)%s(.*)%s" % (str(year),self.url), str(link), re.I):
-		if re.match("(.*)%s(.*)" % year, str(link), re.I):
+                if re.match("(.*)%s(.*)" % year, str(link), re.I):
                     if not "*" in str(link):
                         linkwm = self.wm + link["href"]
                         #### list.append() is thread-safe ####
@@ -61,9 +61,11 @@ class Crawler(object):
 
     def __getPhantomJSDriver(self):
         try:
-            return webdriver.PhantomJS(executable_path=self.phantomJSpath)
+            driver = webdriver.PhantomJS(executable_path=self.phantomJSpath)
+            driver.set_page_load_timeout(300)
+            return driver
         except Exception as e:
-            print "RE-TRYING. Error when getting PhantomBrowser driver: %s" %e
+            print "RE-TRYING. Error when getting PhantomBrowser driver: %s" % e
             return None
 
     def __crawlOne(self):
@@ -82,11 +84,15 @@ class Crawler(object):
             date = link[27:35]
             #print date, self.itemID, link
             try:
+                print link
                 data = self.__getDataFromPhantomBrowser(driver, link)
                 database().storeSnapshot(self.itemID, index, date, link, data)
                 q.task_done()
             except Exception as e:
                 print "RE-CRAWLING. Error when crawling snapshots: %s" % e
+                driver = None
+                while driver is None:
+                    driver = self.__getPhantomJSDriver()
                 q.task_done()
                 q.put((index, link)) #recrawl
                     
@@ -116,7 +122,7 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2262, 3392)
+    itemID_list = database().getItemID(2292, 3392)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
