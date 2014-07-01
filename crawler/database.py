@@ -108,7 +108,7 @@ class database(object):
     def storeSnapshot(self, itemID, index, date, url, data):
         try:
             data = re.escape(data.encode('utf-8').decode('utf-8'))
-            url = url.decode('unicode')
+            url = url.decode('utf-8')
         except Exception as e:
             print "Cannot store to database. Snapshot URL: %s. Error: %s" % (url, e)
         else:
