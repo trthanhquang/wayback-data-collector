@@ -6,6 +6,7 @@ from selenium import webdriver
 import webbrowser
 from threading import *
 from Queue import *
+
 q = None
 
 class Crawler(object):
@@ -68,6 +69,15 @@ class Crawler(object):
             print "RE-TRYING. Error when getting PhantomBrowser driver: %s" % e
             return None
 
+    def __getDataFromURLLIB(self, link):
+        req = urllib2.Request(link)
+        try:
+            resp = urllib2.urlopen(req)
+        except urllib2.URLError, e:
+            return "Crawl-error"
+        else:
+            return resp.read()
+
     def __crawlOne(self):
         driver = None
         while driver is None:
@@ -90,15 +100,18 @@ class Crawler(object):
                 q.task_done()
             except Exception as e:
                 driver.quit()
+                data = self.__getDataFromURLLIB(link)
+                if data != "Crawl-error":
+                    database().storeSnapshot(self.itemID, index, date, link, data)
+
                 driver = None
                 while driver is None:
                     driver = self.__getPhantomJSDriver()
-                print "RE-CRAWLING with new PhantomJS driver. Error when crawling snapshots: %s" % e
+                    
                 q.task_done()
-                q.put((index, link)) #recrawl
                     
     def crawl(self, index_list): #list of indexes of url_list[]
-        noThreads = min(self.getNumberOfSnapshots(), 50) + 1
+        noThreads = min(self.getNumberOfSnapshots(), 40) + 1
         for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
             t.daemon = True
@@ -123,8 +136,9 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2321, 3392)
+    itemID_list = database().getItemID(6822, 7283)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
         print CrawlEvaluator(itemID).successfulRate()
+    
