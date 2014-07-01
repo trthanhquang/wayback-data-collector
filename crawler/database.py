@@ -106,19 +106,24 @@ class database(object):
             return self.isSnapshotInDB(itemID, index)
     
     def storeSnapshot(self, itemID, index, date, url, data):
-        data = re.escape(data)
-        query = """insert ignore into
-                snapshot(itemID, url_list_index, snapshot_date,
-                            snapshot_url, crawl_data)
-                values(%s, %s,
-                        STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");
-                """ % (itemID, index, date, url, data)
         try:
-            self.cur.execute(query)
+            data = re.escape(data.encode('utf-8').decode('utf-8'))
+            url = url.decode('utf-8')
         except Exception as e:
-            self.__del__()
-            self.__init__()
-            print '''Storing snapshot itemID = %s: Error (Probably NO url was given?) %s''' % (itemID, e)
+            print "Cannot store to database. Snapshot URL: %s. Error: %s" % (url, e)
+        else:
+            query = """insert ignore into
+                    snapshot(itemID, url_list_index, snapshot_date,
+                                snapshot_url, crawl_data)
+                    values(%s, %s,
+                            STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");
+                    """ % (itemID, index, date, url, data)
+            try:
+                self.cur.execute(query)
+            except Exception as e:
+                self.__del__()
+                self.__init__()
+                print '''Storing snapshot itemID = %s: Error (Probably NO url was given?) %s''' % (itemID, e)
             
     # return html data as String
     def retrieveHTML(self, itemID, index):
