@@ -33,7 +33,7 @@ class database(object):
             self.cur.execute(getHomepage_query)    
             url = self.cur.fetchone()
             if url is not None:
-                return str(url[0])
+                return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -48,7 +48,7 @@ class database(object):
             self.cur.execute(query)
             url = self.cur.fetchone()
             if url is not None:
-                return str(url[0])
+                return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -65,7 +65,7 @@ class database(object):
             url = self.cur.fetchone()
             if url is not None:
                 if (url[0] <> "Free"):
-                    return str(url[0])
+                    return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
                 else:
                     return " " #generate a 404 on WBM
             else:
@@ -108,7 +108,6 @@ class database(object):
     def storeSnapshot(self, itemID, index, date, url, data):
         try:
             data = re.escape(data.encode('utf-8').decode('utf-8'))
-            url = url.decode('utf-8')
         except Exception as e:
             print "Cannot store to database. Snapshot URL: %s. Error: %s" % (url, e)
         else:
@@ -150,7 +149,7 @@ class database(object):
             self.cur.execute(query)
             itemName = self.cur.fetchone()
             if itemName is not None:
-                return str(itemName[0])
+                return itemName[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
