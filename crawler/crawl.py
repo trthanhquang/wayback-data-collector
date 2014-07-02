@@ -18,6 +18,10 @@ class Crawler(object):
         q = Queue()
         self.itemID = itemID
         url = database().getWebsitePriceURL(itemID)
+        if url == "ItemID not found in database":
+            self.url_list = []
+            return
+        
         if not url.startswith("http"):
             self.url = "http://" + url
         else:
@@ -73,10 +77,9 @@ class Crawler(object):
         req = urllib2.Request(link)
         try:
             resp = urllib2.urlopen(req)
+            return resp.read()
         except urllib2.URLError, e:
             return "Crawl-error"
-        else:
-            return resp.read()
 
     def __crawlOne(self):
         driver = None
@@ -111,7 +114,7 @@ class Crawler(object):
                 q.task_done()
                     
     def crawl(self, index_list): #list of indexes of url_list[]
-        noThreads = min(self.getNumberOfSnapshots(), 40) + 1
+        noThreads = min(self.getNumberOfSnapshots(), 50) + 1
         for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
             t.daemon = True
@@ -136,9 +139,11 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(6822, 7283)
+    itemID_list = database().getItemID(2262, 3392)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
-        print CrawlEvaluator(itemID).successfulRate()
+        crawlEvaluator = CrawlEvaluator(itemID)
+        print crawlEvaluator.successfulRate()
+        database().storeEvaluation(itemID, crawlEvaluator.successfulRate)
     
