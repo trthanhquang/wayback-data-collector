@@ -35,6 +35,8 @@ class database(object):
             if url is not None:
                 if ("." in url[0]):
                     return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
+                else:
+                    return None
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -51,6 +53,8 @@ class database(object):
             if url is not None:
                 if ("." in url[0]):
                     return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
+                else:
+                    return None
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -68,6 +72,10 @@ class database(object):
             if url is not None:
                 if ("." in url[0]):
                     return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
+                elif ("Free" in url[0]):
+                    return "Free"
+                else:
+                    return None
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -174,8 +182,9 @@ class database(object):
             return self.getNumberOfSnapshots(itemID)
 
     def storeEvaluation(self, itemID, evaluation):
-        query = '''insert into status(itemID, evaluation) values(%s, %s);
-                    ''' % (int(itemID), float(evaluation))
+        query = '''insert into status(itemID, evaluation) values(%s, %s)
+                    on duplicate key update evaluation = %s;
+                    ''' % (int(itemID), float(evaluation), float(evaluation))
         self.cur.execute(query)
         
     # return type: list of (date as String, HTML_data as String)

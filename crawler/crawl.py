@@ -18,7 +18,9 @@ class Crawler(object):
         q = Queue()
         self.itemID = itemID
         url = database().getWebsitePriceURL(itemID)
-        if url == "ItemID not found in database":
+        if url is None or \
+           url == "ItemID not found in database" \
+           or url == "Free" :
             self.url_list = []
             return
         
@@ -78,8 +80,8 @@ class Crawler(object):
         try:
             resp = urllib2.urlopen(req)
             return resp.read()
-        except urllib2.URLError, e:
-            return "Crawl-error"
+        except Exception as e:
+            return "Crawl-error: %s" % e
 
     def __crawlOne(self):
         driver = None
@@ -114,7 +116,7 @@ class Crawler(object):
                 q.task_done()
                     
     def crawl(self, index_list): #list of indexes of url_list[]
-        noThreads = min(self.getNumberOfSnapshots(), 50) + 1
+        noThreads = min(self.getNumberOfSnapshots(), 30) + 1
         for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
             t.daemon = True
@@ -139,7 +141,7 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2262, 3392)
+    itemID_list = database().getItemID(2276, 3392)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()

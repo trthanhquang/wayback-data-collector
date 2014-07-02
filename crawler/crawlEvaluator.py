@@ -12,7 +12,12 @@ class CrawlEvaluator(object):
         ######CHANGE THIS IF NOT CRAWLING PRICE######
         url = database().getWebsitePriceURL(itemID)
         #############################################
-        
+        if url is None or \
+           url == "ItemID not found in database" \
+           or url == "Free" :
+            self.url = None
+            return
+            
         if not url.startswith("http"):
             self.url = "http://" + url
         else:
@@ -34,8 +39,11 @@ class CrawlEvaluator(object):
             return 0
 
     def successfulRate(self):
-        self.expectedNumberOfLinks = self.__analyzeWBMSummaryPage()
-        self.actualNumberOfLinks = database().getNumberOfSnapshots(self.itemID);
+        if self.url is None:
+            self.expectedNumberOfLinks = 0
+        else:
+            self.expectedNumberOfLinks = self.__analyzeWBMSummaryPage()
+            self.actualNumberOfLinks = database().getNumberOfSnapshots(self.itemID);
     
         if self.expectedNumberOfLinks == 0 :
             self.successfulRate = -1.0
