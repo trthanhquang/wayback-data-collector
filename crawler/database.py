@@ -33,7 +33,8 @@ class database(object):
             self.cur.execute(getHomepage_query)    
             url = self.cur.fetchone()
             if url is not None:
-                return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
+                if ("." in url[0]):
+                    return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -48,7 +49,8 @@ class database(object):
             self.cur.execute(query)
             url = self.cur.fetchone()
             if url is not None:
-                return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
+                if ("." in url[0]):
+                    return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -64,10 +66,8 @@ class database(object):
             self.cur.execute(query)
             url = self.cur.fetchone()
             if url is not None:
-                if (url[0] <> "Free"):
+                if ("." in url[0]):
                     return url[0].encode('utf-8').decode('utf-8').rstrip().lstrip()
-                else:
-                    return " " #generate a 404 on WBM
             else:
                 return "ItemID not found in database"
         except (MySQLdb.OperationalError):
@@ -134,7 +134,7 @@ class database(object):
             self.cur.execute(query)
             data = self.cur.fetchone()
             if data is not None:
-                return data[0]
+                return str(data[0]) #html as String
             else:
                 return "Data has not been crawled"
         except (MySQLdb.OperationalError):
@@ -173,6 +173,11 @@ class database(object):
             self.__init__()
             return self.getNumberOfSnapshots(itemID)
 
+    def storeEvaluation(self, itemID, evaluation):
+        query = '''insert into status(itemID, evaluation) values(%s, %s);
+                    ''' % (int(itemID), float(evaluation))
+        self.cur.execute(query)
+        
     # return type: list of (date as String, HTML_data as String)
     def getDataList(self, itemID):
         query = '''select snapshot_date, crawl_data from snapshot

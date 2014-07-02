@@ -28,6 +28,7 @@ class CrawlEvaluator(object):
             driver.quit()
             return int(re.sub("[^0-9]", "", keyword))
         except (urllib2.URLError, NoSuchElementException) as e:
+            print e
             driver.close()
             driver.quit()
             return 0
@@ -37,11 +38,15 @@ class CrawlEvaluator(object):
         self.actualNumberOfLinks = database().getNumberOfSnapshots(self.itemID);
     
         if self.expectedNumberOfLinks == 0 :
-            return self.itemID, 0, 0, 1.0
+            self.successfulRate = -1.0
+            return self.itemID, 0, 0, -1.0
+        self.successfulRate = self.actualNumberOfLinks*1.0 / self.expectedNumberOfLinks
         return self.itemID, self.actualNumberOfLinks, \
                self.expectedNumberOfLinks, \
                self.actualNumberOfLinks*1.0 / self.expectedNumberOfLinks
 
 if __name__ == '__main__':
-    crawlEvaluator = CrawlEvaluator(2264)
+    itemID=2989
+    crawlEvaluator = CrawlEvaluator(itemID)
     print crawlEvaluator.successfulRate()
+    database().storeEvaluation(itemID, crawlEvaluator.successfulRate)
