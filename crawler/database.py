@@ -134,7 +134,7 @@ class database(object):
             self.cur.execute(query)
             data = self.cur.fetchone()
             if data is not None:
-                return str(data[0]) #html as String
+                return data[0]
             else:
                 return "Data has not been crawled"
         except (MySQLdb.OperationalError):
@@ -172,3 +172,15 @@ class database(object):
             self.__del__()
             self.__init__()
             return self.getNumberOfSnapshots(itemID)
+
+    # return type: list of (date as String, HTML_data as String)
+    def getDataList(self, itemID):
+        query = '''select snapshot_date, crawl_data from snapshot
+                    where itemID = %s ''' % itemID
+        try:
+            self.cur.execute(query)
+            return self.cur.fetchall()
+        except (MySQLdb.OperationalError):
+            self.__del__()
+            self.__init__()
+            return self.getDataList(itemID)

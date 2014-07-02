@@ -1,5 +1,4 @@
 import sys
-from multithread_downloader import *
 from PyQt4 import QtCore, QtGui, uic
 
 class GUI(QtGui.QWidget):
