@@ -108,6 +108,8 @@ class Crawler(object):
                 data = self.__getDataFromURLLIB(link)
                 if data != "Crawl-error":
                     database().storeSnapshot(self.itemID, index, date, link, data)
+                else:
+                    print "Crawl-error: %s" % link
 
                 driver = None
                 while driver is None:
@@ -141,7 +143,7 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2276, 3392)
+    itemID_list = database().getItemID(2337, 3392)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()

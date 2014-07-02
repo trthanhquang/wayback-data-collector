@@ -2,6 +2,7 @@ import MySQLdb
 import webbrowser
 import re
 from bs4 import BeautifulSoup as BS
+import unicodedata
 
 class database(object):
     def __init__(self, hostName="localhost", userName="root",
@@ -115,7 +116,10 @@ class database(object):
     
     def storeSnapshot(self, itemID, index, date, url, data):
         try:
-            data = re.escape(data.encode('utf-8').decode('utf-8'))
+            if isinstance(data, str):
+                data = re.escape(data).decode('utf-8', 'ignore')
+            else:
+                data = re.escape(unicodedata.normalize('NFKD', data)).encode('utf-8', 'ignore').decode('utf-8', 'ignore')
         except Exception as e:
             print "Cannot store to database. Snapshot URL: %s. Error: %s" % (url, e)
         else:
