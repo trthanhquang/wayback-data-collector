@@ -38,7 +38,7 @@ def urlCrawler(q,url,url_list):
         soup = BS(page.read())
         links = soup.findAll("a")
         for link in links:
-            if re.match("(.*)%s(.*)%s" % (year,url), str(link), re.I):
+            if re.match("(.*)%s(.*)" % (year), str(link), re.I):
                 if not "*" in str(link):
                     linkwm = wm + link["href"]
                     #### list.append() is thread-safe ####
@@ -62,48 +62,60 @@ def getURLs(url):
         yearQueue.put(year)
     
     yearQueue.join()
-
     return sorted(set(url_list),reverse = True)
 
-def htmlCrawler(threadId,urlQueue,snapshotList):
+def getPhantomJSDriver():
     try:
         driver = webdriver.PhantomJS(executable_path=phantomJSpath)
+        driver.set_page_load_timeout(300)
+        return driver
+    except Exception as e:
+        print "RE-TRYING. Error when getting PhantomBrowser driver: %s" % e
+        return None
+
+def htmlCrawler(threadId,urlQueue,snapshotList):
+    driver = None
+    while driver is None:
+        driver = getPhantomJSDriver()
+
+    while True:
+        url = urlQueue.get()
+
+        if url == 'stop': #Terminating
+            break
+
+        start = None
+        if debugMode:
+            start = time.clock()
+            print '[%s:%s] Crawling date = %s. Queue has %s elements'%(threadId,
+                time.clock()-startTime,url[27:35],urlQueue.qsize())
         
-        while True:
-            url = urlQueue.get()
 
-            if url == 'stop': #Terminating
-                break
-
-            start = None
-            if debugMode:
-                start = time.clock()
-                print '[%s:%s] Crawling date = %s. Queue has %s elements'%(threadId,
-                    time.clock()-startTime,url[27:35],urlQueue.qsize())
-            
+        try:
             driver.get(url)
-            html = driver.page_source.encode('utf-8').decode('utf-8')
-            
+            html = driver.page_source.encode('utf-8').decode('utf-8').lstrip().rstrip()
+
             if debugMode:
                 print '[%s:%s] snapshot date %s is crawled [duration: %s]'%(threadId,
                     time.clock()-startTime,url[27:35],time.clock()-start)
-
             snapshotList.append(Snapshot(url,html))
             urlQueue.task_done()
+        except Exception, e:
+            print 'Exception while crawling %s'%e
+            driver.quit()
+            driver = None
+            while driver is None:
+                driver = getPhantomJSDriver()
 
-        #----------------------------
-        if debugMode:
-            print '[%s:%s] Thread is terminated! Remains %s thread running'%(threadId,time.clock()-startTime,urlQueue.qsize())
-        driver.quit()
-        urlQueue.task_done()
-        
-    except socket.error as e:
-        if debugMode:
-            print '[%s:%s] %s'%(threadId,time.clock()-startTime,e)
-        else:
-            print e
-        urlQueue.task_done()
+            urlQueue.task_done()
+            urlQueue.put(url)
 
+    #----------------------------
+    if debugMode:
+        print '[%s:%s] Thread is terminated! Remains %s thread running'%(threadId,time.clock()-startTime,urlQueue.qsize())
+    driver.quit()
+    urlQueue.task_done()
+    
 def getSnapshots(urlList, num_thread = 20):
     snapshotList = []
     urlQueue = Queue()
@@ -128,7 +140,7 @@ def getSnapshots(urlList, num_thread = 20):
     return sorted(snapshotList,reverse=True)
 
 ''' EXAMPLES FUNCTIONS '''
-def crawl(url,numOfThreads = 20):
+def crawl(url,numOfThreads = 30):
     urlList = getURLs(url)
     
     if debugMode:
@@ -156,5 +168,6 @@ def crawl(url,numOfThreads = 20):
     
 if __name__ == '__main__':
     # url = raw_input('URL: ')
-    url = 'http://www.aone-video.com/avi.htm'
+    #url = 'http://www.aone-video.com/avi.htm'
+    url = 'http://www.swishzone.com/index.php?area=purchase'
     crawl(url)

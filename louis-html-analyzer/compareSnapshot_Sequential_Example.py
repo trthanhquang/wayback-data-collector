@@ -5,10 +5,9 @@ crawlModeActivated = False
 
 if __name__ == '__main__':
     # url = raw_input('URL: ')
-    url = 'http://www.aone-video.com/avi.htm'
-    
     snapshotList = []
     if crawlModeActivated:
+        url = 'http://www.aone-video.com/avi.htm'
         urlList = getURLs(url)
         snapshotList = getSnapshots(urlList,num_thread = 30)
         print "Data Crawling is done! Analyzing now..."
@@ -18,9 +17,10 @@ if __name__ == '__main__':
     snapshotList[0].openHTML()
     keyword = str(raw_input('Enter search keyword: '))
 
-    for i in range(len(snapshotList)):
+    listLength = len(snapshotList)
+    for i in range(listLength):
         snapshot = snapshotList[i]
-        print '%s. Analyzing %s'%(i,snapshot.getDate())
+        print '%s/%s. Analyzing %s'%(i,listLength,snapshot.getDate())
         
         if snapshot.contain(keyword):
             print 'OK'
