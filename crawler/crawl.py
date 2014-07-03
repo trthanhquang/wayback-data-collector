@@ -89,11 +89,12 @@ class Crawler(object):
             driver = self.__getPhantomJSDriver()
         
         while True:
-            (index, link) = q.get()
-            ###terminate thread###
-            if (index == -1 and link == ""):
+            try:
+                (index, link) = q.get(True, 5) #5 sec timeout
+            except Exception as e:
+                ###terminate thread###
+                #print "Queue empty, all task done. %s" %e
                 driver.quit()
-                q.task_done()
                 return
             ######################
             date = link[27:35]
@@ -132,10 +133,6 @@ class Crawler(object):
                 q.put((index, self.url_list[index]))
         q.join()
 
-        for i in range(noThreads):
-            q.put((-1, ""))
-        q.join()
-        
     def crawlAll(self):
         self.crawl(list(xrange(self.getNumberOfSnapshots())))
 
@@ -143,7 +140,7 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2337, 3392)
+    itemID_list = database().getItemID(2506, 3392)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
