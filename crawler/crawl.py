@@ -6,6 +6,7 @@ from selenium import webdriver
 import webbrowser
 from threading import *
 from Queue import *
+import time
 
 q = None
 
@@ -90,10 +91,10 @@ class Crawler(object):
         
         while True:
             try:
-                (index, link) = q.get(True, 5) #5 sec timeout
+                (index, link) = q.get(True, 2) #2 sec timeout
             except Exception as e:
                 ###terminate thread###
-                #print "Queue empty, all task done. %s" %e
+                print "Queue empty, all task done. %s" %e
                 driver.quit()
                 return
             ######################
@@ -131,6 +132,8 @@ class Crawler(object):
             
             if database().isSnapshotInDB(self.itemID, index) == False:
                 q.put((index, self.url_list[index]))
+
+        time.sleep(5) # make sure q.get timeout before join unblocks
         q.join()
 
     def crawlAll(self):
@@ -140,7 +143,7 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2506, 3392)
+    itemID_list = database().getItemID(2532, 3392)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
