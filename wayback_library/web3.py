@@ -5,16 +5,14 @@
 # Author:      drtagkim
 #-------------------------------------------------------------------------------
 
-import requests
-import gzip
-import cPickle
-import re
+import gzip, cPickle, re, sys,time
 from threading import Thread
-from bs4 import BeautifulSoup as BS
-import sys,time
 from Queue import Queue
+import requests
+from bs4 import BeautifulSoup as BS
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
+
 
 #---------------------------------------------------------------
 class WebReaderPool(Thread):
@@ -98,11 +96,12 @@ You do not have to input 'url' here. Input URL address when you call read() func
         self.timeout = timeout
         self.encoding = ""
         self.headers = { 'User-Agent' : 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11',
-                         'connection' : 'close' }
+                         'connection' : 'close',
+                         'charset' : 'utf-8'}
         self.loud = loud
         self.text = ''
         self.soup = None
-    def read(self,url = None,parameters = None,soup = False, quietly = False):
+    def read(self,url = None,parameters = None,soup = False, quietly = False, json=False):
         """
 If you do not specify a URL address before, input the infomation here.
 
@@ -123,25 +122,28 @@ See also, bs4 (BeautifulSoup).
             self.connection_status = con.status_code
             self.encoding = con.encoding
             if self.connection_status == requests.codes.ok:
-                self.text = con.text
+                if json:
+                    self.text = con.json()
+                else:
+                    self.text = unicode(con.text)
                 if self.loud:
                     print "[INFO] Page is successfully read."
                 if soup:
                     if self.loud:
                         print "[INFO] Beautiful soup parsing completed."
                     self.soup = BS(self.text,'html.parser')
+
             else:
                 if self.loud:
                     print "[ERROR] Connection failure. Check connection_status"
                 self.text = "0" #which means, failed
+            con.close()
 
         except:
             if self.loud:
                 print "[ERROR] Server cannot be found."
             self.text = '-1' #which means, bad connection
-        self.text = unicode(self.text)
-        if not quietly:
-            return self.text
+        return self.text
     def export_html_gz(self,gzip_file):
         """
         Export html text to gz file
@@ -184,17 +186,29 @@ select.deselect_all()
 
 
     """
-    def __init__(self):
+    def __init__(self,noimage=True):
         """
 >>> pb = PhantomBrowser()
         """
         from selenium import webdriver
-        self.driver = webdriver.PhantomJS()
+        if noimage:
+            self.driver = webdriver.PhantomJS(service_args=['--load-images=no',
+                                                            '--webdriver-loglevel=NONE'
+                                                            ])
+            # http://phantomjs.org/api/command-line.html (service_args reference)
+        else:
+            self.driver = webdriver.PhantomJS(service_args=['--webdriver-loglevel=NONE'])
+        # graphic device setting
         self.driver.set_window_size(1024,768)
 
-    def goto(self,url):
+    def goto(self,url,filter_func = None):
+        """
+| filter_func: sufficient condition of loading a page
+| if the return value True, stop waiting
+        """
         self.driver.get(url)
-
+        if filter_func != None:
+            WebDriverWait(self,60).until(filter_func)
     def capture(self,file_location):
         if file_location == None or len(file_location) == 0:
             print "Input proper file_location"
@@ -214,41 +228,55 @@ select.deselect_all()
     def xpath_elements(self,xpath_pattern):
         return self.driver.find_elements_by_xpath(xpath_pattern)
 
-    def page_source_save(self,file_location):
+    def page_source_save(self,file_location,remove_js = False):
         if file_location == None or len(file_location) == 0:
             print "Input proper file_location"
             return
         import codecs
         f = codecs.open(file_location,'w','utf-8')
-        f.write(self.driver.page_source)
+        page = self.get_page_source(remove_js = remove_js)
+        f.write(page)
         f.close()
         return "page source: %s" % file_location
 
-    def get_page_source(self):
-        return self.driver.page_source
+    def get_page_source(self, remove_js = False):
+        """
+|  if remove_js True, all scripts are deleted
+        """
+        page = self.driver.page_source
+        if remove_js:
+            page = re.sub(r'<script.*?/script>','',page)
+        return page
 
     def execute_javascript(self,script):
-        self.driver.execute_script(script)
+        return self.driver.execute_script(script)
     def wait_ajax(self,driver):
         try:
             return 0 == driver.execute_script("return jQuery.active")
         except WebDriverException:
             pass
     def check_scroll_complete_ajax(self):
-        try:
-            return self.driver.execute_script("return $(document).height() == $(window).height()+$(window).scrollTop();")
-        except WebDriverException:
-            pass
-    def scroll_down(self,patient=30):
+        """
+|  If bottom, true; otherwise false
+        """
+        #try:
+        return self.driver.execute_script("return $(document).height() <= $(window).height()+$(window).scrollTop();")
+        #except WebDriverException:
+        #    pass
+    def scroll_down(self, patient = 30,filter_func = None):
+        rv = False
         script = "window.scrollTo(0, document.body.scrollHeight);"
         self.execute_javascript(script)
-        WebDriverWait(self.driver,patient).until(self.wait_ajax,"Timeout waiting for page to load")
-        #time.sleep(patient)
+        if filter_func != None:
+            rv = WebDriverWait(self,patient).until(filter_func)
+        return rv
+    def close(self):
+        self.driver.quit()
     def __del__(self):
         """
 >>> del pb
         """
-        self.driver.quit()
+        self.close()
 
 class BSHelper:
     def __init__(self):
@@ -257,3 +285,29 @@ class BSHelper:
         tags = soup.find_all(text = re.compile(text_string)) #bs4.element.NavigableString (inherits string)
         tags_list = map(lambda x : x.strip(), tags)
         return tags_list
+
+class Mp4WebTag:
+    """
+>>> sudo pip install hsaudiotag
+>>> sudo pip install requests
+    """
+    def __init__(self):
+        pass
+    def get_duration(self,url,buff=500,explain=False):
+        if explain:
+            print "in seconds"
+        from StringIO import StringIO
+        from hsaudiotag import mp4        
+        r = requests.get(url,stream=True)
+        if r.status_code == 200:
+            a = r.raw.read(buff)
+            b = StringIO()
+            b.write(a)
+            c = mp4.File(b)
+            duration = c.duration
+            b.close()
+            r.close()
+            return duration
+        else:
+            return -1
+        
