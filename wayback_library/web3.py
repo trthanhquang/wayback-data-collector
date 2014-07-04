@@ -201,14 +201,22 @@ select.deselect_all()
         # graphic device setting
         self.driver.set_window_size(1024,768)
 
-    def goto(self,url,filter_func = None):
+    def goto(self,url, frame_switch = False, filter_func = None):
         """
 | filter_func: sufficient condition of loading a page
 | if the return value True, stop waiting
         """
         self.driver.get(url)
+        if frame_switch:
+            try:
+                ele = self.css_selector_element("frameset frame")
+                attr_name = ele.get_attribute('name')
+                self.driver.switch_to_frame(attr_name)
+            except:
+                return False
         if filter_func != None:
             WebDriverWait(self,60).until(filter_func)
+        return True
     def capture(self,file_location):
         if file_location == None or len(file_location) == 0:
             print "Input proper file_location"
