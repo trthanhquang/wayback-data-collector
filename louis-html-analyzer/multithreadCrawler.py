@@ -168,6 +168,6 @@ def crawl(url,numOfThreads = 30):
     
 if __name__ == '__main__':
     # url = raw_input('URL: ')
-    #url = 'http://www.aone-video.com/avi.htm'
-    url = 'http://www.swishzone.com/index.php?area=purchase'
+    url = 'http://www.aone-video.com/avi.htm'
+    # url = 'http://www.swishzone.com/index.php?area=purchase'
     crawl(url)

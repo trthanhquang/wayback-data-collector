@@ -84,14 +84,17 @@ class Snapshot(object):
         f.write('<ul>')
         
         f.write('<li> <a href=\"file:///{}\">TEXT1 (CURRENT)</a> </li>'.format(path+"\\"+'text1.html'))
-        f.write('<li> <a href=\"%s\">HTML1 (CURRENT) - Online </a> </li>'%self.getURL())
         f.write('<li> <a href=\"file:///{}\">HTML1(CURRENT) - Offline </a> </li>'.format(path+"\\"+'html1.html'))
         
         f.write('<br>')
 
         f.write('<li> <a href=\"file:///{}\">TEXT2 (OTHER)</a> </li>'.format(path+"\\"+'text2.html'))
-        f.write('<li> <a href=\"%s\">HTML2 (OTHER) - Online </a> </li>'%other.getURL())
         f.write('<li> <a href=\"file:///{}\">HTML2(OTHER) - Offline </a> </li>'.format(path+"\\"+'html2.html'))
+
+        f.write('<br>')
+
+        f.write('<li> <a href=\"%s\">HTML1 (CURRENT) - Online </a> </li>'%self.getURL())
+        f.write('<li> <a href=\"%s\">HTML2 (OTHER) - Online </a> </li>'%other.getURL())
 
         f.write('</ul>')
         
