@@ -218,7 +218,7 @@ pip-log.txt
 louis-html-analyzer/temp.html
 louis-html-analyzer/text1.html
 louis-html-analyzer/text2.html
-louis-html-analyzer/data.p
 louis-html-analyzer/html2.html
 louis-html-analyzer/html1.html
 louis-html-analyzer/compare.html
+*.pickle
