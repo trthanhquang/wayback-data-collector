@@ -43,11 +43,14 @@ class GUI(QtGui.QWidget):
 
         self.ui.urlText.setText("http://www.aone-video.com/avi.htm")
         self.ui.startButton.clicked.connect(self.startCrawling)
-        self.ui.loadButton.clicked.connect(self.loadFromFile)
+        self.ui.loadFileButton.clicked.connect(self.loadFromFile)
 
         self.ui.diffButton.clicked.connect(self.versionDiffHandler)
         self.ui.htmlButton.clicked.connect(self.openCurrentHTML)
         self.ui.startSearchButton.clicked.connect(self.startSearching)
+        
+        self.ui.stopButton.clicked.connect(self.stopSearching)
+        
         self.ui.errButton.clicked.connect(self.pageErrorHandler)
 
         self.ui.comparatorGroup.setDisabled(True)
@@ -101,11 +104,12 @@ class GUI(QtGui.QWidget):
         if self.index == self.total:
             self.finishSearching()
             return
-            
+
         self.snapshotList[self.index].openHTML()
 
     def finishSearching(self):
-        print 'Finished searching! Please enter new URL!'
+        QtGui.QMessageBox.about(self,"Notification","Finished searching!")        
+        print 'Finished searching!'
         self.ui.searchText.setText("")
         self.ui.urlText.setText("")
         self.ui.dateText.setText("")
@@ -120,20 +124,20 @@ class GUI(QtGui.QWidget):
         self.ui.progressText.setText("%s/%s"%(self.index,self.total))
 
         print 'startSearching...'
-        self.keyword = str(self.ui.searchText.toPlainText())
-
-        self.ui.comparatorGroup.setDisabled(True)
+        self.keyword = str(self.ui.searchText.toPlainText().toUtf8())
 
         if self.keyword =="":
             print 'Please enter the keyword!'
             return
+
+        # self.ui.comparatorGroup.setDisabled(True)
 
         print 'keyword = %s'%self.keyword
 
         loopCount = 0
         while(self.index < self.total):
             loopCount = loopCount +1
-            if(loopCount % 40 == 0): #refresh once every 40 snapshots scanned
+            if(loopCount % 5 == 0): #refresh once every 5 snapshots scanned
                 QtGui.QApplication.processEvents()
                 
             snapshot = self.snapshotList[self.index]
@@ -143,22 +147,31 @@ class GUI(QtGui.QWidget):
             print '%s/%s. Analyzing %s'%(self.index+1,self.total,snapshot.getDate())
 
             if snapshot.contain(self.keyword):
+                self.lastOKindex = self.index
                 self.index = self.index+1
+
                 self.ui.progressText.setText("%s/%s"%(self.index,self.total))
                 self.ui.progressBar.setValue(int(self.index*100.0/self.total))
                 print 'OK'
 
             elif snapshot.contain("Got an HTTP 302 response at crawl time"):
                 print 'Error 302! Continue'
+                self.index = self.index+1
+
             else:
                 print 'Unable to find: '+self.keyword
+                self.ui.searchText.setText("")
                 self.snapshotList[self.index].openHTML()
                 break
 
         if self.index == self.total:
             self.finishSearching()
         
-        self.ui.comparatorGroup.setEnabled(True)
+        # self.ui.comparatorGroup.setEnabled(True)
+
+    def stopSearching(self):
+        self.index = self.total
+        self.finishSearching()
 
     def pageErrorHandler(self):
         if self.index == self.total:
@@ -166,15 +179,16 @@ class GUI(QtGui.QWidget):
 
         print 'PageError at index %s! continue to search'%self.index
         self.index = self.index+1
-        
+
+        self.ui.searchText.setText(self.keyword)
         self.ui.progressText.setText("%s/%s"%(self.index,self.total))
         self.ui.progressBar.setValue(int(self.index*100.0/self.total))
 
-        self.startSearching
+        self.startSearching()
 
     def versionDiffHandler(self):
         if(self.index >0):
-            self.snapshotList[self.index-1].compareHTML(self.snapshotList[self.index])
+            self.snapshotList[self.lastOKindex].compareHTML(self.snapshotList[self.index])
         else:
             self.snapshotList[0].openHTML()
 
