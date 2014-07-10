@@ -202,3 +202,15 @@ class database(object):
             self.__del__()
             self.__init__()
             return self.getDataList(itemID)
+
+    def reportPrice(self, itemID, itemName, snapshot_date, price):
+        query = '''insert into report_price(itemID, itemName, snapshot_date, price)
+                    values (%s, \"%s\", \"%s\", \"%s\")
+                ''' % (itemID, itemName, snapshot_date, price)
+        self.cur.execute(query)
+
+    def reportFeature(self, itemID, itemName, snapshot_date, feature):
+        query = '''insert into report_feature(itemID, itemName, snapshot_date, feature)
+                    values (%s, \"%s\", \"%s\", \"%s\")
+                ''' % (itemID, itemName, snapshot_date, feature)
+        self.cur.execute(query)
