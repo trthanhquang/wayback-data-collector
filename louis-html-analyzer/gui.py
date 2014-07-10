@@ -66,8 +66,10 @@ class GUI(QtGui.QWidget):
         self.db = database()
 
         #----------------- Report --------------------
-        self.ui.reportPriceOkButton.clicked.connect(self.reportPriceHandler)
-        self.ui.reportFeatureOkButton.clicked.connect(self.reportFeatureHandler)
+        self.ui.reportFixPriceButton.clicked.connect(self.reportFixPriceHandler)
+        self.ui.reportSavePriceButton.clicked.connect(self.reportSavePriceHandler)
+        self.ui.reportFixFeatureButton.clicked.connect(self.reportFixFeatureHandler)
+        self.ui.reportSaveFeatureButton.clicked.connect(self.reportSaveFeatureHandler)
 
         
     def startCrawling(self):
@@ -261,6 +263,11 @@ class GUI(QtGui.QWidget):
             "ID %s, %s price %s on %s is added to report!"%(itemID,
                 itemName,itemPrice,snapshotDate))        
 
+    def reportFixPriceHandler(self):
+        
+    # reportSavePriceHandler
+    # reportFixFeatureHandler
+    # reportSaveFeatureHandler
 def main():
     app = QtGui.QApplication(sys.argv)
     try:

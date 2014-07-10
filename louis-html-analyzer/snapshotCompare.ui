@@ -773,7 +773,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="priceTab">
      <attribute name="title">
@@ -806,6 +806,9 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
      <widget class="QPushButton" name="reportSavePriceButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -894,6 +897,9 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
      <widget class="QPushButton" name="reportSaveFeatureButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>110</x>
