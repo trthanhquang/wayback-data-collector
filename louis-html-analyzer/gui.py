@@ -1,7 +1,10 @@
 import sys
 from PyQt4 import QtCore, QtGui, uic
+
 from multithreadCrawler import *
 from snapshotAnalyzer import *
+from database import *
+
 import time
 
 class crawlingThread(QtCore.QThread):
@@ -44,6 +47,8 @@ class GUI(QtGui.QWidget):
         self.ui.urlText.setText("http://www.aone-video.com/avi.htm")
         self.ui.startButton.clicked.connect(self.startCrawling)
         self.ui.loadFileButton.clicked.connect(self.loadFromFile)
+        self.ui.loadDatabaseButton.clicked.connect(self.loadDatabase)
+
 
         self.ui.diffButton.clicked.connect(self.versionDiffHandler)
         self.ui.htmlButton.clicked.connect(self.openCurrentHTML)
@@ -58,7 +63,8 @@ class GUI(QtGui.QWidget):
         
         self.index = 0
         self.total = 0
-
+        self.db = database()
+        
     def startCrawling(self):
         inputURL = str(self.ui.urlText.toPlainText())
         
@@ -79,27 +85,47 @@ class GUI(QtGui.QWidget):
     def finishCrawling(self):        
         self.snapshotList = self.thread.getSnapshotList()
         self.thread.terminate()
-
-        self.index = 0
-        self.total = len(self.snapshotList)
-        self.snapshotList[0].openHTML()
-
-        self.ui.crawlerGroup.setDisabled(True)
-        self.ui.comparatorGroup.setEnabled(True)
-
+        self.initSearch()
+        
     def loadFromFile(self):
         fname = QtGui.QFileDialog.getOpenFileName(self,'Open Pickle File','.',"Pickle File (*.pickle)")
         try:
             f = open(fname,"rb")
             self.snapshotList = pickle.load(f)
-            self.index = 0
-            self.total = len(self.snapshotList)
-            self.snapshotList[0].openHTML()
-            
-            self.ui.crawlerGroup.setDisabled(True)
-            self.ui.comparatorGroup.setEnabled(True)
+            self.initSearch()
         except Exception,e:
             print "No File selected!%s"%e
+
+    def loadDatabase(self):
+        itemID = int(self.ui.itemIDText.toPlainText())
+        rows = self.db.getDataList(itemID)
+        
+        self.snapshotList = []
+        for (url,html) in rows:
+            self.snapshotList.append(Snapshot(url,html))
+
+        productName = self.db.getItemName(itemID)
+        self.ui.nameText.setText(productName)
+        
+        self.initSearch()
+
+    def initSearch(self):
+        self.index = 0
+        self.total = len(self.snapshotList)
+
+        if self.total == 0:
+            print 'Unable to load! No Snapshot Available!'
+            return
+        
+        self.snapshotList[0].openHTML()
+        self.ui.dateText.setText(self.snapshotList[0].getDate())
+
+        self.ui.crawlerGroup.setDisabled(True)
+        self.ui.comparatorGroup.setEnabled(True)
+
+        self.ui.progressText.setText("%s/%s"%(self.index,self.total))
+        self.ui.progressBar.setValue(int(self.index*100.0/self.total))
+ 
     def openCurrentHTML(self):
         if self.index == self.total:
             self.finishSearching()
@@ -110,6 +136,7 @@ class GUI(QtGui.QWidget):
     def finishSearching(self):
         QtGui.QMessageBox.about(self,"Notification","Finished searching!")        
         print 'Finished searching!'
+        self.ui.nameText.setText("")
         self.ui.searchText.setText("")
         self.ui.urlText.setText("")
         self.ui.dateText.setText("")
@@ -120,8 +147,6 @@ class GUI(QtGui.QWidget):
     def startSearching(self):    
         if self.index == self.total:
             self.finishSearching()
-        
-        self.ui.progressText.setText("%s/%s"%(self.index,self.total))
 
         print 'startSearching...'
         self.keyword = str(self.ui.searchText.toPlainText().toUtf8())
