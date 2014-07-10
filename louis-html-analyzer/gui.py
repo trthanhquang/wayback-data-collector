@@ -66,11 +66,8 @@ class GUI(QtGui.QWidget):
         self.db = database()
 
         #----------------- Report --------------------
-        self.ui.reportFixPriceButton.clicked.connect(self.reportFixPriceHandler)
-        self.ui.reportSavePriceButton.clicked.connect(self.reportSavePriceHandler)
-        self.ui.reportFixFeatureButton.clicked.connect(self.reportFixFeatureHandler)
-        self.ui.reportSaveFeatureButton.clicked.connect(self.reportSaveFeatureHandler)
-
+        self.ui.reportSavePriceButton.clicked.connect(self.reportPriceHandler)
+        self.ui.reportSaveFeatureButton.clicked.connect(self.reportFeatureHandler)
         
     def startCrawling(self):
         inputURL = str(self.ui.urlText.toPlainText())
@@ -239,35 +236,33 @@ class GUI(QtGui.QWidget):
         if snapshotDate:
             self.ui.reportDateText.setText(snapshotDate)
 
-    def reportFeatureHandler(self):
-        itemID = int(self.ui.reportIdText.toPlainText())
-        itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
-        itemFeature = str(self.ui.reportFeatureText.toPlainText().toUtf8())
-        snapshotDate = str(self.ui.reportDateText.toPlainText().toUtf8())
-
-        self.db.reportFeature(itemID,itemName,snapshotDate,itemFeature)
-
-        QtGui.QMessageBox.about(self,"Notification",
-            "ID %s, %s changes on %s in feature is added to report!"%(itemID,
-                itemName,snapshotDate))        
-
     def reportPriceHandler(self):
         itemID = int(self.ui.reportIdText.toPlainText())
         itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
         itemPrice = str(self.ui.reportPriceText.toPlainText().toUtf8())
         snapshotDate = str(self.ui.reportDateText.toPlainText().toUtf8())
 
-        self.db.reportPrice(itemID,itemName,snapshotDate,itemPrice)
+        reply = QtGui.QMessageBox.question(self,"Confirmation",
+            "Adding itemID %s(%s) price %s on %s to report"%(itemID,itemName,itemPrice,snapshotDate),
+            QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
 
-        QtGui.QMessageBox.about(self,"Notification",
-            "ID %s, %s price %s on %s is added to report!"%(itemID,
-                itemName,itemPrice,snapshotDate))        
+        if reply==QtGui.QMessageBox.Yes:
+            self.db.reportPrice(itemID,itemName,snapshotDate,itemPrice)
+            print 'Saved to database'
 
-    def reportFixPriceHandler(self):
+    def reportFeatureHandler(self):
+        itemID = int(self.ui.reportIdText.toPlainText())
+        itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
+        itemFeature = str(self.ui.reportFeatureText.toPlainText().toUtf8())
+        snapshotDate = str(self.ui.reportDateText.toPlainText().toUtf8())
+
+        reply = QtGui.QMessageBox.question(self,"Confirmation",
+            "ID %s, %s changes on %s in feature is added to report!"%(itemID,itemName,snapshotDate),
+            QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
         
-    # reportSavePriceHandler
-    # reportFixFeatureHandler
-    # reportSaveFeatureHandler
+        if reply==QtGui.QMessageBox.Yes:
+            self.db.reportFeature(itemID,itemName,snapshotDate,itemFeature)
+            print 'saved to database'
 def main():
     app = QtGui.QApplication(sys.argv)
     try:
