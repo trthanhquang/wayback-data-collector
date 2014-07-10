@@ -60,10 +60,15 @@ class GUI(QtGui.QWidget):
 
         self.ui.comparatorGroup.setDisabled(True)
         self.ui.crawlerGroup.setEnabled(True)
-        
+
         self.index = 0
         self.total = 0
         self.db = database()
+
+        #----------------- Report --------------------
+        self.ui.reportPriceOkButton.clicked.connect(self.reportPriceHandler)
+        self.ui.reportFeatureOkButton.clicked.connect(self.reportFeatureHandler)
+
         
     def startCrawling(self):
         inputURL = str(self.ui.urlText.toPlainText())
@@ -106,7 +111,8 @@ class GUI(QtGui.QWidget):
 
         productName = self.db.getItemName(itemID)
         self.ui.nameText.setText(productName)
-        
+        self.reportAutoFill(itemID=itemID,itemName=productName)
+
         self.initSearch()
 
     def initSearch(self):
@@ -118,7 +124,8 @@ class GUI(QtGui.QWidget):
             return
         
         self.snapshotList[0].openHTML()
-        self.ui.dateText.setText(self.snapshotList[0].getDate())
+        snapshotDate = self.snapshotList[0].getDate()
+        self.ui.dateText.setText(snapshotDate)
 
         self.ui.crawlerGroup.setDisabled(True)
         self.ui.comparatorGroup.setEnabled(True)
@@ -177,6 +184,10 @@ class GUI(QtGui.QWidget):
 
                 self.ui.progressText.setText("%s/%s"%(self.index,self.total))
                 self.ui.progressBar.setValue(int(self.index*100.0/self.total))
+
+                self.reportAutoFill(
+                    snapshotDate=snapshot.getDate())
+
                 print 'OK'
 
             elif snapshot.contain("Got an HTTP 302 response at crawl time"):
@@ -216,6 +227,39 @@ class GUI(QtGui.QWidget):
             self.snapshotList[self.lastOKindex].compareHTML(self.snapshotList[self.index])
         else:
             self.snapshotList[0].openHTML()
+
+    #------------------------- Report Handler ----------------------------
+    def reportAutoFill(self,itemID=None, itemName=None, snapshotDate=None):
+        if itemID:
+            self.ui.reportIdText.setText(str(itemID))
+        if itemName:
+            self.ui.reportItemNameText.setText(itemName)
+        if snapshotDate:
+            self.ui.reportDateText.setText(snapshotDate)
+
+    def reportFeatureHandler(self):
+        itemID = int(self.ui.reportIdText.toPlainText())
+        itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
+        itemFeature = str(self.ui.reportFeatureText.toPlainText().toUtf8())
+        snapshotDate = str(self.ui.reportDateText.toPlainText().toUtf8())
+
+        self.db.reportFeature(itemID,itemName,snapshotDate,itemFeature)
+
+        QtGui.QMessageBox.about(self,"Notification",
+            "ID %s, %s changes on %s in feature is added to report!"%(itemID,
+                itemName,snapshotDate))        
+
+    def reportPriceHandler(self):
+        itemID = int(self.ui.reportIdText.toPlainText())
+        itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
+        itemPrice = str(self.ui.reportPriceText.toPlainText().toUtf8())
+        snapshotDate = str(self.ui.reportDateText.toPlainText().toUtf8())
+
+        self.db.reportPrice(itemID,itemName,snapshotDate,itemPrice)
+
+        QtGui.QMessageBox.about(self,"Notification",
+            "ID %s, %s price %s on %s is added to report!"%(itemID,
+                itemName,itemPrice,snapshotDate))        
 
 def main():
     app = QtGui.QApplication(sys.argv)
