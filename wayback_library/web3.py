@@ -201,21 +201,21 @@ select.deselect_all()
         # graphic device setting
         self.driver.set_window_size(1024,768)
 
-    def goto(self,url, frame_switch = False, filter_func = None):
+    def goto(self,url, frame_switch = False, filter_func = None, filter_time_out = 120):
         """
 | filter_func: sufficient condition of loading a page
 | if the return value True, stop waiting
         """
         self.driver.get(url)
+        if filter_func != None:
+            WebDriverWait(self,filter_time_out).until(filter_func)
         if frame_switch:
             try:
                 ele = self.css_selector_element("frameset frame")
                 attr_name = ele.get_attribute('name')
                 self.driver.switch_to_frame(attr_name)
             except:
-                return False
-        if filter_func != None:
-            WebDriverWait(self,60).until(filter_func)
+                return False        
         return True
     def capture(self,file_location):
         if file_location == None or len(file_location) == 0:
@@ -271,12 +271,14 @@ select.deselect_all()
         return self.driver.execute_script("return $(document).height() <= $(window).height()+$(window).scrollTop();")
         #except WebDriverException:
         #    pass
-    def scroll_down(self, patient = 30,filter_func = None):
+    def scroll_down(self, filter_time_out = 30,filter_func = None):
         rv = False
-        script = "window.scrollTo(0, document.body.scrollHeight);"
-        self.execute_javascript(script)
+        script_0 = "window.scrollTo(0, 0);"
+        script_1 = "window.scrollTo(0, document.body.scrollHeight);"
+        self.execute_javascript(script_0)
+        self.execute_javascript(script_1)
         if filter_func != None:
-            rv = WebDriverWait(self,patient).until(filter_func)
+            rv = WebDriverWait(self,filter_time_out).until(filter_func)
         return rv
     def close(self):
         self.driver.quit()
