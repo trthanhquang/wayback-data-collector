@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>649</width>
-    <height>544</height>
+    <height>545</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -145,7 +145,7 @@
      <rect>
       <x>10</x>
       <y>340</y>
-      <width>101</width>
+      <width>41</width>
       <height>31</height>
      </rect>
     </property>
@@ -156,7 +156,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Snapshot Diff</string>
+     <string>Diff</string>
     </property>
    </widget>
    <widget class="QPushButton" name="startSearchButton">
@@ -282,10 +282,10 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="htmlButton">
+   <widget class="QPushButton" name="htmlOfflineButton">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>60</x>
       <y>340</y>
       <width>91</width>
       <height>31</height>
@@ -298,7 +298,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Open HTML</string>
+     <string>Offline HTML</string>
     </property>
    </widget>
    <widget class="QLabel" name="nameLabel">
@@ -375,6 +375,25 @@
     </property>
     <property name="text">
      <string>Stop Search</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="htmlOnlineButton">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>340</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <italic>false</italic>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Online HTML</string>
     </property>
    </widget>
   </widget>
@@ -677,7 +696,7 @@ p, li { white-space: pre-wrap; }
       <x>10</x>
       <y>80</y>
       <width>211</width>
-      <height>31</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -721,7 +740,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>120</y>
+      <y>130</y>
       <width>111</width>
       <height>25</height>
      </rect>
@@ -741,7 +760,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>120</y>
+      <y>130</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -773,7 +792,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="priceTab">
      <attribute name="title">

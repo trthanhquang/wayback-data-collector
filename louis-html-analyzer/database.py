@@ -206,11 +206,13 @@ class database(object):
     def reportPrice(self, itemID, itemName, snapshot_date, price):
         query = '''insert into report_price(itemID, itemName, snapshot_date, price)
                     values (%s, \"%s\", \"%s\", \"%s\")
-                ''' % (itemID, itemName, snapshot_date, price)
+                    on duplicate key update price = \"%s\"
+                    ''' % (itemID, itemName, snapshot_date, price, price)
         self.cur.execute(query)
 
     def reportFeature(self, itemID, itemName, snapshot_date, feature):
         query = '''insert into report_feature(itemID, itemName, snapshot_date, feature)
                     values (%s, \"%s\", \"%s\", \"%s\")
-                ''' % (itemID, itemName, snapshot_date, feature)
+                    on duplicate key update feature = \"%s\"
+                ''' % (itemID, itemName, snapshot_date, feature,feature)
         self.cur.execute(query)

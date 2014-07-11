@@ -51,7 +51,8 @@ class GUI(QtGui.QWidget):
 
 
         self.ui.diffButton.clicked.connect(self.versionDiffHandler)
-        self.ui.htmlButton.clicked.connect(self.openCurrentHTML)
+        self.ui.htmlOfflineButton.clicked.connect(self.openOfflineHTML)
+        self.ui.htmlOnlineButton.clicked.connect(self.openOnlineHTML)
         self.ui.startSearchButton.clicked.connect(self.startSearching)
         
         self.ui.stopButton.clicked.connect(self.stopSearching)
@@ -119,6 +120,7 @@ class GUI(QtGui.QWidget):
         self.total = len(self.snapshotList)
 
         if self.total == 0:
+            QtGui.QMessageBox.about(self,"Notification","No Snapshot Available!")
             print 'Unable to load! No Snapshot Available!'
             return
         
@@ -132,12 +134,22 @@ class GUI(QtGui.QWidget):
         self.ui.progressText.setText("%s/%s"%(self.index,self.total))
         self.ui.progressBar.setValue(int(self.index*100.0/self.total))
  
-    def openCurrentHTML(self):
+        self.ui.reportSavePriceButton.setDisabled(True)
+        self.ui.reportSaveFeatureButton.setDisabled(True)
+
+    def openOfflineHTML(self):
         if self.index == self.total:
             self.finishSearching()
             return
 
         self.snapshotList[self.index].openHTML()
+
+    def openOnlineHTML(self):
+        if self.index == self.total:
+            self.finishSearching()
+            return
+
+        self.snapshotList[self.index].openHTML(mode="online")
 
     def finishSearching(self):
         QtGui.QMessageBox.about(self,"Notification","Finished searching!")        
@@ -150,7 +162,12 @@ class GUI(QtGui.QWidget):
         self.ui.comparatorGroup.setDisabled(True)
         self.ui.crawlerGroup.setEnabled(True)
 
-    def startSearching(self):    
+    def startSearching(self):
+        self.ui.reportItemNameText.setDisabled(True)
+        self.ui.reportPriceText.setDisabled(True)
+        self.ui.reportPriceText.setDisabled(True)
+        self.ui.reportFeatureText.setDisabled(True)
+
         if self.index == self.total:
             self.finishSearching()
 
@@ -201,6 +218,9 @@ class GUI(QtGui.QWidget):
 
         if self.index == self.total:
             self.finishSearching()
+
+        self.ui.reportSavePriceButton.setDisabled(False)
+        self.ui.reportSaveFeatureButton.setDisabled(False)
         
         # self.ui.comparatorGroup.setEnabled(True)
 
@@ -250,6 +270,14 @@ class GUI(QtGui.QWidget):
             self.db.reportPrice(itemID,itemName,snapshotDate,itemPrice)
             print 'Saved to database'
 
+            self.ui.reportPriceText.setText("")
+            self.ui.reportItemNameText.setDisabled(False)
+            self.ui.reportPriceText.setDisabled(False)
+            self.ui.reportPriceText.setDisabled(False)
+            self.ui.reportFeatureText.setDisabled(False)
+            
+            self.ui.reportSavePriceButton.setDisabled(True)
+
     def reportFeatureHandler(self):
         itemID = int(self.ui.reportIdText.toPlainText())
         itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
@@ -263,6 +291,15 @@ class GUI(QtGui.QWidget):
         if reply==QtGui.QMessageBox.Yes:
             self.db.reportFeature(itemID,itemName,snapshotDate,itemFeature)
             print 'saved to database'
+
+            self.ui.reportFeatureText.setText("")
+            self.ui.reportItemNameText.setDisabled(False)
+            self.ui.reportPriceText.setDisabled(False)
+            self.ui.reportPriceText.setDisabled(False)
+            self.ui.reportFeatureText.setDisabled(False)
+
+            self.ui.reportSaveFeatureButton.setDisabled(True)
+
 def main():
     app = QtGui.QApplication(sys.argv)
     try:
