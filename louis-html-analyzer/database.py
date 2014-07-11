@@ -8,8 +8,7 @@ class database(object):
     def __init__(self, hostName="localhost", userName="root",
                  password="", database="crawling"):
         self.db = None
-        while self.db is None:
-            self.db = self.__getConnection(hostName, userName, password, database)
+        self.db = self.__getConnection(hostName, userName, password, database)
             
         self.db.autocommit(True)
         self.cur = self.db.cursor()

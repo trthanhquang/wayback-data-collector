@@ -63,7 +63,8 @@ class GUI(QtGui.QWidget):
 
         self.index = 0
         self.total = 0
-        self.db = database()
+        self.db = None
+
 
         #----------------- Report --------------------
         self.ui.reportSavePriceButton.clicked.connect(self.reportPriceHandler)
@@ -101,6 +102,13 @@ class GUI(QtGui.QWidget):
             print "No File selected!%s"%e
 
     def loadDatabase(self):
+        try:
+            self.db = database()
+        except Exception,e:
+            QtGui.QMessageBox.about(self,"Notification","No Database Available!")
+            print "no database Available"
+            return
+
         itemID = int(self.ui.itemIDText.toPlainText())
         rows = self.db.getDataList(itemID)
         
