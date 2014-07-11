@@ -56,7 +56,6 @@ class GUI(QtGui.QWidget):
         self.ui.startSearchButton.clicked.connect(self.startSearching)
         
         self.ui.stopButton.clicked.connect(self.stopSearching)
-        
         self.ui.errButton.clicked.connect(self.pageErrorHandler)
 
         self.ui.comparatorGroup.setDisabled(True)
@@ -69,7 +68,7 @@ class GUI(QtGui.QWidget):
         #----------------- Report --------------------
         self.ui.reportSavePriceButton.clicked.connect(self.reportPriceHandler)
         self.ui.reportSaveFeatureButton.clicked.connect(self.reportFeatureHandler)
-        
+        self.ui.reportEnableButton.clicked.connect(self.reportEnableHandler)
     def startCrawling(self):
         inputURL = str(self.ui.urlText.toPlainText())
         
@@ -273,7 +272,6 @@ class GUI(QtGui.QWidget):
             self.ui.reportPriceText.setText("")
             self.ui.reportItemNameText.setDisabled(False)
             self.ui.reportPriceText.setDisabled(False)
-            self.ui.reportPriceText.setDisabled(False)
             self.ui.reportFeatureText.setDisabled(False)
             
             self.ui.reportSavePriceButton.setDisabled(True)
@@ -295,10 +293,18 @@ class GUI(QtGui.QWidget):
             self.ui.reportFeatureText.setText("")
             self.ui.reportItemNameText.setDisabled(False)
             self.ui.reportPriceText.setDisabled(False)
-            self.ui.reportPriceText.setDisabled(False)
             self.ui.reportFeatureText.setDisabled(False)
 
             self.ui.reportSaveFeatureButton.setDisabled(True)
+
+    def reportEnableHandler(self):
+            self.ui.reportIdText.setDisabled(False)
+            self.ui.reportItemNameText.setDisabled(False)
+            self.ui.reportDateText.setDisabled(False)
+            self.ui.reportPriceText.setDisabled(False)
+            self.ui.reportFeatureText.setDisabled(False)
+            self.ui.reportSaveFeatureButton.setDisabled(False)
+            self.ui.reportSavePriceButton.setDisabled(False)
 
 def main():
     app = QtGui.QApplication(sys.argv)

@@ -695,7 +695,7 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>211</width>
+      <width>221</width>
       <height>41</height>
      </rect>
     </property>
@@ -761,7 +761,7 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>130</x>
       <y>130</y>
-      <width>91</width>
+      <width>101</width>
       <height>31</height>
      </rect>
     </property>
@@ -903,6 +903,25 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="reportEnableButton">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>10</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="text">
+     <string>Forced Enable</string>
+    </property>
    </widget>
   </widget>
   <zorder>crawlerGroup</zorder>
