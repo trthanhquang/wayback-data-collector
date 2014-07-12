@@ -44,7 +44,7 @@ class GUI(QtGui.QWidget):
         self.ui = uic.loadUi('snapshotCompare.ui')
         self.ui.show()
 
-        self.ui.urlText.setText("http://www.aone-video.com/avi.htm")
+        self.ui.urlText.setPlainText("http://www.aone-video.com/avi.htm")
         self.ui.startButton.clicked.connect(self.startCrawling)
         self.ui.loadFileButton.clicked.connect(self.loadFromFile)
         self.ui.loadDatabaseButton.clicked.connect(self.loadDatabase)
@@ -156,7 +156,7 @@ class GUI(QtGui.QWidget):
             print 'Unable to load! No Snapshot Available!'
             return
 
-        self.ui.nameText.setText(productName)
+        self.ui.nameText.setPlainText(productName)
         self.reportAutoFill(itemID=itemID,itemName=productName)
         
         self.initSearch()
@@ -167,12 +167,12 @@ class GUI(QtGui.QWidget):
         
         self.snapshotList[0].openHTML()
         snapshotDate = self.snapshotList[0].getDate()
-        self.ui.dateText.setText(snapshotDate)
+        self.ui.dateText.setPlainText(snapshotDate)
 
         self.ui.crawlerGroup.setDisabled(True)
         self.ui.comparatorGroup.setEnabled(True)
 
-        self.ui.progressText.setText("%s/%s"%(self.index,self.total))
+        self.ui.progressText.setPlainText("%s/%s"%(self.index,self.total))
         self.ui.progressBar.setValue(int(self.index*100.0/self.total))
  
         self.ui.reportSavePriceButton.setDisabled(True)
@@ -195,11 +195,11 @@ class GUI(QtGui.QWidget):
     def finishSearching(self):
         QtGui.QMessageBox.about(self,"Notification","Finished searching!")        
         print 'Finished searching!'
-        self.ui.nameText.setText("")
-        self.ui.searchText.setText("")
-        self.ui.urlText.setText("")
-        self.ui.dateText.setText("")
-        self.ui.progressText.setText("{0}/{0}".format(self.total))
+        self.ui.nameText.setPlainText("")
+        self.ui.searchText.setPlainText("")
+        self.ui.urlText.setPlainText("")
+        self.ui.dateText.setPlainText("")
+        self.ui.progressText.setPlainText("{0}/{0}".format(self.total))
         self.ui.comparatorGroup.setDisabled(True)
         self.ui.crawlerGroup.setEnabled(True)
 
@@ -231,7 +231,7 @@ class GUI(QtGui.QWidget):
                 
             snapshot = self.snapshotList[self.index]
             
-            self.ui.dateText.setText(snapshot.getDate())
+            self.ui.dateText.setPlainText(snapshot.getDate())
 
             print '%s/%s. Analyzing %s'%(self.index+1,self.total,snapshot.getDate())
 
@@ -239,7 +239,7 @@ class GUI(QtGui.QWidget):
                 self.lastOKindex = self.index
                 self.index = self.index+1
 
-                self.ui.progressText.setText("%s/%s"%(self.index,self.total))
+                self.ui.progressText.setPlainText("%s/%s"%(self.index,self.total))
                 self.ui.progressBar.setValue(int(self.index*100.0/self.total))
 
                 self.reportAutoFill(
@@ -253,7 +253,7 @@ class GUI(QtGui.QWidget):
 
             else:
                 print 'Unable to find: '+self.keyword
-                self.ui.searchText.setText("")
+                self.ui.searchText.setPlainText("")
                 self.snapshotList[self.index].openHTML()
                 break
 
@@ -276,8 +276,8 @@ class GUI(QtGui.QWidget):
         print 'PageError at index %s! continue to search'%self.index
         self.index = self.index+1
 
-        self.ui.searchText.setText(self.keyword)
-        self.ui.progressText.setText("%s/%s"%(self.index,self.total))
+        self.ui.searchText.setPlainText(self.keyword)
+        self.ui.progressText.setPlainText("%s/%s"%(self.index,self.total))
         self.ui.progressBar.setValue(int(self.index*100.0/self.total))
 
         self.startSearching()
@@ -291,11 +291,11 @@ class GUI(QtGui.QWidget):
     #------------------------- Report Handler ----------------------------
     def reportAutoFill(self,itemID=None, itemName=None, snapshotDate=None):
         if itemID:
-            self.ui.reportIdText.setText(str(itemID))
+            self.ui.reportIdText.setPlainText(str(itemID))
         if itemName:
-            self.ui.reportItemNameText.setText(itemName)
+            self.ui.reportItemNameText.setPlainText(itemName)
         if snapshotDate:
-            self.ui.reportDateText.setText(snapshotDate)
+            self.ui.reportDateText.setPlainText(snapshotDate)
 
     def reportPriceHandler(self):
         itemID = int(self.ui.reportIdText.toPlainText())
@@ -311,7 +311,7 @@ class GUI(QtGui.QWidget):
             self.db.reportPrice(itemID,itemName,snapshotDate,itemPrice)
             print 'Saved to database'
 
-            self.ui.reportPriceText.setText("")
+            self.ui.reportPriceText.setPlainText("")
             self.ui.reportItemNameText.setDisabled(False)
             self.ui.reportPriceText.setDisabled(False)
             self.ui.reportFeatureText.setDisabled(False)
@@ -332,7 +332,7 @@ class GUI(QtGui.QWidget):
             self.db.reportFeature(itemID,itemName,snapshotDate,itemFeature)
             print 'saved to database'
 
-            self.ui.reportFeatureText.setText("")
+            self.ui.reportFeatureText.setPlainText("")
             self.ui.reportItemNameText.setDisabled(False)
             self.ui.reportPriceText.setDisabled(False)
             self.ui.reportFeatureText.setDisabled(False)
