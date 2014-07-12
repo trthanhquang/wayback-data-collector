@@ -56,7 +56,7 @@ class GUI(QtGui.QWidget):
         self.ui.startSearchButton.clicked.connect(self.startSearching)
         
         self.ui.stopButton.clicked.connect(self.stopSearching)
-        self.ui.errButton.clicked.connect(self.skipHandler)
+        self.ui.continueSearchButton.clicked.connect(self.skipHandler)
 
         self.ui.comparatorGroup.setDisabled(True)
         self.ui.crawlerGroup.setEnabled(True)
@@ -139,21 +139,26 @@ class GUI(QtGui.QWidget):
                 featureURL = ""
 
             print homepageURL,priceURL,featureURL
-            url = "http://www.google.com"
+            currentDate = time.strftime("%Y%m%d")
+
+            self.reportAutoFill(itemID=itemID,itemName=productName,snapshotDate=currentDate)
+
             QtGui.QMessageBox.about(self,"Notification",
                 """
                 <p>
                     No Snapshot Available For item {0}!<br>
                     Product Name: \"{1}\"<br>
+                    Current Date: {2} <br>
                     Home Page: <a href= \"{homePage}\"> \"{homePage}\" </a><br>
                     Price URL: <a href= \"{pricePage}\"> \"{pricePage}\"</a><br>
                     Feature URL: <a href= \"{featurePage}\"> \"{featurePage}\" </a>
                 </p>
-                """.format(itemID,productName,
+                """.format(itemID,productName,currentDate,
                     homePage=homepageURL,
                     pricePage=priceURL,
                     featurePage=featureURL))
-            print 'Unable to load! No Snapshot Available!'
+            print 'WARN: No Snapshot Available!'
+
             return
 
         self.ui.nameText.setPlainText(productName)
