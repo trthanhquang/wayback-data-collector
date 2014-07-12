@@ -56,7 +56,7 @@ class GUI(QtGui.QWidget):
         self.ui.startSearchButton.clicked.connect(self.startSearching)
         
         self.ui.stopButton.clicked.connect(self.stopSearching)
-        self.ui.errButton.clicked.connect(self.pageErrorHandler)
+        self.ui.errButton.clicked.connect(self.skipHandler)
 
         self.ui.comparatorGroup.setDisabled(True)
         self.ui.crawlerGroup.setEnabled(True)
@@ -164,7 +164,8 @@ class GUI(QtGui.QWidget):
     def initSearch(self):
         self.index = 0
         self.total = len(self.snapshotList)
-        
+        self.keyword = None
+
         self.snapshotList[0].openHTML()
         snapshotDate = self.snapshotList[0].getDate()
         self.ui.dateText.setPlainText(snapshotDate)
@@ -202,6 +203,7 @@ class GUI(QtGui.QWidget):
         self.ui.progressText.setPlainText("{0}/{0}".format(self.total))
         self.ui.comparatorGroup.setDisabled(True)
         self.ui.crawlerGroup.setEnabled(True)
+        self.keyword = None
 
     def startSearching(self):
         self.ui.reportItemNameText.setDisabled(True)
@@ -269,18 +271,21 @@ class GUI(QtGui.QWidget):
         self.index = self.total
         self.finishSearching()
 
-    def pageErrorHandler(self):
+    def skipHandler(self):
         if self.index == self.total:
             self.finishSearching()
 
-        print 'PageError at index %s! continue to search'%self.index
+        print 'Skip index %s! continue to search'%self.index
         self.index = self.index+1
 
-        self.ui.searchText.setPlainText(self.keyword)
         self.ui.progressText.setPlainText("%s/%s"%(self.index,self.total))
         self.ui.progressBar.setValue(int(self.index*100.0/self.total))
 
-        self.startSearching()
+        if self.keyword ==None:
+            print 'WARN: no keyword!'
+        else:
+            self.ui.searchText.setPlainText(self.keyword)
+            self.startSearching()
 
     def versionDiffHandler(self):
         if(self.index >0):
@@ -312,6 +317,8 @@ class GUI(QtGui.QWidget):
             print 'Saved to database'
 
             self.ui.reportPriceText.setPlainText("")
+            self.ui.reportDateText.setPlainText("")
+            
             self.ui.reportItemNameText.setDisabled(False)
             self.ui.reportPriceText.setDisabled(False)
             self.ui.reportFeatureText.setDisabled(False)
@@ -333,6 +340,8 @@ class GUI(QtGui.QWidget):
             print 'saved to database'
 
             self.ui.reportFeatureText.setPlainText("")
+            self.ui.reportDateText.setPlainText("")
+
             self.ui.reportItemNameText.setDisabled(False)
             self.ui.reportPriceText.setDisabled(False)
             self.ui.reportFeatureText.setDisabled(False)
