@@ -158,7 +158,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Continue Search</string>
+     <string>Skip and Continue</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="progressBar">
