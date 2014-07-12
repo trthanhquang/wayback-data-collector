@@ -109,7 +109,12 @@ class GUI(QtGui.QWidget):
             print "no database Available"
             return
 
-        itemID = int(self.ui.itemIDText.toPlainText())
+        itemIDstr = self.ui.itemIDText.toPlainText()        
+        if itemIDstr == "":
+            QtGui.QMessageBox.about(self,"Notification","Please enter itemID!")
+            return
+        itemID = int(itemIDstr)
+
         rows = self.db.getDataList(itemID)
         
         self.snapshotList = []
@@ -117,19 +122,48 @@ class GUI(QtGui.QWidget):
             self.snapshotList.append(Snapshot(url,html))
 
         productName = self.db.getItemName(itemID)
+
+        if productName == "ItemID not found in database":
+            QtGui.QMessageBox.about(self,"Notification","Item ID %s is not in database"%itemID)
+            return
+
+        if len(self.snapshotList) == 0:
+            homepageURL = self.db.getWebsiteHomepage(itemID)
+            
+            priceURL = self.db.getWebsitePriceURL(itemID)
+            if priceURL == "Free":
+                priceURL = ""
+
+            featureURL = self.db.getWebsiteFeatureURL(itemID)
+            if featureURL =="ItemID not found in database":
+                featureURL = ""
+
+            print homepageURL,priceURL,featureURL
+            url = "http://www.google.com"
+            QtGui.QMessageBox.about(self,"Notification",
+                """
+                <p>
+                    No Snapshot Available For item {0}!<br>
+                    Product Name: \"{1}\"<br>
+                    Home Page: <a href= \"{homePage}\"> \"{homePage}\" </a><br>
+                    Price URL: <a href= \"{pricePage}\"> \"{pricePage}\"</a><br>
+                    Feature URL: <a href= \"{featurePage}\"> \"{featurePage}\" </a>
+                </p>
+                """.format(itemID,productName,
+                    homePage=homepageURL,
+                    pricePage=priceURL,
+                    featurePage=featureURL))
+            print 'Unable to load! No Snapshot Available!'
+            return
+
         self.ui.nameText.setText(productName)
         self.reportAutoFill(itemID=itemID,itemName=productName)
-
+        
         self.initSearch()
 
     def initSearch(self):
         self.index = 0
         self.total = len(self.snapshotList)
-
-        if self.total == 0:
-            QtGui.QMessageBox.about(self,"Notification","No Snapshot Available!")
-            print 'Unable to load! No Snapshot Available!'
-            return
         
         self.snapshotList[0].openHTML()
         snapshotDate = self.snapshotList[0].getDate()
