@@ -51,6 +51,7 @@ class GUI(QtGui.QWidget):
 
 
         self.ui.diffButton.clicked.connect(self.versionDiffHandler)
+        self.ui.openTextButton.clicked.connect(self.openCurrentText)
         self.ui.htmlOfflineButton.clicked.connect(self.openOfflineHTML)
         self.ui.htmlOnlineButton.clicked.connect(self.openOnlineHTML)
         self.ui.startSearchButton.clicked.connect(self.startSearching)
@@ -197,6 +198,12 @@ class GUI(QtGui.QWidget):
             return
 
         self.snapshotList[self.index].openHTML(mode="online")
+
+    def openCurrentText(self):
+        if self.index == self.total:
+            self.finishSearching()
+            return
+        self.snapshotList[self.index].openTextAsHTML()
 
     def finishSearching(self):
         QtGui.QMessageBox.about(self,"Notification","Finished searching!")        

@@ -112,6 +112,7 @@
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -131,6 +132,7 @@
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -142,15 +144,15 @@
    <widget class="QPushButton" name="continueSearchButton">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>180</x>
       <y>90</y>
-      <width>111</width>
+      <width>101</width>
       <height>25</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -210,14 +212,15 @@
    <widget class="QPushButton" name="htmlOfflineButton">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>100</x>
       <y>340</y>
-      <width>91</width>
+      <width>71</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -249,15 +252,15 @@
    <widget class="QPushButton" name="stopButton">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>290</x>
       <y>90</y>
-      <width>91</width>
+      <width>81</width>
       <height>25</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -269,14 +272,15 @@
    <widget class="QPushButton" name="htmlOnlineButton">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>175</x>
       <y>340</y>
-      <width>91</width>
+      <width>71</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -346,6 +350,26 @@
      <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
     </property>
    </widget>
+   <widget class="QPushButton" name="openTextButton">
+    <property name="geometry">
+     <rect>
+      <x>55</x>
+      <y>340</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <italic>false</italic>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Text</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="crawlerGroup">
    <property name="geometry">
@@ -400,6 +424,7 @@
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -456,6 +481,7 @@
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -521,6 +547,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="font">
      <font>
+      <pointsize>8</pointsize>
       <italic>false</italic>
       <underline>false</underline>
      </font>
@@ -714,7 +741,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="priceTab">
      <attribute name="title">
@@ -756,6 +783,7 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="font">
        <font>
+        <pointsize>8</pointsize>
         <italic>false</italic>
         <underline>false</underline>
        </font>
@@ -809,6 +837,7 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="font">
        <font>
+        <pointsize>8</pointsize>
         <italic>false</italic>
         <underline>false</underline>
        </font>

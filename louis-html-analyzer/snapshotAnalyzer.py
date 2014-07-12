@@ -67,6 +67,11 @@ class Snapshot(object):
             f.close
             webbrowser.open("temp.html")
 
+    def openTextAsHTML(self):
+        text1 = self.getText()
+        saveTextAsHTML(text1,'text1.html','TEXT1(CURRENT)- %s'%self.getDate())
+        webbrowser.open('text1.html')
+
     def compareHTML(self, other, mode = 'offline'):
         text1 = self.getText()
         text2 = other.getText()
