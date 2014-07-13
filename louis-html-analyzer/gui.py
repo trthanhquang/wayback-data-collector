@@ -315,10 +315,30 @@ class GUI(QtGui.QWidget):
             self.ui.reportDateText.setPlainText(snapshotDate)
 
     def reportPriceHandler(self):
-        itemID = int(self.ui.reportIdText.toPlainText())
-        itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
-        itemPrice = str(self.ui.reportPriceText.toPlainText().toUtf8())
-        snapshotDate = str(self.ui.reportDateText.toPlainText().toUtf8())
+        itemIDText = self.ui.reportIdText.toPlainText()
+        itemNameText = self.ui.reportItemNameText.toPlainText().toUtf8()
+        priceText = self.ui.reportPriceText.toPlainText().toUtf8()
+        dateText = self.ui.reportDateText.toPlainText().toUtf8()
+
+
+        if not(itemIDText and itemNameText and priceText and dateText):
+            message = "Missing Information: <br>"
+            if not itemIDText:
+                message = message + "- Item ID <br>"
+            if not itemNameText:
+                message = message + "- Item Name <br>"
+            if not dateText:
+                message = message + "- Snapshot Date <br>"
+            if not priceText:
+                message = message + "- Price <br>"
+
+            QtGui.QMessageBox.about(self,"Notification",message)
+            return
+
+        itemID = int(itemIDText)
+        itemName = str(itemNameText)
+        itemPrice = str(priceText)
+        snapshotDate = str(dateText)
 
         reply = QtGui.QMessageBox.question(self,"Confirmation",
             "Adding itemID %s(%s) price %s on %s to report"%(itemID,itemName,itemPrice,snapshotDate),
@@ -338,10 +358,30 @@ class GUI(QtGui.QWidget):
             self.ui.reportSavePriceButton.setDisabled(True)
 
     def reportFeatureHandler(self):
-        itemID = int(self.ui.reportIdText.toPlainText())
-        itemName = str(self.ui.reportItemNameText.toPlainText().toUtf8())
-        itemFeature = str(self.ui.reportFeatureText.toPlainText().toUtf8())
-        snapshotDate = str(self.ui.reportDateText.toPlainText().toUtf8())
+        itemIDText = self.ui.reportIdText.toPlainText()
+        itemNameText = self.ui.reportItemNameText.toPlainText().toUtf8()
+        featureText = self.ui.reportFeatureText.toPlainText().toUtf8()
+        dateText = self.ui.reportDateText.toPlainText().toUtf8()
+
+
+        if not(itemIDText and itemNameText and featureText and dateText):
+            message = "Missing Information: <br>"
+            if not itemIDText:
+                message = message + "- Item ID <br>"
+            if not itemNameText:
+                message = message + "- Item Name <br>"
+            if not dateText:
+                message = message + "- Snapshot Date <br>"
+            if not featureText:
+                message = message + "- Feature <br>"
+
+            QtGui.QMessageBox.about(self,"Notification",message)
+            return
+
+        itemID = int(itemIDText)
+        itemName = str(itemNameText)
+        itemFeature = str(featureText)
+        snapshotDate = str(dateText)
 
         reply = QtGui.QMessageBox.question(self,"Confirmation",
             "ID %s, %s changes on %s in feature is added to report!"%(itemID,itemName,snapshotDate),
