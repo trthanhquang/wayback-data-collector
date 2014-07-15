@@ -27,16 +27,9 @@ class crawlingThread(QtCore.QThread):
             print 'Saving to %s'%self.fileName
             pickle.dump(self.snapshotList, open(self.fileName,"wb"))
             print 'Saved!'
+
     def getSnapshotList(self):
         return self.snapshotList
-'''
-class searchingThread(QtCore.QThread):
-    def __init__(self,parent=None):
-        QtCore.QThread.__init__(self,parent)
-
-    def run(self):
-        pass
-'''
 
 class GUI(QtGui.QWidget):
     def __init__(self):
@@ -54,10 +47,11 @@ class GUI(QtGui.QWidget):
         self.ui.openTextButton.clicked.connect(self.openCurrentText)
         self.ui.htmlOfflineButton.clicked.connect(self.openOfflineHTML)
         self.ui.htmlOnlineButton.clicked.connect(self.openOnlineHTML)
+
         self.ui.startSearchButton.clicked.connect(self.startSearching)
-        
         self.ui.stopButton.clicked.connect(self.stopSearching)
-        self.ui.continueSearchButton.clicked.connect(self.skipHandler)
+        self.ui.continueSearchButton.clicked.connect(self.continueSearchHandler)
+        self.ui.skipButton.clicked.connect(self.skipHandler)
 
         self.ui.comparatorGroup.setDisabled(True)
         self.ui.crawlerGroup.setEnabled(True)
@@ -65,7 +59,6 @@ class GUI(QtGui.QWidget):
         self.index = 0
         self.total = 0
         self.db = None
-
 
         #----------------- Report --------------------
         self.ui.reportSavePriceButton.clicked.connect(self.reportPriceHandler)
@@ -106,7 +99,7 @@ class GUI(QtGui.QWidget):
         try:
             self.db = database()
         except Exception,e:
-            QtGui.QMessageBox.about(self,"Notification","No Database Available!")
+            QtGui.QMessageBox.about(self,"Notification","No Database Available!<br>Is Wamp Sever On?")
             print "no database Available"
             return
 
@@ -282,8 +275,34 @@ class GUI(QtGui.QWidget):
     def stopSearching(self):
         self.index = self.total
         self.finishSearching()
-
+    
     def skipHandler(self):
+        inputDate, ok = QtGui.QInputDialog.getText(self,'Skip Handler',
+            '''
+                Please Enter The Date That You Would Like To Skip To<br>
+                Format: (YYYYMMDD). Example: "20110301" to jump to 1 Mar 2011 
+            ''')
+        
+        latestDate = self.snapshotList[0].getDate()
+        oldestDate = self.snapshotList[self.total-1].getDate()
+
+        if not(oldestDate <= inputDate <= latestDate):
+            print 'year not in range'
+            QtGui.QMessageBox.about(self,'ERROR','invalid year input')
+            return
+
+        if ok:    
+            currSnapshotDate = self.snapshotList[self.index].getDate() 
+            while currSnapshotDate > inputDate:
+                print 'skip %s, date: %s'%(self.index,currSnapshotDate)
+                self.index = self.index + 1
+                currSnapshotDate = self.snapshotList[self.index].getDate() 
+                self.ui.progressText.setPlainText("%s/%s"%(self.index,self.total))
+                self.ui.progressBar.setValue(int(self.index*100.0/self.total))
+                self.ui.dateText.setPlainText(currSnapshotDate)
+            
+
+    def continueSearchHandler(self):
         if self.index == self.total:
             self.finishSearching()
 
