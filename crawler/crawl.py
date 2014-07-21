@@ -19,39 +19,54 @@ class Crawler(object):
         q = Queue()
         self.itemID = itemID
         url = database().getWebsitePriceURL(itemID)
-        if url is None or \
-           url == "ItemID not found in database" \
-           or url == "Free" :
-            self.url_list = []
-            return
-        
-        if not url.startswith("http"):
-            self.url = "http://" + url
-        else:
-            self.url = url
-            
-        for i in range(19):
-            t = Thread(target = self.__getSnapshotLinks)
-            t.daemon = True
-            t.start()
-            
         self.url_list = []
-        for year in range(2014, 1995, -1):
-            q.put(year)
-        q.join()
-        
+        if url is not None and "." in url :    
+            if not url.startswith("http"):
+                self.price_url = "http://" + url
+            else:
+                self.price_url = url
+
+            self.url_list.append(self.price_url)
+            for i in range(19):
+                t = Thread(target = self.__getSnapshotLinks, args = (self.price_url,))
+                t.daemon = True
+                t.start()
+                
+            for year in range(2014, 1995, -1):
+                q.put(year)
+            q.join()
+
+        url = database().getWebsiteFeatureURL(itemID)
+        self.sameLink = False
+        if url is not None and "." in url:
+            if not url.startswith("http"):
+                self.feature_url = "http://" + url
+            else:
+                self.feature_url = url
+
+            if not (url == database().getWebsitePriceURL(itemID)):
+                self.url_list.append(self.feature_url)
+                for i in range(19):
+                    t = Thread(target = self.__getSnapshotLinks, args = (self.feature_url,))
+                    t.daemon = True
+                    t.start()
+                    
+                for year in range(2014, 1995, -1):
+                    q.put(year)
+                q.join()
+            else:
+                self.sameLink = True
+            
         self.url_list = sorted(set(self.url_list), reverse=True)
-        #print self.url_list
         
-    def __getSnapshotLinks (self):
+    def __getSnapshotLinks (self, url):
         year = q.get()
-        req = urllib2.Request(self.wmstart + str(year) + "0600000000*/" + self.url)
+        req = urllib2.Request(self.wmstart + str(year) + "0600000000*/" + url)
         try:
             page = urllib2.urlopen(req)
             soup = BS(page.read())
             links = soup.findAll("a")
             for link in links:
-                #if re.match("(.*)%s(.*)%s" % (str(year),self.url), str(link), re.I):
                 if re.match("(.*)%s(.*)" % year, str(link), re.I):
                     if not "*" in str(link):
                         linkwm = self.wm + link["href"]
@@ -75,7 +90,7 @@ class Crawler(object):
     def __getPhantomJSDriver(self):
         try:
             driver = webdriver.PhantomJS(executable_path=self.phantomJSpath)
-            driver.set_page_load_timeout(300)
+            driver.set_page_load_timeout(500)
             return driver
         except Exception as e:
             print "RE-TRYING. Error when getting PhantomBrowser driver: %s" % e
@@ -94,37 +109,48 @@ class Crawler(object):
             resp = urllib2.urlopen(req)
             return resp.read()
         except Exception as e:
-            print "Crawl-error: %s" % e
+            print "Crawl-error, internet connection? %s" % e
             return None
 
     def __crawlOne(self):
-        driver = self.__getPhantomJSDriverWithRetry(10)
+        driver = self.__getPhantomJSDriverWithRetry(5)
         while True:
             try:
                 (index, link) = q.get(True, 2) #2 sec timeout
             except Exception as e:
-                ###terminate thread###
                 print "Queue empty, all task done. %s" %e
-                driver.quit()
+                if driver is not None:
+                    driver.quit()
                 return
             else:
                 try:
-                    date = link[27:35]
+                    if link.startswith(self.wm):
+                        date = link[27:35]
+                    else:
+                        date = time.strftime("%Y%m%d")
                     data = self.__getDataFromPhantomBrowser(driver, link)
-                    database().storePriceSnapshot(self.itemID, index, date, link, data)
-                    q.task_done()
-                except Exception as e:
-                    driver.quit()
-                    data = self.__getDataFromURLLIB(link)
+                    if data is None:
+                        data = self.__getDataFromURLLIB(link)
+
                     if data is not None:
-                        database().storeSnapshot(self.itemID, index, date, link, data)
+                        if self.feature_url in link:
+                            database().storeFeatureSnapshot(self.itemID, index, date, link, data)
+                        elif self.price_url in link:
+                            database().storePriceSnapshot(self.itemID, index, date, link, data)
+                        else:
+                            print "Price or Feature??? URL: %s. Date: %s" % (link, date)
                     else:
                         print "Crawl-error: %s" % link
-                    driver = self.__getPhantomJSDriverWithRetry(10)
+                    q.task_done()
+                except Exception as e:
+                    print e
+                    if driver is not None:
+                        driver.quit()
+                    driver = self.__getPhantomJSDriverWithRetry(5)
                     q.task_done()
                     
     def crawl(self, index_list): #list of indexes of url_list[]
-        noThreads = min(self.getNumberOfSnapshots(), 30) + 1
+        noThreads = min(self.getNumberOfSnapshots(), 25) + 1
         for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
             t.daemon = True
@@ -134,11 +160,18 @@ class Crawler(object):
             if (index < 0 or index >= len(self.url_list)):
                 continue
             
-            if database().isPriceSnapshotInDB(self.itemID, index) == False:
-                q.put((index, self.url_list[index]))
-
+            temp_url = self.url_list[index]
+            if self.feature_url in temp_url:
+                if database().isFeatureSnapshotInDB(self.itemID, index) == False:
+                    q.put((index, temp_url))
+            elif self.price_url in temp_url:
+                if database().isPriceSnapshotInDB(self.itemID, index) == False:
+                    q.put((index, temp_url))
+    
         time.sleep(5) # make sure q.get timeout before join unblocks
         q.join()
+        if self.sameLink:
+            database().copyFromFeatureToPrice(self.itemID)
 
     def crawlAll(self):
         self.crawl(list(xrange(self.getNumberOfSnapshots())))

@@ -119,43 +119,7 @@ class database(object):
                 return False
         except Exception as e:
             print e
-
-    # return True if snapshot had been crawled
-    def isHomepageInDB(self, itemID, index):
-        status_query = '''select itemID, url_list_index from homepage
-                        where itemID = %s and
-                        url_list_index = %s
-                        ''' % (itemID, index)
-        try:
-            self.cur.execute(status_query)
-            status = self.cur.fetchone()
-            if status is not None:
-                return True
-            else:
-                return False
-        except Exception as e:
-            print e
-
-    def storeHomepage(self, itemID, index, date, url, data):
-        try:
-            if isinstance(data, str):
-                data = re.escape(data).decode('utf-8', 'ignore')
-            else:
-                data = re.escape(unicodedata.normalize('NFKD', data)).encode('utf-8', 'ignore').decode('utf-8', 'ignore')
-        except Exception as e:
-            print "Unicode Encoder Error. Snapshot URL: %s. Error: %s" % (url, e)
-        else:
-            query = """insert ignore into
-                    homepage(itemID, url_list_index, snapshot_date,
-                                snapshot_url, crawl_data)
-                    values(%s, %s,
-                            STR_TO_DATE(\"%s\", \"%%Y%%m%%d\"), \"%s\", \"%s\");
-                    """ % (itemID, index, date, url, data)
-            try:
-                self.cur.execute(query)
-            except Exception as e:
-                print '''Storing snapshot itemID = %s: Error (Probably NO url was given?) %s''' % (itemID, e)
-                
+            
     def storePriceSnapshot(self, itemID, index, date, url, data):
         try:
             if isinstance(data, str):
@@ -225,6 +189,16 @@ class database(object):
         except Exception as e:
             print e
 
+    def copyFromFeatureToPrice(self, itemID):
+        query = '''insert into snapshot_price
+                    select f.* from snapshot_feature f
+                    where itemID = %s
+                ''' % itemID
+        try:
+            self.cur.execute(query)
+        except Exception as e:
+            print e
+        
     # return type: numberOfSnapshots as Int
     def getNumberOfSnapshots(self, itemID):
         query = '''select count(url_list_index) from snapshot
