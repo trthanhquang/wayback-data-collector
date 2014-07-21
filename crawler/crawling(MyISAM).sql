@@ -3,11 +3,10 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2014 at 05:24 AM
+-- Generation Time: Jul 21, 2014 at 07:29 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -26,26 +25,10 @@ USE `crawling`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `homepage`
---
-
-CREATE TABLE IF NOT EXISTS `homepage` (
-  `itemID` int(4) NOT NULL,
-  `url_list_index` int(5) NOT NULL,
-  `snapshot_date` date NOT NULL,
-  `snapshot_url` text NOT NULL,
-  `crawl_data` longtext NOT NULL,
-  PRIMARY KEY (`itemID`,`url_list_index`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4
-/*!50100 PARTITION BY HASH (itemID)
-PARTITIONS 10 */;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `item`
 --
 
+DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
   `itemID` int(4) NOT NULL,
   `softwareID` int(6) DEFAULT NULL,
@@ -65,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `item` (
 -- Table structure for table `report`
 --
 
+DROP TABLE IF EXISTS `report`;
 CREATE TABLE IF NOT EXISTS `report` (
   `itemID` int(4) NOT NULL,
   `itemName` char(128) NOT NULL,
@@ -80,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `report` (
 -- Table structure for table `snapshot_feature`
 --
 
+DROP TABLE IF EXISTS `snapshot_feature`;
 CREATE TABLE IF NOT EXISTS `snapshot_feature` (
   `itemID` int(4) NOT NULL,
   `url_list_index` int(5) NOT NULL,
@@ -88,8 +73,12 @@ CREATE TABLE IF NOT EXISTS `snapshot_feature` (
   `crawl_data` longtext NOT NULL,
   PRIMARY KEY (`itemID`,`url_list_index`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4
-/*!50100 PARTITION BY HASH (itemID)
-PARTITIONS 10 */;
+/*!50100 PARTITION BY RANGE (itemID)
+(PARTITION p0 VALUES LESS THAN (228) ENGINE = MyISAM,
+ PARTITION p1 VALUES LESS THAN (456) ENGINE = MyISAM,
+ PARTITION p3 VALUES LESS THAN (683) ENGINE = MyISAM,
+ PARTITION p4 VALUES LESS THAN (910) ENGINE = MyISAM,
+ PARTITION p5 VALUES LESS THAN (1138) ENGINE = MyISAM) */;
 
 -- --------------------------------------------------------
 
@@ -97,6 +86,7 @@ PARTITIONS 10 */;
 -- Table structure for table `snapshot_price`
 --
 
+DROP TABLE IF EXISTS `snapshot_price`;
 CREATE TABLE IF NOT EXISTS `snapshot_price` (
   `itemID` int(4) NOT NULL,
   `url_list_index` int(5) NOT NULL,
@@ -105,9 +95,12 @@ CREATE TABLE IF NOT EXISTS `snapshot_price` (
   `crawl_data` longtext NOT NULL,
   PRIMARY KEY (`itemID`,`url_list_index`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4
-/*!50100 PARTITION BY HASH (itemID)
-PARTITIONS 10 */;
-SET FOREIGN_KEY_CHECKS=1;
+/*!50100 PARTITION BY RANGE (itemID)
+(PARTITION p0 VALUES LESS THAN (228) ENGINE = MyISAM,
+ PARTITION p1 VALUES LESS THAN (456) ENGINE = MyISAM,
+ PARTITION p3 VALUES LESS THAN (683) ENGINE = MyISAM,
+ PARTITION p4 VALUES LESS THAN (910) ENGINE = MyISAM,
+ PARTITION p5 VALUES LESS THAN (1138) ENGINE = MyISAM) */;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
