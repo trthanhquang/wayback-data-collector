@@ -41,7 +41,7 @@ class database(object):
             else:
                 return None
         except Exception as e:
-            print e
+            print "getWebsiteHomepageURL %s" % e
             
     def getWebsiteFeatureURL(self, itemID):
         query = '''select Feature_URL from item
@@ -57,7 +57,7 @@ class database(object):
             else:
                 return None
         except Exception as e:
-            print e
+            print "getWebsiteFeatureURL %s" % e
             
     # return URL as String
     def getWebsitePriceURL(self, itemID):
@@ -76,7 +76,7 @@ class database(object):
             else:
                 return None
         except Exception as e:
-            print e
+            print "getWebsitePriceURL %s" % e
             
     # return list of itemID
     def getItemID(self, lower, upper):
@@ -86,7 +86,7 @@ class database(object):
             self.cur.execute(query)
             return self.cur.fetchall()
         except Exception as e:
-            print e
+            print "getItemID %s" % e
 
     # return True if snapshot had been crawled
     def isPriceSnapshotInDB(self, itemID, index):
@@ -102,7 +102,7 @@ class database(object):
             else:
                 return False
         except Exception as e:
-            print e
+            print "isPriceSnapshotInDB %s" % e
             
     # return True if snapshot had been crawled
     def isFeatureSnapshotInDB(self, itemID, index):
@@ -118,7 +118,7 @@ class database(object):
             else:
                 return False
         except Exception as e:
-            print e
+            print "isFeatureSnapshotInDB %s" % e
             
     def storePriceSnapshot(self, itemID, index, date, url, data):
         try:
@@ -174,7 +174,7 @@ class database(object):
             else:
                 return "Data has not been crawled"
         except Exception as e:
-            print e
+            print "retrieveHTML %s" % e
         
     # return itemName as String
     def getItemName(self, itemID):
@@ -187,7 +187,7 @@ class database(object):
             else:
                 return "ItemID not found in database"
         except Exception as e:
-            print e
+            print "getItemName %s" % e
 
     def copyFromFeatureToPrice(self, itemID):
         query = '''insert into snapshot_price
@@ -197,7 +197,7 @@ class database(object):
         try:
             self.cur.execute(query)
         except Exception as e:
-            print e
+            print "copyFromFeatureToPrice %s" % e
         
     # return type: numberOfSnapshots as Int
     def getNumberOfSnapshots(self, itemID):
@@ -211,7 +211,7 @@ class database(object):
             else:
                 return 0
         except Exception as e:
-            print e
+            print "getNumberOfSnapshots %s" % e
 
     def storeEvaluation(self, itemID, evaluation):
         try:
@@ -220,7 +220,7 @@ class database(object):
                         ''' % (int(itemID), float(evaluation), float(evaluation))
             self.cur.execute(query)
         except Exception as e:
-            print e
+            print "storeEvaluation %s" % e
         
     # return type: list of (date as String, HTML_data as String)
     def getDataList(self, itemID):
@@ -230,7 +230,7 @@ class database(object):
             self.cur.execute(query)
             return self.cur.fetchall()
         except Exception as e:
-            print e
+            print "getDataList %s" % e
             
     def reportPrice(self, itemID, itemName, snapshot_date, price):
         try:

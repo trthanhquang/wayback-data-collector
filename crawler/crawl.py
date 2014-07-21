@@ -35,6 +35,8 @@ class Crawler(object):
             for year in range(2014, 1995, -1):
                 q.put(year)
             q.join()
+        else:
+            self.price_url = None
 
         url = database().getWebsiteFeatureURL(itemID)
         self.sameLink = False
@@ -56,13 +58,16 @@ class Crawler(object):
                 q.join()
             else:
                 self.sameLink = True
+        else:
+            self.feature_url = None
             
         self.url_list = sorted(set(self.url_list), reverse=True)
         
     def __getSnapshotLinks (self, url):
         year = q.get()
-        req = urllib2.Request(self.wmstart + str(year) + "0600000000*/" + url)
         try:
+            url = self.wmstart + str(year) + "0600000000*/" + url
+            req = urllib2.Request(url)
             page = urllib2.urlopen(req)
             soup = BS(page.read())
             links = soup.findAll("a")
@@ -73,9 +78,9 @@ class Crawler(object):
                         #### list.append() is thread-safe ####
                         self.url_list.append(linkwm)
             q.task_done()
-        except urllib2.URLError, e:
+        except Exception as e:
             q.task_done()
-            print e
+            print "Error collecting snapshots links. Error: %s. URL: %s" % (e, url)
 
     def __getDataFromPhantomBrowser(self, driver, url):
         try:
@@ -90,7 +95,7 @@ class Crawler(object):
     def __getPhantomJSDriver(self):
         try:
             driver = webdriver.PhantomJS(executable_path=self.phantomJSpath)
-            driver.set_page_load_timeout(500)
+            driver.set_page_load_timeout(60)
             return driver
         except Exception as e:
             print "RE-TRYING. Error when getting PhantomBrowser driver: %s" % e
@@ -133,9 +138,9 @@ class Crawler(object):
                         data = self.__getDataFromURLLIB(link)
 
                     if data is not None:
-                        if self.feature_url in link:
+                        if self.feature_url is not None and self.feature_url in link:
                             database().storeFeatureSnapshot(self.itemID, index, date, link, data)
-                        elif self.price_url in link:
+                        elif self.price_url is not None and self.price_url in link:
                             database().storePriceSnapshot(self.itemID, index, date, link, data)
                         else:
                             print "Price or Feature??? URL: %s. Date: %s" % (link, date)
@@ -143,14 +148,14 @@ class Crawler(object):
                         print "Crawl-error: %s" % link
                     q.task_done()
                 except Exception as e:
-                    print e
+                    print "Crawling error %s" % e
                     if driver is not None:
                         driver.quit()
                     driver = self.__getPhantomJSDriverWithRetry(5)
                     q.task_done()
                     
     def crawl(self, index_list): #list of indexes of url_list[]
-        noThreads = min(self.getNumberOfSnapshots(), 25) + 1
+        noThreads = min(self.getNumberOfSnapshots(), 15) + 1
         for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
             t.daemon = True
@@ -161,10 +166,10 @@ class Crawler(object):
                 continue
             
             temp_url = self.url_list[index]
-            if self.feature_url in temp_url:
+            if self.feature_url is not None and self.feature_url in temp_url:
                 if database().isFeatureSnapshotInDB(self.itemID, index) == False:
                     q.put((index, temp_url))
-            elif self.price_url in temp_url:
+            elif self.price_url is not None and self.price_url in temp_url:
                 if database().isPriceSnapshotInDB(self.itemID, index) == False:
                     q.put((index, temp_url))
     
@@ -180,8 +185,7 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(1, 1130)
+    itemID_list = database().getItemID(16, 1130)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
-    
