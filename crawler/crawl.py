@@ -63,9 +63,14 @@ class Crawler(object):
             print e
 
     def __getDataFromPhantomBrowser(self, driver, url):
-        driver.get(url)
-        data = driver.page_source
-        return data
+        try:
+            driver.get(url)
+            data = driver.page_source
+            return data
+        except Exception as e:
+            print "RE-TRYING. Error when getting data from PhantomBrowser: %s, URL: %s" % (e, url)
+            return None
+
 
     def __getPhantomJSDriver(self):
         try:
@@ -76,19 +81,24 @@ class Crawler(object):
             print "RE-TRYING. Error when getting PhantomBrowser driver: %s" % e
             return None
 
+    def __getPhantomJSDriverWithRetry(self, retry):
+        driver = None
+        while (driver is None) and (retry > 0):
+            retry = retry - 1
+            driver = self.__getPhantomJSDriver()
+        return driver
+    
     def __getDataFromURLLIB(self, link):
         req = urllib2.Request(link)
         try:
             resp = urllib2.urlopen(req)
             return resp.read()
         except Exception as e:
-            return "Crawl-error: %s" % e
+            print "Crawl-error: %s" % e
+            return None
 
     def __crawlOne(self):
-        driver = None
-        while driver is None:
-            driver = self.__getPhantomJSDriver()
-        
+        driver = self.__getPhantomJSDriverWithRetry(10)
         while True:
             try:
                 (index, link) = q.get(True, 2) #2 sec timeout
@@ -97,27 +107,21 @@ class Crawler(object):
                 print "Queue empty, all task done. %s" %e
                 driver.quit()
                 return
-            ######################
-            date = link[27:35]
-            #print date, self.itemID, link
-            try:
-                #print link
-                data = self.__getDataFromPhantomBrowser(driver, link)
-                database().storeSnapshot(self.itemID, index, date, link, data)
-                q.task_done()
-            except Exception as e:
-                driver.quit()
-                data = self.__getDataFromURLLIB(link)
-                if data != "Crawl-error":
-                    database().storeSnapshot(self.itemID, index, date, link, data)
-                else:
-                    print "Crawl-error: %s" % link
-
-                driver = None
-                while driver is None:
-                    driver = self.__getPhantomJSDriver()
-                    
-                q.task_done()
+            else:
+                try:
+                    date = link[27:35]
+                    data = self.__getDataFromPhantomBrowser(driver, link)
+                    database().storePriceSnapshot(self.itemID, index, date, link, data)
+                    q.task_done()
+                except Exception as e:
+                    driver.quit()
+                    data = self.__getDataFromURLLIB(link)
+                    if data is not None:
+                        database().storeSnapshot(self.itemID, index, date, link, data)
+                    else:
+                        print "Crawl-error: %s" % link
+                    driver = self.__getPhantomJSDriverWithRetry(10)
+                    q.task_done()
                     
     def crawl(self, index_list): #list of indexes of url_list[]
         noThreads = min(self.getNumberOfSnapshots(), 30) + 1
@@ -130,7 +134,7 @@ class Crawler(object):
             if (index < 0 or index >= len(self.url_list)):
                 continue
             
-            if database().isSnapshotInDB(self.itemID, index) == False:
+            if database().isPriceSnapshotInDB(self.itemID, index) == False:
                 q.put((index, self.url_list[index]))
 
         time.sleep(5) # make sure q.get timeout before join unblocks
@@ -143,11 +147,8 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(2532, 3392)
+    itemID_list = database().getItemID(1, 1130)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
-        crawlEvaluator = CrawlEvaluator(itemID)
-        print crawlEvaluator.successfulRate()
-        database().storeEvaluation(itemID, crawlEvaluator.successfulRate)
     
