@@ -4,6 +4,7 @@ import webbrowser #open html/website
 from bs4 import BeautifulSoup as BS
 import os
 import nltk
+import time
 
 path = os.getcwd()
 
@@ -48,7 +49,10 @@ class Snapshot(object):
             return False
 
     def getDate(self):
-        return self.url[27:35]
+		if self.url.startswith("http://web.archive.org"):
+			return self.url[27:35]
+		else:
+			return time.strftime("%Y%m%d")
 
     def getText(self):
         if not self.initialized:

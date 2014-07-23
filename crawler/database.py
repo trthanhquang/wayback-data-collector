@@ -221,31 +221,3 @@ class database(object):
             self.cur.execute(query)
         except Exception as e:
             print "storeEvaluation %s" % e
-        
-    # return type: list of (date as String, HTML_data as String)
-    def getDataList(self, itemID):
-        query = '''select snapshot_date, crawl_data from snapshot
-                    where itemID = %s ''' % itemID
-        try:
-            self.cur.execute(query)
-            return self.cur.fetchall()
-        except Exception as e:
-            print "getDataList %s" % e
-            
-    def reportPrice(self, itemID, itemName, snapshot_date, price):
-        try:
-            query = '''insert into report_price(itemID, itemName, snapshot_date, price)
-                        values (%s, \"%s\", \"%s\", \"%s\")
-                    ''' % (itemID, itemName, snapshot_date, price)
-            self.cur.execute(query)
-        except Exception as e:
-            print e
-
-    def reportFeature(self, itemID, itemName, snapshot_date, feature):
-        try:
-            query = '''insert into report_feature(itemID, itemName, snapshot_date, feature)
-                        values (%s, \"%s\", \"%s\", \"%s\")
-                    ''' % (itemID, itemName, snapshot_date, feature)
-            self.cur.execute(query)
-        except Exception as e:
-            print e

@@ -222,9 +222,9 @@ class database(object):
         except Exception as e:
             print "storeEvaluation %s" % e
         
-    # return type: list of (date as String, HTML_data as String)
+    # return type: list of (url as String, HTML_data as String)
     def getPriceDataList(self, itemID):
-        query = '''select snapshot_date, crawl_data from snapshot_price
+        query = '''select snapshot_url, crawl_data from snapshot_price
                     where itemID = %s ''' % itemID
         try:
             self.cur.execute(query)
@@ -232,9 +232,9 @@ class database(object):
         except Exception as e:
             print "getPriceDataList %s" % e
     
-    # return type: list of (date as String, HTML_data as String)
+    # return type: list of (url as String, HTML_data as String)
     def getFeatureDataList(self, itemID):
-        query = '''select snapshot_date, crawl_data from snapshot_feature
+        query = '''select snapshot_url, crawl_data from snapshot_feature
                     where itemID = %s ''' % itemID
         try:
             self.cur.execute(query)
