@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2014 at 07:29 PM
+-- Generation Time: Jul 23, 2014 at 10:52 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -28,7 +28,6 @@ USE `crawling`;
 -- Table structure for table `item`
 --
 
-DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
   `itemID` int(4) NOT NULL,
   `softwareID` int(6) DEFAULT NULL,
@@ -48,7 +47,6 @@ CREATE TABLE IF NOT EXISTS `item` (
 -- Table structure for table `report`
 --
 
-DROP TABLE IF EXISTS `report`;
 CREATE TABLE IF NOT EXISTS `report` (
   `itemID` int(4) NOT NULL,
   `itemName` char(128) NOT NULL,
@@ -64,7 +62,6 @@ CREATE TABLE IF NOT EXISTS `report` (
 -- Table structure for table `snapshot_feature`
 --
 
-DROP TABLE IF EXISTS `snapshot_feature`;
 CREATE TABLE IF NOT EXISTS `snapshot_feature` (
   `itemID` int(4) NOT NULL,
   `url_list_index` int(5) NOT NULL,
@@ -86,7 +83,6 @@ CREATE TABLE IF NOT EXISTS `snapshot_feature` (
 -- Table structure for table `snapshot_price`
 --
 
-DROP TABLE IF EXISTS `snapshot_price`;
 CREATE TABLE IF NOT EXISTS `snapshot_price` (
   `itemID` int(4) NOT NULL,
   `url_list_index` int(5) NOT NULL,
@@ -101,6 +97,18 @@ CREATE TABLE IF NOT EXISTS `snapshot_price` (
  PARTITION p3 VALUES LESS THAN (683) ENGINE = MyISAM,
  PARTITION p4 VALUES LESS THAN (910) ENGINE = MyISAM,
  PARTITION p5 VALUES LESS THAN (1138) ENGINE = MyISAM) */;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `status`
+--
+
+CREATE TABLE IF NOT EXISTS `status` (
+  `itemID` int(4) NOT NULL,
+  `evaluation` float NOT NULL,
+  PRIMARY KEY (`itemID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

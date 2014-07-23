@@ -3,6 +3,7 @@ from database import *
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
+driver = webdriver.Chrome();
 class CrawlEvaluator(object):
     wbm_prefix = "http://web.archive.org/web/*/"
     
@@ -34,7 +35,7 @@ class CrawlEvaluator(object):
         
     def __analyzeWBMSummaryPage (self):
         try:
-            driver = webdriver.Chrome();
+            global driver
             if self.feature_url is None:
                 numberOfFeatureSnapshots = 0
             else:
@@ -48,14 +49,13 @@ class CrawlEvaluator(object):
                 element = driver.find_element_by_xpath("//div[@id='wbMeta']/p[2]/strong")
                 numberOfPriceSnapshots = int(re.sub("[^0-9]", "", element.text)) + 1
 
-            driver.close()
-            driver.quit()
             return numberOfFeatureSnapshots + numberOfPriceSnapshots
         except Exception as e:
             print "__analyzeWBMSummaryPage %s" % e
             if driver is not None:
                 driver.close()
                 driver.quit()
+            driver = webdriver.Chrome();
             return 0
 
     def successfulRate(self):
@@ -72,8 +72,10 @@ class CrawlEvaluator(object):
                self.actualNumberOfLinks*1.0 / self.expectedNumberOfLinks
 
 if __name__ == '__main__':
-    while True:
-        itemID = raw_input("itemID: ")
+    db = database()
+    for itemID in range (1, 1130):
         crawlEvaluator = CrawlEvaluator(itemID)
         print crawlEvaluator.successfulRate()
-        #database().storeEvaluation(itemID, crawlEvaluator.successfulRate)
+        db.storeEvaluation(itemID, crawlEvaluator.successfulRate)
+    driver.close()
+    driver.quit()
