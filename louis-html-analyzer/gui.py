@@ -109,27 +109,29 @@ class GUI(QtGui.QWidget):
             return
         itemID = int(itemIDstr)
 
-        rows = self.db.getDataList(itemID)
+        if self.ui.horizontalSlider.value() == 0:
+            rows = self.db.getPriceDataList(itemID)
+        else:
+            rows = self.db.getFeatureDataList(itemID)
         
         self.snapshotList = []
         for (url,html) in rows:
             self.snapshotList.append(Snapshot(url,html))
 
         productName = self.db.getItemName(itemID)
-
         if productName == "ItemID not found in database":
             QtGui.QMessageBox.about(self,"Notification","Item ID %s is not in database"%itemID)
             return
 
         if len(self.snapshotList) == 0:
-            homepageURL = self.db.getWebsiteHomepage(itemID)
+            homepageURL = self.db.getWebsiteHomepageURL(itemID)
             
             priceURL = self.db.getWebsitePriceURL(itemID)
-            if priceURL == "Free":
+            if priceURL is None or priceURL == "Free":
                 priceURL = ""
 
             featureURL = self.db.getWebsiteFeatureURL(itemID)
-            if featureURL =="ItemID not found in database":
+            if featureURL is None or featureURL =="ItemID not found in database":
                 featureURL = ""
 
             print homepageURL,priceURL,featureURL
