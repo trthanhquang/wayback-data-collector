@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup as BS
 import urllib2
 from database import *
-from crawlEvaluator import *
 from selenium import webdriver
 import webbrowser
 from threading import *
@@ -170,7 +169,6 @@ class Crawler(object):
                 continue
             
             temp_url = self.url_list[index]
-            print index, temp_url, self.rawFeatureURL
             if self.feature_url is not None and self.rawFeatureURL in temp_url:
                 if database().isFeatureSnapshotInDB(self.itemID, index) == False:
                     q.put((index, temp_url))
