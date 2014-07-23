@@ -8,42 +8,60 @@ class CrawlEvaluator(object):
     
     def __init__ (self, itemID):
         self.itemID = itemID
-
-        ######CHANGE THIS IF NOT CRAWLING PRICE######
-        url = database().getWebsitePriceURL(itemID)
-        #############################################
-        if url is None or \
-           url == "ItemID not found in database" \
-           or url == "Free" :
-            self.url = None
-            return
-            
-        if not url.startswith("http"):
-            self.url = "http://" + url
+        self.db = database()
+        url = self.db.getWebsitePriceURL(itemID)
+        self.url_list = []
+        if url is not None and "." in url :    
+            if not url.startswith("http"):
+                self.price_url = "http://" + url
+            else:
+                self.price_url = url
         else:
-            self.url = url
+            self.price_url = None
+
+        url = self.db.getWebsiteFeatureURL(itemID)
+        self.sameLink = False
+        if url is not None and "." in url:
+            if not url.startswith("http"):
+                self.feature_url = "http://" + url
+            else:
+                self.feature_url = url
+
+            if (url == self.db.getWebsitePriceURL(itemID)):
+                self.sameLink = True
+        else:
+            self.feature_url = None
         
     def __analyzeWBMSummaryPage (self):
-        try: 
+        try:
             driver = webdriver.Chrome();
-            driver.get(self.wbm_prefix + self.url)
-            element = driver.find_element_by_xpath("//div[@id='wbMeta']/p[2]/strong")
-            keyword = element.text
+            if self.feature_url is None:
+                numberOfFeatureSnapshots = 0
+            else:
+                driver.get(self.wbm_prefix + self.feature_url)
+                element = driver.find_element_by_xpath("//div[@id='wbMeta']/p[2]/strong")
+                numberOfFeatureSnapshots = int(re.sub("[^0-9]", "", element.text)) + 1
+            if self.price_url is None:
+                numberOfPriceSnapshots = 0
+            else:
+                driver.get(self.wbm_prefix + self.price_url)
+                element = driver.find_element_by_xpath("//div[@id='wbMeta']/p[2]/strong")
+                numberOfPriceSnapshots = int(re.sub("[^0-9]", "", element.text)) + 1
+
             driver.close()
             driver.quit()
-            return int(re.sub("[^0-9]", "", keyword))
-        except (urllib2.URLError, NoSuchElementException) as e:
-            print e
-            driver.close()
-            driver.quit()
+            return numberOfFeatureSnapshots + numberOfPriceSnapshots
+        except Exception as e:
+            print "__analyzeWBMSummaryPage %s" % e
+            if driver is not None:
+                driver.close()
+                driver.quit()
             return 0
 
     def successfulRate(self):
-        if self.url is None:
-            self.expectedNumberOfLinks = 0
-        else:
-            self.expectedNumberOfLinks = self.__analyzeWBMSummaryPage()
-            self.actualNumberOfLinks = database().getNumberOfSnapshots(self.itemID);
+        self.expectedNumberOfLinks = self.__analyzeWBMSummaryPage()
+        self.actualNumberOfLinks = self.db.getNumberOfFeatureSnapshots(self.itemID)\
+                                   + self.db.getNumberOfPriceSnapshots(self.itemID);
     
         if self.expectedNumberOfLinks == 0 :
             self.successfulRate = -1.0
@@ -54,7 +72,8 @@ class CrawlEvaluator(object):
                self.actualNumberOfLinks*1.0 / self.expectedNumberOfLinks
 
 if __name__ == '__main__':
-    itemID=2989
-    crawlEvaluator = CrawlEvaluator(itemID)
-    print crawlEvaluator.successfulRate()
-    database().storeEvaluation(itemID, crawlEvaluator.successfulRate)
+    while True:
+        itemID = raw_input("itemID: ")
+        crawlEvaluator = CrawlEvaluator(itemID)
+        print crawlEvaluator.successfulRate()
+        #database().storeEvaluation(itemID, crawlEvaluator.successfulRate)

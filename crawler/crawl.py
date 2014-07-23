@@ -19,13 +19,15 @@ class Crawler(object):
         q = Queue()
         self.itemID = itemID
         url = database().getWebsitePriceURL(itemID)
+        
         self.url_list = []
-        if url is not None and "." in url :    
+        if url is not None and "." in url :
             if not url.startswith("http"):
                 self.price_url = "http://" + url
             else:
                 self.price_url = url
-
+            self.rawPriceURL = re.sub(r'^http(s)?://(www.)?',"", self.price_url)
+            
             self.url_list.append(self.price_url)
             for i in range(19):
                 t = Thread(target = self.__getSnapshotLinks, args = (self.price_url,))
@@ -45,7 +47,8 @@ class Crawler(object):
                 self.feature_url = "http://" + url
             else:
                 self.feature_url = url
-
+            self.rawFeatureURL = re.sub(r"^http(s)?://(www.)?","", self.feature_url)
+            
             if not (url == database().getWebsitePriceURL(itemID)):
                 self.url_list.append(self.feature_url)
                 for i in range(19):
@@ -138,9 +141,9 @@ class Crawler(object):
                         data = self.__getDataFromURLLIB(link)
 
                     if data is not None:
-                        if self.feature_url is not None and self.feature_url in link:
+                        if self.feature_url is not None and self.rawFeatureURL in link:
                             database().storeFeatureSnapshot(self.itemID, index, date, link, data)
-                        elif self.price_url is not None and self.price_url in link:
+                        elif self.price_url is not None and self.rawPriceURL in link:
                             database().storePriceSnapshot(self.itemID, index, date, link, data)
                         else:
                             print "Price or Feature??? URL: %s. Date: %s" % (link, date)
@@ -155,7 +158,8 @@ class Crawler(object):
                     q.task_done()
                     
     def crawl(self, index_list): #list of indexes of url_list[]
-        noThreads = min(self.getNumberOfSnapshots(), 15) + 1
+        noThreads = min(self.getNumberOfSnapshots(), 12) + 1
+
         for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
             t.daemon = True
@@ -166,10 +170,11 @@ class Crawler(object):
                 continue
             
             temp_url = self.url_list[index]
-            if self.feature_url is not None and self.feature_url in temp_url:
+            print index, temp_url, self.rawFeatureURL
+            if self.feature_url is not None and self.rawFeatureURL in temp_url:
                 if database().isFeatureSnapshotInDB(self.itemID, index) == False:
                     q.put((index, temp_url))
-            elif self.price_url is not None and self.price_url in temp_url:
+            elif self.price_url is not None and self.rawPriceURL in temp_url:
                 if database().isPriceSnapshotInDB(self.itemID, index) == False:
                     q.put((index, temp_url))
     
@@ -185,7 +190,12 @@ class Crawler(object):
         return len(self.url_list)
 
 if __name__ == '__main__':
-    itemID_list = database().getItemID(16, 1130)
+    itemID_list = database().getItemID(1, 1130)
     for (itemID,) in itemID_list:
         print itemID, active_count()
         Crawler(itemID).crawlAll()
+        
+    '''while True:
+        itemID = raw_input("ItemID: ")
+        Crawler(itemID).crawlAll()
+    '''

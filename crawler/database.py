@@ -190,9 +190,11 @@ class database(object):
             print "getItemName %s" % e
 
     def copyFromFeatureToPrice(self, itemID):
-        query = '''insert into snapshot_price
+        query = '''insert into snapshot_price(itemID, url_list_index, snapshot_date, snapshot_url, crawl_data)
                     select f.* from snapshot_feature f
                     where itemID = %s
+                    on duplicate key 
+                    update crawl_data = values(crawl_data);
                 ''' % itemID
         try:
             self.cur.execute(query)
@@ -200,8 +202,8 @@ class database(object):
             print "copyFromFeatureToPrice %s" % e
         
     # return type: numberOfSnapshots as Int
-    def getNumberOfSnapshots(self, itemID):
-        query = '''select count(url_list_index) from snapshot
+    def getNumberOfPriceSnapshots(self, itemID):
+        query = '''select count(url_list_index) from snapshot_price
                     where itemID = %s ''' % itemID
         try:
             self.cur.execute(query)
@@ -212,7 +214,21 @@ class database(object):
                 return 0
         except Exception as e:
             print "getNumberOfSnapshots %s" % e
-
+    
+    # return type: numberOfSnapshots as Int
+    def getNumberOfFeatureSnapshots(self, itemID):
+        query = '''select count(url_list_index) from snapshot_feature
+                    where itemID = %s ''' % itemID
+        try:
+            self.cur.execute(query)
+            numberOfSnapshots = self.cur.fetchone()
+            if numberOfSnapshots is not None:
+                return int(numberOfSnapshots[0])
+            else:
+                return 0
+        except Exception as e:
+            print "getNumberOfSnapshots %s" % e
+    
     def storeEvaluation(self, itemID, evaluation):
         try:
             query = '''insert into status(itemID, evaluation) values(%s, %s)
