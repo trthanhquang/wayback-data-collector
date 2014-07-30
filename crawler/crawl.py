@@ -66,8 +66,8 @@ class Crawler(object):
         self.url_list = sorted(set(self.url_list), reverse=True)
         
     def __getSnapshotLinks (self, url):
-        year = q.get()
         try:
+            year = q.get(True, 2)
             url = self.wmstart + str(year) + "0600000000*/" + url
             req = urllib2.Request(url)
             page = urllib2.urlopen(req)
@@ -157,7 +157,7 @@ class Crawler(object):
                     q.task_done()
                     
     def crawl(self, index_list): #list of indexes of url_list[]
-        noThreads = min(self.getNumberOfSnapshots(), 12) + 1
+        noThreads = min(self.getNumberOfSnapshots(), 20) + 1
 
         for i in range(noThreads):
             t = Thread(target = self.__crawlOne)
