@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 30, 2014 at 05:52 AM
+-- Generation Time: Jul 30, 2014 at 06:21 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -54,7 +54,13 @@ CREATE TABLE IF NOT EXISTS `report` (
   `price` longtext NOT NULL,
   `feature` longtext NOT NULL,
   PRIMARY KEY (`itemID`,`itemName`,`snapshot_date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4
+/*!50100 PARTITION BY RANGE (itemID)
+(PARTITION p0 VALUES LESS THAN (226) ENGINE = MyISAM,
+ PARTITION p1 VALUES LESS THAN (452) ENGINE = MyISAM,
+ PARTITION p2 VALUES LESS THAN (678) ENGINE = MyISAM,
+ PARTITION p3 VALUES LESS THAN (904) ENGINE = MyISAM,
+ PARTITION p4 VALUES LESS THAN (1131) ENGINE = MyISAM) */;
 
 -- --------------------------------------------------------
 
