@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 30, 2014 at 06:21 AM
+-- Generation Time: Jul 30, 2014 at 05:32 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -44,15 +44,34 @@ CREATE TABLE IF NOT EXISTS `item` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `report`
+-- Table structure for table `report_feature`
 --
 
-CREATE TABLE IF NOT EXISTS `report` (
+CREATE TABLE IF NOT EXISTS `report_feature` (
+  `itemID` int(4) NOT NULL,
+  `itemName` char(128) NOT NULL,
+  `snapshot_date` date NOT NULL,
+  `feature` longtext NOT NULL,
+  PRIMARY KEY (`itemID`,`itemName`,`snapshot_date`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4
+/*!50100 PARTITION BY RANGE (itemID)
+(PARTITION p0 VALUES LESS THAN (226) ENGINE = MyISAM,
+ PARTITION p1 VALUES LESS THAN (452) ENGINE = MyISAM,
+ PARTITION p2 VALUES LESS THAN (678) ENGINE = MyISAM,
+ PARTITION p3 VALUES LESS THAN (904) ENGINE = MyISAM,
+ PARTITION p4 VALUES LESS THAN (1131) ENGINE = MyISAM) */;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_price`
+--
+
+CREATE TABLE IF NOT EXISTS `report_price` (
   `itemID` int(4) NOT NULL,
   `itemName` char(128) NOT NULL,
   `snapshot_date` date NOT NULL,
   `price` longtext NOT NULL,
-  `feature` longtext NOT NULL,
   PRIMARY KEY (`itemID`,`itemName`,`snapshot_date`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4
 /*!50100 PARTITION BY RANGE (itemID)
