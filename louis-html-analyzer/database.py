@@ -246,7 +246,8 @@ class database(object):
         try:
             query = '''insert into report_price(itemID, itemName, snapshot_date, price)
                         values (%s, \"%s\", \"%s\", \"%s\")
-                    ''' % (itemID, itemName, snapshot_date, price)
+                    ''' % (itemID, re.escape(itemName), re.escape(snapshot_date), re.escape(price))
+            #print query
             self.cur.execute(query)
         except Exception as e:
             print "reportPrice %s" % e
@@ -255,7 +256,8 @@ class database(object):
         try:
             query = '''insert into report_feature(itemID, itemName, snapshot_date, feature)
                         values (%s, \"%s\", \"%s\", \"%s\")
-                    ''' % (itemID, itemName, snapshot_date, feature)
+                    ''' % (itemID, re.escape(itemName), re.escape(snapshot_date), re.escape(feature))
+            #print query
             self.cur.execute(query)
         except Exception as e:
             print "reportFeature %s" % e
