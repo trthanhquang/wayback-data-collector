@@ -23,7 +23,7 @@ class Snapshot(object):
     def __initialize(self):
         self.initialized = True
         self.soup = BS(self.html)
-        text = nltk.clean_html(str(self.soup))
+        text = self.soup.get_text()
         self.rawText = os.linesep.join([s for s in text.split('\n') if s.strip() !=''])
 
     def __readabilityCheck(self,word):
